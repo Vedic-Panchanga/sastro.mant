@@ -21,13 +21,13 @@ export default function Explain() {
           , thus it might be incorrect in a longer time range.
         </p>
         <p>
-          <strong>Lunisolar Calendar</strong> is a calendar tying to associate a
-          month with year in some way, thus each algorithm could be applied to a
-          particular location and generate a variant. (different locations have
-          different Sun and different Moon)
+          <strong>Lunisolar Calendar</strong> is a calendar tying to associate
+          Moon to Sun in some way. Different locations have different Sun and
+          different Moon, thus each algorithm could be applied to a particular
+          location and generate a calendar variant.
         </p>
         <p>
-          That is why Chinese calendar published by authorities in Beijing and
+          That's why Chinese calendar published by authorities in Beijing and
           Taiwan could be a little different. Each Tibetan temple publishes its
           own calendar. Celebrations of Indian festivals might also occur on
           different days.

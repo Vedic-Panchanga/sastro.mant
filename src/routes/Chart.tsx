@@ -14,7 +14,8 @@ import {
   siderealOrTropicalAtom,
 } from "../settings/chart-settings/General";
 import { distance, planetsSymbol, timestamp2jdut } from "../utils";
-
+import astrologer from "../../astrologer.ts";
+import { useEffect, useState } from "react";
 // import { ChartDrawingOptions } from "../chart-components/ChartDrawingOptions";
 declare global {
   interface Window {
@@ -82,72 +83,74 @@ export default function Chart() {
   const siderealOrTropical = useAtomValue(siderealOrTropicalAtom); //false: tropical, true: sidereal
   const sidMode = useAtomValue(sidModeAtom); //swe_set_sid_mode
   const house = useAtomValue(houseAtom); //swe_house_ex
+  const [wasm, setWasm] = useState<WasmType | null>(null);
 
-  //Calc
-  const wasmRaw: string = window.Module.ccall(
-    "get",
-    "string",
-    [
-      "number",
-      "number",
-      "number",
-      "number",
-      "number",
-      "string",
-      "number",
-      "number",
-    ],
-    [
+  useEffect(() => {
+    astrologer(
       timestamp2jdut(dateTime.toUnixInteger()),
-      siderealOrTropical === false ? -1 : sidMode,
+      siderealOrTropical === false ? -1 : Number(sidMode),
       location.longitude,
       location.latitude,
       0,
       house,
       258 | (helio === true ? 8 : 0),
-      2 | 1 | 128,
-    ]
-  );
-  const wasm: WasmType = JSON.parse(wasmRaw);
-  // console.log("wasm", wasm, !helio);
+      2 | 1 | 128
+    )
+      .then((wasm) => {
+        setWasm(wasm);
 
-  // calculate positions
-  const planetState = wasm.planets;
-  function planetStateAdd(planetIndex: string, planetLongitude: number) {
-    planetState[planetIndex] = {
-      name: planetsSymbol(planetIndex, true),
-      lon: planetLongitude,
-    };
-  }
-  //add IC, Dsc
-  planetStateAdd("-5", (planetState[-4].lon + 180) % 360);
-  planetStateAdd("-7", (planetState[-6].lon + 180) % 360);
-  if (!helio) {
-    //add Fortune and Spirit Parts
-    const distanceASCToSun = distance(planetState[-4].lon, planetState[0].lon);
-    const dayOrNight = distanceASCToSun >= 0 && distanceASCToSun < 180;
-    const distanceMoonToSun = distance(planetState[1].lon, planetState[0].lon);
-    // Forturn
-    planetStateAdd(
-      "-3",
-      (planetState[-4].lon +
-        (dayOrNight === false ? distanceMoonToSun : -distanceMoonToSun) +
-        360) %
-        360
-    );
+        // calculate positions
+        const planetState = wasm.planets;
+        // eslint-disable-next-line no-inner-declarations
+        function planetStateAdd(planetIndex: string, planetLongitude: number) {
+          planetState[planetIndex] = {
+            name: planetsSymbol(planetIndex, true),
+            lon: planetLongitude,
+          };
+        }
+        //add IC, Dsc
+        planetStateAdd("-5", (planetState[-4].lon + 180) % 360);
+        planetStateAdd("-7", (planetState[-6].lon + 180) % 360);
+        if (!helio) {
+          //add Fortune and Spirit Parts
+          const distanceASCToSun = distance(
+            planetState[-4].lon,
+            planetState[0].lon
+          );
+          const dayOrNight = distanceASCToSun >= 0 && distanceASCToSun < 180;
+          const distanceMoonToSun = distance(
+            planetState[1].lon,
+            planetState[0].lon
+          );
+          // Fortune
+          planetStateAdd(
+            "-3",
+            (planetState[-4].lon +
+              (dayOrNight === false ? distanceMoonToSun : -distanceMoonToSun) +
+              360) %
+              360
+          );
+          // Spirit
+          planetStateAdd(
+            "-9",
+            (planetState[-4].lon +
+              (dayOrNight === false ? -distanceMoonToSun : distanceMoonToSun) +
+              360) %
+              360
+          );
+        }
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+        // Handle the error
+      });
+  }, [dateTime, location, helio, house, sidMode, siderealOrTropical]);
 
-    // Spirit
-    planetStateAdd(
-      "-9",
-      (planetState[-4].lon +
-        (dayOrNight === false ? -distanceMoonToSun : distanceMoonToSun) +
-        360) %
-        360
-    );
-  }
   return (
     <div>
-      <ChartDrawingWrapper wasm={wasm} helio={helio}></ChartDrawingWrapper>
+      {wasm && (
+        <ChartDrawingWrapper wasm={wasm} helio={helio}></ChartDrawingWrapper>
+      )}
     </div>
   );
 }

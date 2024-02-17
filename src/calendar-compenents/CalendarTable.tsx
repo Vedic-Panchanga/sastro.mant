@@ -9,9 +9,10 @@ import {
 import { Table, Tooltip } from "@mantine/core";
 import { type DateTimeT } from "../routes/Root";
 import classes from "./CalendarTable.module.css";
-import { useMemo } from "react";
-import { FixedOffsetZone } from "luxon";
+import { useEffect, useRef, useState } from "react";
+import { DateTime, FixedOffsetZone } from "luxon";
 import Explain from "./Explain";
+import astrologer from "../../astrologer";
 
 // const enum calendarType {
 //   Observe,
@@ -34,20 +35,14 @@ export default function CalendarTable({
   setSelectedDate: React.Dispatch<React.SetStateAction<DateTimeT>>;
 }) {
   const calendarArray: (number | null)[][] = [];
-  const zone = FixedOffsetZone.instance(selectedDate.offset);
+
   const days = selectedDate.daysInMonth;
-  //record jieqi+moon
-  const daysArraySubTitle: Array<string | undefined> = new Array(days! + 1);
-  //record all the events
-  const daysArrayEvents: Array<event[]> = new Array(days! + 1).fill([]);
-  const firstDayOfYear = selectedDate.set({
-    month: 1,
-    day: 1,
-    hour: 0,
-    minute: 0,
-    second: 0,
-    millisecond: 0,
-  });
+  const daysArraySubTitleRef = useRef<Array<string | undefined>>(
+    new Array(days! + 1)
+  );
+  const daysArrayEventsRef = useRef<Array<event[]>>(
+    new Array(days! + 1).fill([])
+  );
 
   const firstDayOfMonth = selectedDate.set({
     day: 1,
@@ -56,90 +51,89 @@ export default function CalendarTable({
     second: 0,
     millisecond: 0,
   });
-  //inclusive, in jdut
-  const startMonth = timestamp2jdut(firstDayOfMonth.toUnixInteger());
-  //exclusive, in jdut
-  const endMonth = timestamp2jdut(
-    selectedDate
-      .set({
-        month: selectedDate.month + 1,
-        day: 1,
-        hour: 0,
-        minute: 0,
-        second: 0,
-        millisecond: 0,
-      })
-      .toUnixInteger()
-  );
+
   //first day of month noon jd local (in convenience to calc other jd locals)
   const firstDayOfMonthJDLocal = timestamp2jdlocal(
     firstDayOfMonth.set({ hour: 12 }).toUnixInteger(),
     firstDayOfMonth.offset
   );
+  const [wasm, setWasm] = useState<any>(null);
   //apply the calculation
-  const wasm = useMemo(
-    () =>
-      JSON.parse(
-        window.Module.ccall(
-          "get",
-          "string",
-          [
-            "number",
-            "number",
-            "number",
-            "number",
-            "number",
-            "string",
-            "number",
-            "number",
-          ],
-          [
-            timestamp2jdut(firstDayOfYear.toUnixInteger()),
-            -1,
-            0,
-            0,
-            0,
-            "P",
-            258,
-            512,
-          ]
-        )
+  useEffect(() => {
+    astrologer(
+      timestamp2jdut(
+        DateTime.fromObject(
+          { year: selectedDate.year },
+          { zone: FixedOffsetZone.instance(selectedDate.offset) }
+        ).toUnixInteger()
       ),
-    [firstDayOfYear]
-  );
+      -1,
+      0,
+      0,
+      0,
+      "P",
+      258,
+      512
+    )
+      .then((wasm) => {
+        setWasm(wasm);
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+        // Handle the error
+      });
+  }, [selectedDate.year, selectedDate.offset]);
   // console.log("wasmCalendarMonth", wasm);
   // console.log("wasmCalendarMonth", wasmRaw);
   // const wasm = JSON.parse(wasmRaw);
 
   // add the jieqi and moons
-  wasm.month_jieqi.forEach((jieqiArray: [number, number]) => {
-    if (jieqiArray[0] >= endMonth || jieqiArray[0] < startMonth) {
-      return;
-    } else {
-      const jieqiDateTime = jdut2DateTime(jieqiArray[0], zone);
-      daysArraySubTitle[jieqiDateTime.day] = jieqiList(Number(jieqiArray[1]));
-      daysArrayEvents[jieqiDateTime.day].push({
-        name: 0, //number of SUN
-        jd: jieqiArray[0],
-        value: jieqiArray[1],
-        display: jieqiList(Number(jieqiArray[1])),
-      });
-    }
-  });
-  wasm.month_moons.forEach((moonArray: [number, number, number]) => {
-    if (moonArray[0] >= endMonth || moonArray[0] < startMonth) {
-      return;
-    } else {
-      const moonDateTime = jdut2DateTime(moonArray[0], zone);
-      daysArraySubTitle[moonDateTime.day] = moonArray[1] == 0 ? "新月" : "满月";
-      daysArrayEvents[moonDateTime.day].push({
-        name: 1, //number of MOON
-        jd: moonArray[0],
-        value: moonArray[2],
-        display: moonArray[1] == 0 ? "新月" : "满月",
-      });
-    }
-  });
+
+  if (wasm) {
+    const zone = FixedOffsetZone.instance(firstDayOfMonth.offset);
+    const days = firstDayOfMonth.daysInMonth;
+    daysArraySubTitleRef.current = new Array(days! + 1);
+    daysArrayEventsRef.current = new Array(days! + 1).fill([]);
+    //inclusive, in jdut
+    const startMonth = timestamp2jdut(firstDayOfMonth.toUnixInteger());
+    //exclusive, in jdut
+    const endMonth = timestamp2jdut(
+      firstDayOfMonth.plus({ day: days }).toUnixInteger()
+    );
+
+    wasm.month_jieqi.forEach((jieqiArray: [number, number]) => {
+      if (jieqiArray[0] >= endMonth || jieqiArray[0] < startMonth) {
+        return;
+      } else {
+        const jieqiDateTime = jdut2DateTime(jieqiArray[0], zone);
+        daysArraySubTitleRef.current[jieqiDateTime.day] = jieqiList(
+          Number(jieqiArray[1])
+        );
+        daysArrayEventsRef.current[jieqiDateTime.day].push({
+          name: 0, //number of SUN
+          jd: jieqiArray[0],
+          value: jieqiArray[1],
+          display: jieqiList(Number(jieqiArray[1])),
+        });
+      }
+    });
+    wasm.month_moons.forEach((moonArray: [number, number, number]) => {
+      if (moonArray[0] >= endMonth || moonArray[0] < startMonth) {
+        return;
+      } else {
+        const moonDateTime = jdut2DateTime(moonArray[0], zone);
+        daysArraySubTitleRef.current[moonDateTime.day] =
+          moonArray[1] == 0 ? "新月" : "满月";
+        daysArrayEventsRef.current[moonDateTime.day].push({
+          name: 1, //number of MOON
+          jd: moonArray[0],
+          value: moonArray[2],
+          display: moonArray[1] == 0 ? "新月" : "满月",
+        });
+      }
+    });
+  }
+
   //calendar skelton
   let day = 1;
   for (let i = 0; i < 5; i++) {
@@ -160,112 +154,120 @@ export default function CalendarTable({
   }
   return (
     <div>
-      <Table
-        style={{ textAlign: "center", maxWidth: "600px" }}
-        captionSide="top"
-      >
-        {/* <Table.Caption>
-          {selectedDate
-            .setLocale("zh-tw-u-ca-chinese")
-            .toLocaleString({ year: "2-digit", month: "long" })}
-        </Table.Caption> */}
-        <Table.Thead>
-          <Table.Tr>
-            <Table.Th>Sun</Table.Th>
-            <Table.Th>Mon</Table.Th>
-            <Table.Th>Tue</Table.Th>
-            <Table.Th>Wed</Table.Th>
-            <Table.Th>Thu</Table.Th>
-            <Table.Th>Fri</Table.Th>
-            <Table.Th>Sat</Table.Th>
-          </Table.Tr>
-        </Table.Thead>
-        <Table.Tbody>
-          {calendarArray.map((week, index) => (
-            <Table.Tr key={index}>
-              {week.map((day, i) => {
-                if (day === null) {
-                  return (
-                    // day: which day (could be null), index: which week, i: which day of the week
-                    <Table.Td key={day + "-" + index + "-" + i}></Table.Td>
-                  );
-                }
-                const dayCalendar = selectedDate.set({
-                  day: day,
-                });
-                const dayStringParts = dayCalendar
-                  .setLocale("zh-tw-u-ca-chinese")
-                  .toLocaleParts({
-                    dateStyle: "long",
-                  });
-                return (
-                  <Table.Td key={day + "-" + index + "-" + i}>
-                    <Tooltip
-                      events={{ hover: true, focus: false, touch: false }}
-                      label={
-                        <>
-                          <div>
-                            {dayStringParts[1].value}
-                            {dayStringParts[3].value}
-                            {dayStringParts[4].value}
-                          </div>
-                          <div>
-                            {(firstDayOfMonthJDLocal + day - 1).toString()}
-                          </div>
-                        </>
-                      }
-                    >
-                      <div
-                        className={
-                          selectedDate.day === day ? classes.selected : ""
-                        }
-                        onClick={() => {
-                          setSelectedDate(dayCalendar);
-                        }}
-                      >
-                        {day.toString()}
-                        <br />
-                        <div
-                          style={{
-                            color: daysArraySubTitle[day] ? "red" : "black",
-                          }}
+      {wasm && (
+        <>
+          <Table
+            style={{ textAlign: "center", maxWidth: "600px" }}
+            captionSide="top"
+          >
+            <Table.Thead>
+              <Table.Tr>
+                <Table.Th>Sun</Table.Th>
+                <Table.Th>Mon</Table.Th>
+                <Table.Th>Tue</Table.Th>
+                <Table.Th>Wed</Table.Th>
+                <Table.Th>Thu</Table.Th>
+                <Table.Th>Fri</Table.Th>
+                <Table.Th>Sat</Table.Th>
+              </Table.Tr>
+            </Table.Thead>
+            <Table.Tbody>
+              {calendarArray.map((week, index) => (
+                <Table.Tr key={index}>
+                  {week.map((day, i) => {
+                    if (day === null) {
+                      return (
+                        // day: which day (could be null), index: which week, i: which day of the week
+                        <Table.Td key={day + "-" + index + "-" + i}></Table.Td>
+                      );
+                    }
+                    const dayCalendar = selectedDate.set({
+                      day: day,
+                    });
+                    const dayStringParts = dayCalendar
+                      .setLocale("zh-tw-u-ca-chinese")
+                      .toLocaleParts({
+                        dateStyle: "long",
+                      });
+                    return (
+                      <Table.Td key={day + "-" + index + "-" + i}>
+                        <Tooltip
+                          events={{ hover: true, focus: false, touch: false }}
+                          label={
+                            <>
+                              <div>
+                                {dayStringParts[1].value}
+                                {dayStringParts[3].value}
+                                {dayStringParts[4].value}
+                              </div>
+                              <div>
+                                {(firstDayOfMonthJDLocal + day - 1).toString()}
+                              </div>
+                            </>
+                          }
                         >
-                          {daysArraySubTitle[day] ??
-                            day2GanzhiChar(firstDayOfMonthJDLocal + day - 1)}
-                        </div>
-                      </div>
-                    </Tooltip>
-                  </Table.Td>
-                );
-              })}
-            </Table.Tr>
-          ))}
-        </Table.Tbody>
-      </Table>
-      <Explain />
-      <div>
-        {selectedDate.toFormat("yyyy LLLL dd")}
-        <br />
-        {selectedDate
-          .setLocale("zh-tw-u-ca-chinese")
-          .toLocaleString({ year: "2-digit", month: "long", day: "numeric" })}
-        <br />
-        {selectedDate
-          .reconfigure({ locale: "zh-cn", outputCalendar: "hebrew" })
-          .toLocaleString()}{" "}
-        <br />
-        {selectedDate
-          .reconfigure({ locale: "zh-cn", outputCalendar: "islamic" })
-          .toLocaleString()}
-        <br />
-        {selectedDate
-          .reconfigure({ locale: "zh-cn", outputCalendar: "islamic-umalqura" })
-          .toLocaleString()}{" "}
-        <br />
-        {selectedDate
-          .reconfigure({ locale: "zh-cn", outputCalendar: "islamic-civil" })
-          .toLocaleString()}{" "}
-      </div>
+                          <div
+                            className={
+                              selectedDate.day === day ? classes.selected : ""
+                            }
+                            onClick={() => {
+                              setSelectedDate(dayCalendar);
+                            }}
+                          >
+                            {day.toString()}
+                            <br />
+                            <div
+                              style={{
+                                color: daysArraySubTitleRef.current[day]
+                                  ? "red"
+                                  : "black",
+                              }}
+                            >
+                              {daysArraySubTitleRef.current[day] ??
+                                day2GanzhiChar(
+                                  firstDayOfMonthJDLocal + day - 1
+                                )}
+                            </div>
+                          </div>
+                        </Tooltip>
+                      </Table.Td>
+                    );
+                  })}
+                </Table.Tr>
+              ))}
+            </Table.Tbody>
+          </Table>
+          <Explain />
+          <div>
+            {selectedDate.toFormat("yyyy LLLL dd")}
+            <br />
+            {selectedDate.setLocale("zh-tw-u-ca-chinese").toLocaleString({
+              year: "2-digit",
+              month: "long",
+              day: "numeric",
+            })}
+            <br />
+            {selectedDate
+              .reconfigure({ locale: "zh-cn", outputCalendar: "hebrew" })
+              .toLocaleString()}{" "}
+            <br />
+            {selectedDate
+              .reconfigure({ locale: "zh-cn", outputCalendar: "islamic" })
+              .toLocaleString()}
+            <br />
+            {selectedDate
+              .reconfigure({
+                locale: "zh-cn",
+                outputCalendar: "islamic-umalqura",
+              })
+              .toLocaleString()}{" "}
+            <br />
+            {selectedDate
+              .reconfigure({ locale: "zh-cn", outputCalendar: "islamic-civil" })
+              .toLocaleString()}{" "}
+          </div>
+        </>
+      )}
     </div>
   );
 }
