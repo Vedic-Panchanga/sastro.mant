@@ -2,9 +2,9 @@ import { Button } from "@mantine/core";
 import { Link, useRouteError } from "react-router-dom";
 export default function ErrorPage() {
   const error: any = useRouteError();
-  console.log("Status", error.status);
-  console.log("obj", error);
-  console.log("message", error.message);
+  // console.log("Status", error.status);
+  // console.log("obj", error);
+  // console.log("message", error.message);
 
   return (
     <div id="error-page">

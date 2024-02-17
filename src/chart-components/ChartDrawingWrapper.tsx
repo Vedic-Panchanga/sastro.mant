@@ -29,7 +29,7 @@ export default function ChartDrawingWrapper({
 
   //Calculate the position of planets
   const planetState = wasm.planets;
-  console.log("planetState", planetState);
+  // console.log("planetState", planetState);
   if (!helio) {
     planetState[nodeType ? 10 : 11].shown = false;
     planetState[nodeType ? 11 : 10].shown = display[10];

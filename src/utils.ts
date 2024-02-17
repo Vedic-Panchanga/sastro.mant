@@ -239,7 +239,11 @@ export function year2Ganzhi(year_chinese: number) {
 
 export function day2Ganzhi(jd: number) {
   const day2JiaYin = Math.floor(-1 + 1 / 24 + jd);
-  return [day2JiaYin % 10, day2JiaYin % 12];
+  let gan = day2JiaYin % 10;
+  let zhi = day2JiaYin % 12;
+  if (gan < 0) gan += 10;
+  if (zhi < 0) zhi += 12;
+  return [gan, zhi];
 }
 export function ganList(gan: number) {
   const list = ["甲", "乙", "丙", "丁", "戊", "己", "庚", "辛", "壬", "癸"];

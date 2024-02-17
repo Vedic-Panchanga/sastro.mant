@@ -1,6 +1,6 @@
 import { ActionIcon, NativeSelect, TextInput } from "@mantine/core";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 
 import { useOutletContext } from "react-router-dom";
 import { type DateTimeT, Location } from "./Root";
@@ -23,6 +23,11 @@ export default function Calendar() {
   function handleYear(newYear: string) {
     setYear(newYear);
     const validYear = Number(newYear);
+    if (validYear <= -4800 || validYear >= 3000) {
+      return alert(
+        "Hello! the year is only valid from -4800 to 3000 (exclusive). \n\nExtended range is possible but would bloat page."
+      );
+    }
     if (!isNaN(validYear)) {
       setSelectedDate((prev) => prev.set({ year: validYear }));
     }

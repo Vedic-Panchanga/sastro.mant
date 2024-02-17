@@ -11,23 +11,20 @@ import { type DateTimeT } from "../routes/Root";
 import classes from "./CalendarTable.module.css";
 import { useMemo } from "react";
 import { FixedOffsetZone } from "luxon";
-const enum calendarType {
-  Observe,
-  Astrology,
-}
+import Explain from "./Explain";
+
+// const enum calendarType {
+//   Observe,
+//   Astrology,
+// }
 type event = {
-  name: string;
-  jd: number;
-  value: string | number; //where does it happen or the magnitude
-  type?: calendarType;
+  jd: number; //when
+  name: number; //number, since we would like to use planets' symbols
+  type?: string; //what, number, look the numbers up in the table
+  value: string | number; //where. =>where does it happen or the magnitude
+  display?: string; // normally: concat: "jd  name + type  value", but some use display directly, like "display  value" (display like new moon)
 };
 const DAYS = 7;
-type Day = {
-  dayNum: number;
-  subTitle: string;
-  jd: number;
-  eventList?: event[];
-};
 
 export default function CalendarTable({
   selectedDate,
@@ -36,12 +33,14 @@ export default function CalendarTable({
   selectedDate: DateTimeT;
   setSelectedDate: React.Dispatch<React.SetStateAction<DateTimeT>>;
 }) {
-  const calendarArray: (Day | null)[][] = [];
+  const calendarArray: (number | null)[][] = [];
   const zone = FixedOffsetZone.instance(selectedDate.offset);
   const days = selectedDate.daysInMonth;
   //record jieqi+moon
-  const daysArray = new Array(days);
-  const firstDayofYear = selectedDate.set({
+  const daysArraySubTitle: Array<string | undefined> = new Array(days! + 1);
+  //record all the events
+  const daysArrayEvents: Array<event[]> = new Array(days! + 1).fill([]);
+  const firstDayOfYear = selectedDate.set({
     month: 1,
     day: 1,
     hour: 0,
@@ -50,16 +49,16 @@ export default function CalendarTable({
     millisecond: 0,
   });
 
-  const firstDayofMonth = selectedDate.set({
+  const firstDayOfMonth = selectedDate.set({
     day: 1,
     hour: 0,
     minute: 0,
     second: 0,
     millisecond: 0,
   });
-  //inclisive
-  const startMonth = timestamp2jdut(firstDayofMonth.toUnixInteger());
-  //exlusive
+  //inclusive, in jdut
+  const startMonth = timestamp2jdut(firstDayOfMonth.toUnixInteger());
+  //exclusive, in jdut
   const endMonth = timestamp2jdut(
     selectedDate
       .set({
@@ -72,6 +71,12 @@ export default function CalendarTable({
       })
       .toUnixInteger()
   );
+  //first day of month noon jd local (in convenience to calc other jd locals)
+  const firstDayOfMonthJDLocal = timestamp2jdlocal(
+    firstDayOfMonth.set({ hour: 12 }).toUnixInteger(),
+    firstDayOfMonth.offset
+  );
+  //apply the calculation
   const wasm = useMemo(
     () =>
       JSON.parse(
@@ -89,7 +94,7 @@ export default function CalendarTable({
             "number",
           ],
           [
-            timestamp2jdut(firstDayofYear.toUnixInteger()),
+            timestamp2jdut(firstDayOfYear.toUnixInteger()),
             -1,
             0,
             0,
@@ -100,18 +105,25 @@ export default function CalendarTable({
           ]
         )
       ),
-    [firstDayofYear]
+    [firstDayOfYear]
   );
-  console.log("wasmCalendarMonth", wasm);
+  // console.log("wasmCalendarMonth", wasm);
   // console.log("wasmCalendarMonth", wasmRaw);
   // const wasm = JSON.parse(wasmRaw);
 
+  // add the jieqi and moons
   wasm.month_jieqi.forEach((jieqiArray: [number, number]) => {
     if (jieqiArray[0] >= endMonth || jieqiArray[0] < startMonth) {
       return;
     } else {
       const jieqiDateTime = jdut2DateTime(jieqiArray[0], zone);
-      daysArray[jieqiDateTime.day] = jieqiList(Number(jieqiArray[1]));
+      daysArraySubTitle[jieqiDateTime.day] = jieqiList(Number(jieqiArray[1]));
+      daysArrayEvents[jieqiDateTime.day].push({
+        name: 0, //number of SUN
+        jd: jieqiArray[0],
+        value: jieqiArray[1],
+        display: jieqiList(Number(jieqiArray[1])),
+      });
     }
   });
   wasm.month_moons.forEach((moonArray: [number, number, number]) => {
@@ -119,39 +131,33 @@ export default function CalendarTable({
       return;
     } else {
       const moonDateTime = jdut2DateTime(moonArray[0], zone);
-      daysArray[moonDateTime.day] = moonArray[1] == 0 ? "新月" : "满月";
+      daysArraySubTitle[moonDateTime.day] = moonArray[1] == 0 ? "新月" : "满月";
+      daysArrayEvents[moonDateTime.day].push({
+        name: 1, //number of MOON
+        jd: moonArray[0],
+        value: moonArray[2],
+        display: moonArray[1] == 0 ? "新月" : "满月",
+      });
     }
   });
-
+  //calendar skelton
   let day = 1;
   for (let i = 0; i < 5; i++) {
-    if (i == 0 && days === 28 && firstDayofMonth.weekday == 1) {
+    if (i == 0 && days === 28 && firstDayOfMonth.weekday == 1) {
       continue;
     }
-    const week: (Day | null)[] = [];
+    const week: (number | null)[] = [];
     for (let j = 0; j < DAYS; j++) {
-      const dayCanlendar = selectedDate.set({
-        day: day,
-      });
-      const jd =
-        timestamp2jdlocal(dayCanlendar.toUnixInteger(), dayCanlendar.offset) +
-        0.5;
-      if ((i === 0 && j < firstDayofMonth.weekday) || day > days!) {
+      if ((i === 0 && j < firstDayOfMonth.weekday) || day > days!) {
         week.push(null);
       } else {
-        week.push({
-          dayNum: day,
-          subTitle: daysArray[day] ?? day2GanzhiChar(jd),
-          jd: jd,
-        });
+        week.push(day);
         day++;
       }
     }
     calendarArray.push(week);
     if (day > days!) break;
   }
-
-  // const firstDay = wasm.month_jieqi[0].day;
   return (
     <div>
       <Table
@@ -180,25 +186,20 @@ export default function CalendarTable({
               {week.map((day, i) => {
                 if (day === null) {
                   return (
+                    // day: which day (could be null), index: which week, i: which day of the week
                     <Table.Td key={day + "-" + index + "-" + i}></Table.Td>
                   );
                 }
-                const dayCanlendar = selectedDate.set({
-                  day: day.dayNum,
+                const dayCalendar = selectedDate.set({
+                  day: day,
                 });
-                const dayStringParts = dayCanlendar
+                const dayStringParts = dayCalendar
                   .setLocale("zh-tw-u-ca-chinese")
                   .toLocaleParts({
                     dateStyle: "long",
                   });
-                // const jd =
-                //   timestamp2jdlocal(
-                //     dayCanlendar.toUnixInteger(),
-                //     dayCanlendar.offset
-                //   ) + 0.5;
-
                 return (
-                  <Table.Td key={day.dayNum + "-" + index + "-" + i}>
+                  <Table.Td key={day + "-" + index + "-" + i}>
                     <Tooltip
                       events={{ hover: true, focus: false, touch: false }}
                       label={
@@ -208,23 +209,30 @@ export default function CalendarTable({
                             {dayStringParts[3].value}
                             {dayStringParts[4].value}
                           </div>
-                          <div>{day.jd.toString()}</div>
+                          <div>
+                            {(firstDayOfMonthJDLocal + day - 1).toString()}
+                          </div>
                         </>
                       }
                     >
                       <div
                         className={
-                          selectedDate.day === day.dayNum
-                            ? classes.selected
-                            : ""
+                          selectedDate.day === day ? classes.selected : ""
                         }
                         onClick={() => {
-                          setSelectedDate(dayCanlendar);
+                          setSelectedDate(dayCalendar);
                         }}
                       >
-                        {day.dayNum.toString()}
+                        {day.toString()}
                         <br />
-                        {day.subTitle}
+                        <div
+                          style={{
+                            color: daysArraySubTitle[day] ? "red" : "black",
+                          }}
+                        >
+                          {daysArraySubTitle[day] ??
+                            day2GanzhiChar(firstDayOfMonthJDLocal + day - 1)}
+                        </div>
                       </div>
                     </Tooltip>
                   </Table.Td>
@@ -234,6 +242,7 @@ export default function CalendarTable({
           ))}
         </Table.Tbody>
       </Table>
+      <Explain />
       <div>
         {selectedDate.toFormat("yyyy LLLL dd")}
         <br />
@@ -250,7 +259,11 @@ export default function CalendarTable({
           .toLocaleString()}
         <br />
         {selectedDate
-          .reconfigure({ locale: "zh-cn", outputCalendar: "islamicc" })
+          .reconfigure({ locale: "zh-cn", outputCalendar: "islamic-umalqura" })
+          .toLocaleString()}{" "}
+        <br />
+        {selectedDate
+          .reconfigure({ locale: "zh-cn", outputCalendar: "islamic-civil" })
           .toLocaleString()}{" "}
       </div>
     </div>

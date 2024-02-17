@@ -53,7 +53,7 @@ function Geocode({ setGeocodeLocation }: GeocodeProps) {
 
       setTimeout(() => setIsSearching(false), 2000); // disable searching for 2 seconds
     } catch (error) {
-      console.error("Error geocoding:", (error as Error).message);
+      // console.error("Error geocoding:", (error as Error).message);
       return <>{(error as Error).message}</>;
     }
   }

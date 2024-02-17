@@ -52,6 +52,7 @@ export default function ChartDisplaySettings() {
     <div className={classes.container}>
       {Object.entries(display).map(([key, value]) => (
         <Chip
+          key={key}
           checked={value}
           onChange={() => setDisplay((prev) => ({ ...prev, [key]: !value }))}
         >

@@ -109,7 +109,7 @@ export default function Chart() {
     ]
   );
   const wasm: WasmType = JSON.parse(wasmRaw);
-  console.log("wasm", wasm, !helio);
+  // console.log("wasm", wasm, !helio);
 
   // calculate positions
   const planetState = wasm.planets;
