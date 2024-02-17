@@ -1,0 +1,15 @@
+.list-item {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: auto;
+  align-items: flex-start;
+}
+.list {
+  list-style-type: none;
+  padding: 10px;
+}
+.search {
+  --button-height-xs: 5rem !important;
+  margin-left: 4px;
+}

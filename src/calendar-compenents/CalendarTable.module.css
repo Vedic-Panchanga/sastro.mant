@@ -1,0 +1,14 @@
+.selected {
+  background-color: #f0f0f0;
+  border-radius: 20%;
+  color: #000;
+  font-weight: bold;
+  /* padding: 5px;
+  margin: 0;
+  width: 30px;
+  height: 30px;
+  text-align: center;
+  line-height: 30px; */
+  /* cursor: pointer; */
+  transition: 0.3s;
+}

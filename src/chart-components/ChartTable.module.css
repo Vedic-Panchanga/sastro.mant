@@ -1,0 +1,6 @@
+.container {
+  text-align: center;
+  @media screen and (orientation: landscape) {
+    max-width: 50%;
+  }
+}

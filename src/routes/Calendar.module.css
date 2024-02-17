@@ -1,0 +1,16 @@
+.stack {
+  display: flex;
+  flex-direction: row;
+  gap: 30px;
+}
+.select {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 5px;
+}
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}

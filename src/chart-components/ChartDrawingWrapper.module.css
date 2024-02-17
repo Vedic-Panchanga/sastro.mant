@@ -1,0 +1,14 @@
+.container {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  /* 当屏幕方向为竖屏时，flex-direction为column */
+  @media screen and (orientation: portrait) {
+    flex-direction: column;
+  }
+  /* 当屏幕方向为横屏时，flex-direction为row */
+  @media screen and (orientation: landscape) {
+    flex-direction: row;
+    align-items: start;
+  }
+}

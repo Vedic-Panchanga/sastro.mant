@@ -1,0 +1,32 @@
+.text {
+  font-family: "Courier New", Courier, monospace;
+}
+.container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 1em;
+  flex-wrap: wrap;
+}
+.left {
+  display: flex;
+  flex-direction: column;
+  /* align-items: center; */
+  justify-content: space-between;
+}
+.lon-lat {
+  display: flex;
+  justify-content: space-between;
+}
+.buttons {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.2em;
+}
+.selects {
+  display: flex;
+  width: fit-content;
+  margin: auto;
+}

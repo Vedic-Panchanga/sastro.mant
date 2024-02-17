@@ -1,0 +1,1 @@
+const MiscSettings = ["colorElements", "homeLocation"];
