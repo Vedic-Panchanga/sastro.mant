@@ -14,7 +14,7 @@ import {
   siderealOrTropicalAtom,
 } from "../settings/chart-settings/General";
 import { distance, planetsSymbol, timestamp2jdut } from "../utils";
-import astrologer from "../../astrologer.ts";
+import astrologer from "../astrologer.ts";
 import { useEffect, useState } from "react";
 // import { ChartDrawingOptions } from "../chart-components/ChartDrawingOptions";
 declare global {

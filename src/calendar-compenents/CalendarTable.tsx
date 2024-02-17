@@ -12,7 +12,7 @@ import classes from "./CalendarTable.module.css";
 import { useEffect, useRef, useState } from "react";
 import { DateTime, FixedOffsetZone } from "luxon";
 import Explain from "./Explain";
-import astrologer from "../../astrologer";
+import astrologer from "../astrologer";
 
 // const enum calendarType {
 //   Observe,

@@ -20,6 +20,6 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true
   },
-  "include": ["src", "astrologer.ts", "asweph.js"],
+  "include": ["src", "src/astrologer.ts", "asweph.js"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }
