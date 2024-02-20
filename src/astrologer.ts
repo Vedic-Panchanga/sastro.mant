@@ -10,10 +10,13 @@ export default function astrologer(
   type: number
 ): Promise<any> {
   return new Promise((resolve, reject) => {
-    if (astrologerWorker) {
-      astrologerWorker.terminate();
+    // if (astrologerWorker) {
+    //   astrologerWorker.terminate();
+    // }
+    if (!astrologerWorker) {
+      astrologerWorker = new Worker("asweph.js");
     }
-    astrologerWorker = new Worker("asweph.js");
+
     astrologerWorker.postMessage([
       tjd_ut,
       sid,

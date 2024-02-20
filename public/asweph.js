@@ -1,3 +1,4 @@
+let flag = false;
 self.Module = {
   locateFile: function (s) {
     return s;
@@ -5,6 +6,7 @@ self.Module = {
   // Add this function
   onRuntimeInitialized: function () {
     var query = get();
+    flag = true;
     postMessage(query);
   },
 };
@@ -16,6 +18,10 @@ self.data = {};
 // to pass data from the main JS file
 self.onmessage = function (messageEvent) {
   self.data = messageEvent.data; // save the data
+  if (flag) {
+    var query = get();
+    postMessage(query);
+  }
 };
 
 // gets executed when everything is ready.
