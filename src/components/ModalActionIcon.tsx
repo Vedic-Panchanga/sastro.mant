@@ -6,6 +6,7 @@ type ModalButtonProps = {
   children: ReactNode;
   modalHeading?: string;
 };
+//only used by question mark icon by now
 export default function ModalActionIcon({
   children,
   modalHeading,
@@ -13,7 +14,9 @@ export default function ModalActionIcon({
   const [opened, { open, close }] = useDisclosure(false);
   return (
     <>
-      <ActionIcon onClick={open}>{<IconQuestionMark />}</ActionIcon>
+      <ActionIcon onClick={open} size="xs" variant="outline" radius="lg">
+        {<IconQuestionMark />}
+      </ActionIcon>
       <Modal
         opened={opened}
         onClose={close}

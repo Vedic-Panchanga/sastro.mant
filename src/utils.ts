@@ -1,21 +1,30 @@
 import { DateTime, FixedOffsetZone } from "luxon";
 import { Planet } from "./routes/Chart";
-export function parseDegree(deg: number) {
+/**
+ *
+ * @param deg [0,360)
+ * @returns {zodiac, minute, second}
+ */
+export function parseDegree(deg: number): {
+  zodiac: number;
+  degree: number;
+  minute: number;
+} {
   const zodiac = Math.floor(deg / 30);
   const remainder = deg % 30;
   const degree = Math.floor(remainder);
   const minute = Math.floor((remainder - degree) * 60);
-  return { zodiac: zodiac, degree: degree, minute: minute };
+  return { zodiac, degree, minute };
 }
 export function parseDegreeNoZodiac(deg: number) {
   const degree = Math.floor(deg);
   const minute = Math.floor((deg - degree) * 60);
   const second = Math.round(((deg - degree) * 60 - minute) * 60);
-  return { degree: degree, minute: minute, second: second };
+  return { degree, minute, second };
 }
-export function degreesToRadians(degree: number) {
-  return degree * (Math.PI / 180);
-}
+// export function degreesToRadians(degree: number) {
+//   return degree * (Math.PI / 180);
+// }
 export function zodiacSymbol(zodiac: number) {
   return String.fromCharCode(zodiac + 9800) + "\u{FE0E}";
 }
@@ -268,7 +277,7 @@ export function zhiList(zhi: number) {
 }
 /**
  *
- * @param jieqiNumber sun longitude of this jieqi
+ * @param jieqiNumber sun longitude of this jieqi, [0,360)
  * @returns jieqi name
  */
 export function jieqiList(jieqiNumber: number) {

@@ -29,7 +29,7 @@ export default function TimeLocationDisplay({
   const [number, setNumber] = useState<string>("1");
   const [unit, setUnit] = useState<string>("day");
   function addOrMinusTime(sign: number) {
-    setDateTime((prev) => prev.plus({ [unit]: sign }));
+    setDateTime((prev) => prev.plus({ [unit]: sign * Number(number) }));
   }
   return (
     <div className={classes.container}>

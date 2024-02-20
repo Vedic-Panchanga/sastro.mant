@@ -17,11 +17,6 @@ import { distance, planetsSymbol, timestamp2jdut } from "../utils";
 import astrologer from "../astrologer.ts";
 import { useEffect, useState } from "react";
 // import { ChartDrawingOptions } from "../chart-components/ChartDrawingOptions";
-declare global {
-  interface Window {
-    Module: any; // 或者使用更具体的类型，如 ModuleType，根据实际情况
-  }
-}
 
 // 定义 Planet 类型
 export type Planet = {
@@ -98,6 +93,7 @@ export default function Chart() {
     )
       .then((wasm) => {
         setWasm(wasm);
+        // console.log(wasm);
 
         // calculate positions
         const planetState = wasm.planets;

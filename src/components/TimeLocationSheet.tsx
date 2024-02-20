@@ -129,7 +129,9 @@ export default function TimeLocationSheet({
       inputValues.latSec !== ""
     ) {
       latitude =
-        ((parseFloat(inputValues.latDeg) || Math.abs(location.latitude)) +
+        ((inputValues.latDeg !== ""
+          ? parseFloat(inputValues.latDeg)
+          : Math.abs(location.latitude)) +
           (parseFloat(inputValues.latMin) || 0) / 60 +
           (parseFloat(inputValues.latSec) || 0) / 3600) *
         (locationDirection.northSouth ? 1 : -1);

@@ -1,1 +1,0 @@
-const MiscSettings = ["colorElements", "homeLocation"];

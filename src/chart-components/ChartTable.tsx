@@ -1,4 +1,4 @@
-import { Table, Tabs, Tooltip } from "@mantine/core";
+import { ScrollArea, Table, Tabs, Tooltip } from "@mantine/core";
 import { type Planet as PlanetType, Fixstars } from "../routes/Chart.tsx";
 import {
   parseDegree,
@@ -10,14 +10,24 @@ import {
 } from "../utils.ts";
 import Settings from "../settings/Settings.tsx";
 import classes from "./ChartTable.module.css";
+
 type TableChartProps = {
   planetState: Record<string, PlanetType>;
 };
+
 function TableChart({ planetState }: TableChartProps) {
+  // const [scrolled, setScrolled] = useState(false);
   return (
-    <Table.ScrollContainer minWidth={500}>
-      <Table highlightOnHover>
-        <Table.Thead>
+    <ScrollArea
+      h="80vh"
+      // miw={500}
+      // onScrollPositionChange={({ y }) => setScrolled(y !== 0)}
+    >
+      {/* <Table.ScrollContainer minWidth={500}> */}
+      <Table highlightOnHover stickyHeader>
+        <Table.Thead
+        // className={cx(classes.header, { [classes.scrolled]: scrolled })}
+        >
           <Table.Tr>
             <Table.Th>Planet</Table.Th>
             <Table.Th>Lon</Table.Th>
@@ -98,7 +108,8 @@ function TableChart({ planetState }: TableChartProps) {
           })}
         </Table.Tbody>
       </Table>
-    </Table.ScrollContainer>
+      {/* </Table.ScrollContainer> */}
+    </ScrollArea>
   );
 }
 type TableFixstarProps = {

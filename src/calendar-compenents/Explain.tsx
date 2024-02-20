@@ -16,7 +16,7 @@ export default function Explain() {
             rel="noopener noreferrer"
             href="https://github.com/unicode-org/cldr/blob/main/common/bcp47/calendar.xml"
           >
-            your explorer
+            Internet explorer
           </Anchor>
           , thus it might be incorrect in a longer time range.
         </p>
@@ -40,7 +40,7 @@ export default function Explain() {
               <Table.Th>Hebrew</Table.Th>
               <Table.Th>Chinese</Table.Th>
               <Table.Th>Panchang (Vedic)</Table.Th>
-              <Table.Th>Tibetan (Panchang)</Table.Th>
+              <Table.Th>Tibetan</Table.Th>
             </Table.Tr>
           </Table.Thead>
           <Table.Tbody>
@@ -50,9 +50,16 @@ export default function Explain() {
                 <Anchor
                   target="_blank"
                   rel="noopener noreferrer"
+                  href="https://cldr.unicode.org/development/development-process/design-proposals/islamic-calendar-types"
+                >
+                  explain
+                </Anchor>{" "}
+                <Anchor
+                  target="_blank"
+                  rel="noopener noreferrer"
                   href="https://webspace.science.uu.nl/~gent0113/islam/islam_tabcal_converter.htm"
                 >
-                  here
+                  convert
                 </Anchor>
               </Table.Td>
               <Table.Td>
@@ -62,8 +69,7 @@ export default function Explain() {
                   href="https://www.jewfaq.org/jewish_calendar"
                 >
                   explain
-                </Anchor>
-                /
+                </Anchor>{" "}
                 <Anchor
                   target="_blank"
                   rel="noopener noreferrer"
@@ -79,8 +85,7 @@ export default function Explain() {
                   href="https://ytliu0.github.io/ChineseCalendar/rules.html"
                 >
                   explain
-                </Anchor>
-                /
+                </Anchor>{" "}
                 <Anchor
                   target="_blank"
                   rel="noopener noreferrer"
@@ -139,7 +144,7 @@ export default function Explain() {
             <Table.Tr>
               <Table.Td>year start</Table.Td>
               <Table.Td>first month of a 12 month loop</Table.Td>
-              <Table.Td>first month after spring equinox</Table.Td>
+              <Table.Td>first month after 12 March?</Table.Td>
               <Table.Td>the month contains ecliptic longitude 330°</Table.Td>
               <Table.Td>the month contains sidereal Aries cusp</Table.Td>
               <Table.Td>
@@ -153,7 +158,7 @@ export default function Explain() {
               <Table.Td>last month of a year</Table.Td>
               <Table.Td>
                 the month does not contains (中气) ecliptic longitude (15 + 30m,
-                m is an integer) degree
+                m is an integer)
               </Table.Td>
               <Table.Td>the month does not contains sign cusps</Table.Td>
               <Table.Td>

@@ -45,7 +45,10 @@ const defaultSettings: Record<string, boolean> = {
 };
 
 export const displayAtom = atomWithStorage("display", defaultSettings);
-
+/**
+ * Which planets to display
+ * @returns
+ */
 export default function ChartDisplaySettings() {
   const [display, setDisplay] = useAtom(displayAtom);
   return (

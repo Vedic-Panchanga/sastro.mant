@@ -1,7 +1,6 @@
 import React from "react";
 import {
   colorTheme,
-  degreesToRadians,
   middle,
   parseDegree,
   planetsSymbol,
@@ -12,7 +11,7 @@ const DEFAULT_COLOR = "black";
 const DEFAULT_FONT_SIZE = "100%";
 const DEFAULT_FONT_WEIGHT = "normal";
 const DEFAULT_STROKE_WIDTH = "1px";
-
+const DEG2RAD = Math.PI / 180;
 type TextProps = {
   displayText: string;
   distanceFromCenter: number;
@@ -33,8 +32,8 @@ export function Text({
   angleOffset = 0,
   textWeight = DEFAULT_FONT_WEIGHT,
 }: TextProps) {
-  const cos_value = Math.cos(degreesToRadians(angleInDegrees - angleOffset));
-  const sin_value = Math.sin(degreesToRadians(angleInDegrees - angleOffset));
+  const cos_value = Math.cos(DEG2RAD * (angleInDegrees - angleOffset));
+  const sin_value = Math.sin(DEG2RAD * (angleInDegrees - angleOffset));
   return (
     <text
       x={-distanceFromCenter * cos_value + "%"}
@@ -70,8 +69,8 @@ export function Line({
   color = "black",
   strokeWidth = DEFAULT_STROKE_WIDTH,
 }: LineProps) {
-  const cos_value = Math.cos(degreesToRadians(theta - leftDegree));
-  const sin_value = Math.sin(degreesToRadians(theta - leftDegree));
+  const cos_value = Math.cos(DEG2RAD * (theta - leftDegree));
+  const sin_value = Math.sin(DEG2RAD * (theta - leftDegree));
   const endRadius = startRadius - length;
   return (
     <line

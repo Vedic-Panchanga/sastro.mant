@@ -9,8 +9,7 @@ import { FixedOffsetZone } from "luxon";
 import { IconMinus, IconPlus } from "@tabler/icons-react";
 import classes from "./Calendar.module.css";
 export default function Calendar() {
-  const [dateTime, , location]: [DateTimeT, never, Location] =
-    useOutletContext();
+  const [dateTime]: [DateTimeT, never, Location] = useOutletContext();
   const [year, setYear] = useState<string>(dateTime.year.toString());
 
   const [selectedDate, setSelectedDate] = useState(
