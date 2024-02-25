@@ -17,6 +17,7 @@ import TabsTwo from "../components/TabsTwo";
 import classes from "./Bazi.module.css";
 import ModalActionIcon from "../components/ModalActionIcon";
 import { atomWithStorage } from "jotai/utils";
+import { useAtom } from "jotai";
 type WasmType = {
   jd_ut: number;
   e: number;
@@ -45,7 +46,7 @@ export default function Bazi() {
   const [wasm, setWasm] = useState<WasmType | undefined>(undefined);
   //get data
   useEffect(() => {
-    setWasm(undefined);
+    // setWasm(undefined);
 
     astrologer(
       timestamp2jdut(dateTime.toMillis()),
@@ -77,6 +78,7 @@ export default function Bazi() {
     )
   );
 }
+
 function BaziDisplay({
   wasm,
   geoLon,
@@ -88,7 +90,7 @@ function BaziDisplay({
 }) {
   //Hooks
   const [gender, setGender] = useState(true); //true for male, false for female
-  const [type, setType] = useState(true); //true for LMT, false for LAT
+  const [type, setType] = useAtom(lmtOrLatAtom); //true for LMT, false for LAT
   //calc
   const [zi1Num, zi2Num] = year2Ganzhi(wasm.year_chinese);
   const monthChinese = Math.floor((wasm.SUN_tropical + 45) / 30) % 12;
