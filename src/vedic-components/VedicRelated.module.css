@@ -1,8 +1,14 @@
 .th {
   padding: 0;
 }
-
-.control {
+.tablePrimary {
+  /* color: rebeccapurple; */
+  font-weight: bold;
+}
+.tabsContainer {
+  text-align: center;
+}
+/* .control {
   width: 100%;
   padding: var(--mantine-spacing-xs) var(--mantine-spacing-md);
 
@@ -12,10 +18,10 @@
       var(--mantine-color-dark-6)
     );
   }
-}
+} */
 
-.icon {
+/* .icon {
   width: rem(21px);
   height: rem(21px);
   border-radius: rem(21px);
-}
+} */

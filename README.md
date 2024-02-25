@@ -2,8 +2,9 @@
 
 ## chart setting: general
 
-1. fixed asc to 0 degree Aries
-2. color scheme of elements
+1. color scheme of elements
+2. bi-wheel
+3. animate the chart
 
 ## chart setting: display
 

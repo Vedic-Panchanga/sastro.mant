@@ -7,6 +7,7 @@ import {
 import { groupPlanetsByWholeHouse } from "../utils";
 // import { Planet } from "../routes/Chart";
 import { type Planet } from "../routes/Vedic";
+import classes from "../chart-components/SVGChart.module.css";
 export default function SVGVedic({
   planetState,
 }: {
@@ -15,14 +16,14 @@ export default function SVGVedic({
   const svgWidth = 404;
   const firstHouseSign = Math.floor(planetState[-4].lon / 30);
   const groupPlanets = groupPlanetsByWholeHouse(planetState);
-  const size = 95; //percentage
+  const size = 95; //percentage chart
   const fontSizePlanet = "130%";
   return (
     <svg
       viewBox={
         -svgWidth / 2 + " -" + svgWidth / 2 + " " + svgWidth + " " + svgWidth
       }
-      className="w-100"
+      className={classes.chart}
       xmlns="http://www.w3.org/2000/svg"
       version="1.1"
     >

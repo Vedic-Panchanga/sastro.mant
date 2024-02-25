@@ -14,6 +14,7 @@ import { Planet } from "../routes/Vedic.js";
 import { DateTimeT } from "../routes/Root.js";
 import { IconSelector, IconChevronDown } from "@tabler/icons-react";
 import classes from "./VedicRelated.module.css";
+import LongitudeFormat from "../components/LongitudeFormat.js";
 export function SignText({
   firstHouseSign,
   size,
@@ -21,7 +22,7 @@ export function SignText({
   firstHouseSign: number;
   size: number;
 }) {
-  const fontSizeSign = "60%";
+  const fontSizeSign = "65%";
   const distanceKendra = "3%";
   const distanceNotKendra1 = size / 4 + "%";
   const distanceNotKendra2 = "27%";
@@ -255,6 +256,7 @@ type VedicPlanetType = {
   pada: number;
   index: number; //index of planet
   karaIndex: number; //index of kara
+  kara: string;
 };
 type VedicPlanetSearchType = "lon" | "index" | "karaIndex";
 
@@ -267,12 +269,12 @@ function Th({ children, sorted, onSort }: ThProps) {
   const Icon = sorted ? IconChevronDown : IconSelector;
   return (
     <Table.Th className={classes.th}>
-      <UnstyledButton onClick={onSort} className={classes.control}>
+      <UnstyledButton onClick={onSort}>
         <Group justify="space-between">
-          <Text fw={500} fz="sm">
+          <Text fw={700} fz="sm">
             {children}
           </Text>
-          <Center className={classes.icon}>
+          <Center>
             <Icon style={{ width: rem(16), height: rem(16) }} stroke={1.5} />
           </Center>
         </Group>
@@ -284,9 +286,10 @@ function sortData(data: VedicPlanetType[], sortBy: VedicPlanetSearchType) {
   data.sort((a, b) => {
     return a[sortBy] - b[sortBy];
   });
+  console.log("sortData", sortBy, data);
   return data;
 }
-export function TableSort({ planetState }: { planetState: VedicPlanetType[] }) {
+function TableSort({ planetState }: { planetState: VedicPlanetType[] }) {
   const [sortedData, setSortedData] = useState(planetState);
   const [sortBy, setSortBy] = useState<VedicPlanetSearchType>("lon");
   const [reverseSortDirection, setReverseSortDirection] = useState(false);
@@ -295,12 +298,15 @@ export function TableSort({ planetState }: { planetState: VedicPlanetType[] }) {
     const reversed = field === sortBy ? !reverseSortDirection : false;
     setReverseSortDirection(reversed);
     setSortBy(field);
-    setSortedData(sortData(planetState, sortBy));
+    setSortedData(sortData(planetState, field));
   };
   const rows = sortedData.map((row) => (
     <Table.Tr key={row.name}>
       <Table.Td>{row.name}</Table.Td>
-      <Table.Td>{row.lon}</Table.Td>
+      <Table.Td>{row.kara}</Table.Td>
+      <Table.Td>
+        <LongitudeFormat longitude={row.lon} />
+      </Table.Td>
       <Table.Td>{row.nakshastra}</Table.Td>
       <Table.Td>{row.pada}</Table.Td>
     </Table.Tr>
@@ -309,23 +315,30 @@ export function TableSort({ planetState }: { planetState: VedicPlanetType[] }) {
   return (
     <ScrollArea>
       <Table
-        horizontalSpacing="md"
+        highlightOnHover
+        horizontalSpacing="xs"
         verticalSpacing="xs"
-        miw={700}
-        layout="fixed"
+        miw={320}
+        // layout="fixed"
       >
-        <Table.Tbody>
+        <Table.Thead>
           <Table.Tr>
             <Th sorted={sortBy === "index"} onSort={() => setSorting("index")}>
-              Name
+              Planet
+            </Th>
+            <Th
+              sorted={sortBy === "karaIndex"}
+              onSort={() => setSorting("karaIndex")}
+            >
+              Kara
             </Th>
             <Th sorted={sortBy === "lon"} onSort={() => setSorting("lon")}>
-              Longitude
+              Lon
             </Th>
             <Table.Th>Nakastra</Table.Th>
             <Table.Th>Pada</Table.Th>
           </Table.Tr>
-        </Table.Tbody>
+        </Table.Thead>
         <Table.Tbody>{rows}</Table.Tbody>
       </Table>
     </ScrollArea>
@@ -373,7 +386,8 @@ function TableVedic({ planetState }: { planetState: Record<string, Planet> }) {
       nakshastra: nakshatras[nakshastraIndex],
       pada: padaIndex + 1,
       index: Number(planetIndex),
-      karaIndex: -1,
+      karaIndex: 64,
+      kara: "",
     };
   }
   const tablePlanetsInfo = Object.keys(planetState).reduce<VedicPlanetType[]>(
@@ -387,74 +401,18 @@ function TableVedic({ planetState }: { planetState: Record<string, Planet> }) {
   );
   console.log("tablePlanetsInfo", tablePlanetsInfo);
   // tablePlanetsInfo[-4].name = "Lagna";
-  useEffect(() => {
-    tablePlanetsInfo.sort(
-      (a, b) =>
-        (b.index >= 0 && b.index < 7 ? b.lon % 30 : -1) -
-        (a.index >= 0 && a.index < 7 ? a.lon % 30 : -1)
-    );
-    // sortTable("kara", tablePlanetsInfo);
-    tablePlanetsInfo.forEach((planet, index) => {
-      if (planet.index < 0 || planet.index > 7) return;
-      planet.name += " - " + karaList[index];
-      planet.karaIndex = index;
-    });
-  }, [tablePlanetsInfo]);
-  return (
-    tablePlanetsInfo[0] && <TableSort planetState={tablePlanetsInfo} />
-    // <Table size="sm" striped hover>
-    //   <thead>
-    //     <tr>
-    //       <th>
-    //         <Button
-    //           size="sm"
-    //           variant="primary"
-    //           onClick={() => setSortBy("key", tablePlanetsInfo)}
-    //         >
-    //           Planet
-    //         </Button>
-    //       </th>
-    //       <th>
-    //         <ToolTipOverlayTrigger tooltipText="sort by longitude, or Kara">
-    //           <Button
-    //             size="sm"
-    //             variant="primary"
-    //             onClick={() =>
-    //               setSortBy(sortBy === "lon" ? "kara" : "lon", tablePlanetsInfo)
-    //             }
-    //           >
-    //             Longitude
-    //           </Button>
-    //         </ToolTipOverlayTrigger>
-    //       </th>
-    //       <th>Nakshastra</th>
-    //       <th>Pada</th>
-    //     </tr>
-    //   </thead>
-    //   <tbody>
-    //     {tablePlanetsInfo.map((value) => {
-    //       const lonParsed = parseDegree(value.lon);
-    //       return (
-    //         <tr key={value.index}>
-    //           <td>{value.name}</td>
-    //           <td>
-    //             {lonParsed.degree}
-    //             <span
-    //               className="astro-font"
-    //               style={{ color: colorTheme(lonParsed.zodiac % 4) }}
-    //             >
-    //               {zodiacSymbol(lonParsed.zodiac)}
-    //             </span>
-    //             {lonParsed.minute}
-    //           </td>
-    //           <td>{value.nakshastra}</td>
-    //           <td>{value.pada}</td>
-    //         </tr>
-    //       );
-    //     })}
-    //   </tbody>
-    // </Table>
+  tablePlanetsInfo.sort(
+    (a, b) =>
+      (b.index >= 0 && b.index < 7 ? b.lon % 30 : -1) -
+      (a.index >= 0 && a.index < 7 ? a.lon % 30 : -1)
   );
+  // sortTable("kara", tablePlanetsInfo);
+  tablePlanetsInfo.forEach((planet, index) => {
+    if (planet.index < 0 || planet.index > 7) return;
+    planet.kara = karaList[index];
+    planet.karaIndex = index;
+  });
+  return <TableSort planetState={tablePlanetsInfo} />;
 }
 function Dasas({
   moonPos,
@@ -511,38 +469,38 @@ function Dasas({
     }
   }
   return (
-    <Table>
-      <thead>
-        <tr>
-          <th>Major</th>
-          <th>Minor</th>
-          <th>Date</th>
-          <th>Age</th>
-        </tr>
-      </thead>
-      <tbody>
+    <Table highlightOnHover stickyHeader>
+      <Table.Thead>
+        <Table.Tr>
+          <Table.Th>Major</Table.Th>
+          <Table.Th>Minor</Table.Th>
+          <Table.Th>Date</Table.Th>
+          <Table.Th>Age</Table.Th>
+        </Table.Tr>
+      </Table.Thead>
+      <Table.Tbody>
         {dataDasas.map((dasas) =>
           dasas.map((dasa, index) => {
             return (
-              <tr
+              <Table.Tr
                 key={dasa.cumulatedYear}
-                className={index === 0 ? "table-primary" : ""}
+                className={index === 0 ? classes.tablePrimary : ""}
               >
-                <td>{dasa.major}</td>
-                <td>{dasa.minor}</td>
-                <td>
+                <Table.Td>{dasa.major}</Table.Td>
+                <Table.Td>{dasa.minor}</Table.Td>
+                <Table.Td>
                   {dateTime
                     .plus({
                       second: dasa.cumulatedYear * 365.24217 * 86400,
                     })
                     .toFormat("yyyy-MM-dd")}
-                </td>
-                <td>{dasa.cumulatedYear.toFixed(1)}</td>
-              </tr>
+                </Table.Td>
+                <Table.Td>{dasa.cumulatedYear.toFixed(1)}</Table.Td>
+              </Table.Tr>
             );
           })
         )}
-      </tbody>
+      </Table.Tbody>
     </Table>
   );
 }
@@ -554,7 +512,7 @@ export function TabVedic({
   dateTime: DateTimeT;
 }) {
   return (
-    <Tabs defaultValue="planets" className="mb-1">
+    <Tabs defaultValue="planets" className={classes.tabsContainer}>
       <Tabs.List>
         <Tabs.Tab value="planets">Planets</Tabs.Tab>
         <Tabs.Tab value="dasas">Dasas</Tabs.Tab>

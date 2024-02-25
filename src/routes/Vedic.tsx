@@ -9,10 +9,10 @@ import { type DateTimeT, Location } from "./Root.js";
 // import { type Planet } from "../routes/Chart";
 import TabsTwo from "../components/TabsTwo.js";
 import SelectDropdown from "../components/SelectDropdown";
+import classes from "../chart-components/ChartDrawingWrapper.module.css";
 export type Planet = {
   name: string;
   lon: number;
-
   speed: number;
   shown: boolean;
 }; //especially for groupPlanetsByWholeHouse
@@ -63,7 +63,14 @@ export default function Vedic() {
   return (
     planetState && (
       <div>
-        <div className="d-flex justify-content-center align-items-center">
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            gap: "20px",
+          }}
+        >
           <TabsTwo
             option={siderealOrTropical}
             setOption={setSiderealOrTropical}
@@ -76,23 +83,24 @@ export default function Vedic() {
             inputLabel="Sidereal Type"
           />
         </div>
-        <VedicDrawingOptions planetState={planetState} dateTime={dateTime} />
+        <VedicDrawingWrapper planetState={planetState} dateTime={dateTime} />
       </div>
     )
   );
 }
-function VedicDrawingOptions({
+function VedicDrawingWrapper({
   planetState,
   dateTime,
 }: {
   planetState: Record<string, Planet>;
   dateTime: DateTimeT;
 }) {
-  const [nodeType, setNodeType] = useState(false); //false: "mean", true: "true"
+  // const [nodeType, setNodeType] = useState(false); //false: "mean", true: "true"
 
-  const nodeIndex = nodeType ? 11 : 10;
-  const nodeIndexOther = nodeType ? 10 : 11;
-
+  // const nodeIndex = nodeType ? 11 : 10;
+  // const nodeIndexOther = nodeType ? 10 : 11;
+  const nodeIndex = 10; //suppose we only use mean node
+  const nodeIndexOther = 11;
   planetState[nodeIndex].shown = true;
   planetState[nodeIndexOther].shown = false;
 
@@ -112,20 +120,16 @@ function VedicDrawingOptions({
     shown: false,
   };
   return (
-    <div>
-      <div className="fw-bold">
+    <div className={classes.container}>
+      {/* <div>
         Node:{" "}
         <TabsTwo
           option={nodeType}
           setOption={setNodeType}
           optionLabel={["true", "mean"]}
         />
-      </div>
-      <div className="mx-auto" style={{ maxWidth: "800px" }}>
-        {/* <Row> */}
-        <SVGVedic planetState={planetState} />
-        {/* </Row> */}
-      </div>
+      </div> */}
+      <SVGVedic planetState={planetState} />
       <TabVedic planetState={planetState} dateTime={dateTime} />
     </div>
   );
