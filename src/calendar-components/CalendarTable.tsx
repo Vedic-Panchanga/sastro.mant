@@ -2,43 +2,43 @@ import {
   day2GanzhiChar,
   jdut2DateTime,
   jieqiList,
+  planetsSymbol,
   timestamp2jdlocal,
   timestamp2jdut,
 } from "../utils";
 
 import { Table, Tabs, Tooltip } from "@mantine/core";
-import { type DateTimeT } from "../routes/Root";
+import { Location, type DateTimeT } from "../routes/Root";
 import classes from "./CalendarTable.module.css";
-import { useEffect, useState } from "react";
-import { DateTime, FixedOffsetZone } from "luxon";
-import Explain from "./Explain";
+import { useEffect, useRef, useState } from "react";
+import { FixedOffsetZone } from "luxon";
+import ExplainCalendar from "./ExplainCalendar";
 import astrologer from "../astrologer";
-import Events from "./Events";
+import EventsCalendar from "./EventsCalendar";
+import RiseSet from "./RiseSet";
+import ExplainRiseSet from "./ExplainRiseSet";
 
-// const enum calendarType {
-//   Observe,
-//   Astrology,
-// }
 export type EventType = {
   jd: number; //when
   name: number; //number, since we would like to use planets' symbols
   type?: string; //what, number, look the numbers up in the table
   value: string | number; //where. =>where does it happen or the magnitude
-  display?: string; // normally: concat: "jd  name + type  value", but some use display directly, like "display  value" (display like new moon)
+  // display?: string; // normally: concat: "jd  name + type  value", but some use display directly, like "display  value" (display like new moon)
 };
 const DAYS = 7;
 
 export default function CalendarTable({
   selectedDate,
   setSelectedDate,
+  location,
 }: {
   selectedDate: DateTimeT;
   setSelectedDate: React.Dispatch<React.SetStateAction<DateTimeT>>;
+  location: Location;
 }) {
   const calendarArray: (number | null)[][] = [];
-
   const days = selectedDate.daysInMonth;
-  const daysArraySubTitle = new Array(days! + 1).fill("");
+  const daysArraySubTitle: string[] | null = new Array(days! + 1).fill(null);
   const daysArrayEvents = Array.from(
     { length: days! + 1 },
     () => []
@@ -54,35 +54,45 @@ export default function CalendarTable({
 
   //first day of month noon jd local (in convenience to calc other jd locals)
   const firstDayOfMonthJDLocal = timestamp2jdlocal(
-    firstDayOfMonth.set({ hour: 12 }).toUnixInteger(),
+    firstDayOfMonth.set({ hour: 12 }).toMillis(),
     firstDayOfMonth.offset
   );
   const [wasm, setWasm] = useState<Record<string, Array<number[]>>>({});
+  const [riseSet, setRiseSet] = useState<{
+    day_sunrise: number[];
+    day_moonrise: number[];
+  } | null>(null);
+  const yearRef = useRef<number>(-14001);
   //apply the calculation
   useEffect(() => {
+    // if the year change?
+    // if yearRef is -14000, then it has to be true (need calc)
+    // else check whether it is equal to the current selected year
+    const yearChange = yearRef.current !== selectedDate.year;
+    // console.log("yearChange", yearChange, yearRef.current, selectedDate.year);
     astrologer(
-      timestamp2jdut(
-        DateTime.fromObject(
-          { year: selectedDate.year },
-          { zone: FixedOffsetZone.instance(selectedDate.offset) }
-        ).toUnixInteger()
-      ),
+      timestamp2jdut(selectedDate.toMillis()),
       -1,
-      0,
-      0,
-      0,
+      location.longitude,
+      location.latitude,
+      location.height,
       "P",
       258,
-      512
+      (yearChange ? 512 : 0) | 256 | (selectedDate.month > 6 ? 1024 : 0) //if year change, calculate the major data,
     )
-      .then((wasm) => {
-        setWasm(wasm);
+      .then((wasmRe) => {
+        if (yearChange) {
+          setWasm(wasmRe);
+        }
+        setRiseSet(wasmRe);
+        yearRef.current = selectedDate.year;
+        // console.log(wasmRe);
       })
       .catch((error) => {
         console.error("Error:", error);
         // Handle the error
       });
-  }, [selectedDate.year, selectedDate.offset]);
+  }, [selectedDate, location]);
   // console.log("wasmCalendarMonth", wasm);
   // console.log("wasmCalendarMonth", wasmRaw);
   // const wasm = JSON.parse(wasmRaw);
@@ -94,10 +104,10 @@ export default function CalendarTable({
     // daysArraySubTitle = new Array(days! + 1);
     // daysArrayEventsRef.current = new Array(days! + 1).fill([]);
     //inclusive, in jdut
-    const startMonth = timestamp2jdut(firstDayOfMonth.toUnixInteger());
+    const startMonth = timestamp2jdut(firstDayOfMonth.toMillis());
     //exclusive, in jdut
     const endMonth = timestamp2jdut(
-      firstDayOfMonth.plus({ day: days }).toUnixInteger()
+      firstDayOfMonth.plus({ day: days }).toMillis()
     );
 
     wasm.month_jieqi?.forEach((jieqiArray: [number, number] | number[]) => {
@@ -110,7 +120,8 @@ export default function CalendarTable({
           name: 0, //number of SUN
           jd: jieqiArray[0],
           value: jieqiArray[1],
-          display: jieqiList(Number(jieqiArray[1])),
+          // display: jieqiList(Number(jieqiArray[1])),
+          type: `Sun ingress ${jieqiList(Number(jieqiArray[1]))}`,
         });
       }
     });
@@ -120,13 +131,28 @@ export default function CalendarTable({
           return;
         } else {
           const moonDateTime = jdut2DateTime(moonArray[0], zone);
-          daysArraySubTitle[moonDateTime.day] =
-            moonArray[1] == 0 ? "新月" : "满月";
+          daysArraySubTitle[moonDateTime.day] = moonArray[1] == 0 ? "🌑" : "🌕";
           daysArrayEvents[moonDateTime.day].push({
             name: 1, //number of MOON
             jd: moonArray[0],
             value: moonArray[2],
-            display: moonArray[1] == 0 ? "新月" : "满月",
+            // display: moonArray[1] == 0 ? "🌑" : "🌕",
+            type: moonArray[1] == 0 ? "🌑" : "🌕",
+          });
+        }
+      }
+    );
+    wasm.events?.forEach(
+      (eventArray: [number, number, number, number] | number[]) => {
+        if (eventArray[1] >= endMonth || eventArray[1] < startMonth) {
+          return;
+        } else {
+          const eventDateTime = jdut2DateTime(eventArray[1], zone);
+          daysArrayEvents[eventDateTime.day].push({
+            name: eventArray[0],
+            jd: eventArray[1],
+            value: eventArray[3],
+            type: eventLookup(eventArray[0], eventArray[2]),
           });
         }
       }
@@ -136,7 +162,7 @@ export default function CalendarTable({
   //calendar skelton
   let day = 1;
   for (let i = 0; i < 5; i++) {
-    if (i == 0 && days === 28 && firstDayOfMonth.weekday == 1) {
+    if (i == 4 && days === 28 && firstDayOfMonth.weekday == 1) {
       continue;
     }
     const week: (number | null)[] = [];
@@ -151,15 +177,13 @@ export default function CalendarTable({
     calendarArray.push(week);
     if (day > days!) break;
   }
+  // console.log("after wasm", wasm);
 
   return (
-    <div>
+    <>
       {wasm && (
         <>
-          <Table
-            style={{ textAlign: "center", maxWidth: "600px" }}
-            captionSide="top"
-          >
+          <Table className={classes.calendar} captionSide="top">
             <Table.Thead>
               <Table.Tr>
                 <Table.Th>Sun</Table.Th>
@@ -189,6 +213,8 @@ export default function CalendarTable({
                       .toLocaleParts({
                         dateStyle: "long",
                       });
+                    // console.log(daysArraySubTitle[day]);
+
                     return (
                       <Table.Td key={day + "-" + index + "-" + i}>
                         <Tooltip
@@ -199,8 +225,13 @@ export default function CalendarTable({
                                 {dayStringParts[1].value}
                                 {dayStringParts[3].value}
                                 {dayStringParts[4].value}
+
+                                {day2GanzhiChar(
+                                  firstDayOfMonthJDLocal + day - 1
+                                )}
                               </div>
                               <div>
+                                JD:{" "}
                                 {(firstDayOfMonthJDLocal + day - 1).toString()}
                               </div>
                             </>
@@ -238,14 +269,14 @@ export default function CalendarTable({
 
           <Tabs defaultValue="calendar">
             <Tabs.List>
-              <Tabs.Tab value="calendar">calendar</Tabs.Tab>
-              <Tabs.Tab value="events">events</Tabs.Tab>
-              <Tabs.Tab value="settings">Settings</Tabs.Tab>
-              <div style={{ marginLeft: "auto", alignSelf: "center" }}>
-                <Explain />
-              </div>
+              <Tabs.Tab value="calendar" rightSection={<ExplainCalendar />}>
+                Calendar
+              </Tabs.Tab>
+              <Tabs.Tab value="events">Events</Tabs.Tab>
+              <Tabs.Tab value="riseSet" rightSection={<ExplainRiseSet />}>
+                Rise Set
+              </Tabs.Tab>
             </Tabs.List>
-
             <Tabs.Panel value="calendar">
               <div>
                 <strong>Gregorian: </strong>
@@ -274,13 +305,72 @@ export default function CalendarTable({
               </div>
             </Tabs.Panel>
             <Tabs.Panel value="events">
-              <small>{zone.name}</small>
-              <Events eventList={daysArrayEvents} zone={zone} />
+              <small>{zone.name}, Geocentric</small>
+              <EventsCalendar eventList={daysArrayEvents} zone={zone} />
             </Tabs.Panel>
-            <Tabs.Panel value="settings">Settings tab content</Tabs.Panel>
+            <Tabs.Panel value="riseSet">
+              <small>
+                {selectedDate.toFormat("DD z")} <strong>lon:</strong>{" "}
+                {location.longitude.toFixed(2)} <strong>lat:</strong>{" "}
+                {location.latitude.toFixed(2)}
+              </small>
+              {riseSet && (
+                <RiseSet
+                  sunRise={riseSet.day_sunrise}
+                  moonRise={riseSet.day_moonrise}
+                  zone={zone}
+                ></RiseSet>
+              )}
+            </Tabs.Panel>
           </Tabs>
         </>
       )}
-    </div>
+    </>
   );
+}
+function eventLookup(planet: number, eventCode: number): string | undefined {
+  let type = "";
+  // let description = "";
+  if (planet < 4) {
+    switch (eventCode) {
+      case 0:
+        type = "superior conj.";
+        break;
+      case 200:
+        type = "inferior conj.";
+        break;
+      case 100:
+        type = "greatest east.";
+        break;
+      case 300:
+        type = "greatest west.";
+        break;
+      default:
+        type = eventCode.toString();
+    }
+  } else if (planet < 100) {
+    switch (eventCode) {
+      case 0:
+        type = "☍";
+        break;
+      case 200:
+        type = "☌";
+        break;
+      case 100:
+        type = "western quad.";
+        break;
+      case 300:
+        type = "eastern quad.";
+        break;
+      default:
+        type = eventCode.toString();
+    }
+  } else if (planet == 130) {
+    return "Sirius helical rising";
+  }
+  if (eventCode < 100) {
+    return `${planetsSymbol(planet)} ☌ ${planetsSymbol(type)}`;
+  }
+
+  return `${planetsSymbol(planet)} ${type} ${planetsSymbol(0)}`;
 }

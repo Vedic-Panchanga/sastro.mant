@@ -32,3 +32,8 @@
   gap: 1.35625rem;
   margin: 1.35625rem 0;
 }
+.loading {
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 5;
+}

@@ -24,23 +24,39 @@ export default function ChartDrawingWrapper({
 }: ChartDrawingOptionsProps) {
   //Hooks
   const nodeType = useAtomValue(nodeTypeAtom); //false: "mean", true: "true"
-  const lilithType = useAtomValue(lilithTypeAtom); //false: "mean", true: "true"
+  const lilithType = useAtomValue(lilithTypeAtom); //0: "mean", 1: "true" 2: intp
   const display = useAtomValue(displayAtom);
 
   //Calculate the position of planets
   const planetState = wasm.planets;
   // console.log("planetState", planetState);
-  if (!helio) {
+  if (!helio && !(wasm.reflag | 8)) {
+    //return flag does not have helio bit
     planetState[nodeType ? 10 : 11].shown = false;
     planetState[nodeType ? 11 : 10].shown = display[10];
 
-    planetState[lilithType ? 12 : 13].shown = false;
-    planetState[lilithType ? 13 : 12].shown = display[12];
+    planetState[12].shown = false;
+    planetState[13].shown = false;
+    planetState[21].shown = false;
+    planetState[22].shown = false;
+    if (lilithType === 2) {
+      planetState[21].shown = display[12];
+      planetState[22].shown = display[12];
+    } else if (lilithType === 1) {
+      planetState[13].shown = display[12];
+    } else {
+      planetState[12].shown = display[12];
+    }
   }
   Object.keys(planetState).forEach((planetIndex) => {
-    if (Number(planetIndex) >= 10 && Number(planetIndex) <= 13) return;
+    if (
+      (Number(planetIndex) >= 10 && Number(planetIndex) <= 13) ||
+      Number(planetIndex) >= 21
+    )
+      return;
     planetState[planetIndex].shown = display[planetIndex] ?? true;
   });
+  console.log(planetState);
 
   return (
     <div className={classes.container}>

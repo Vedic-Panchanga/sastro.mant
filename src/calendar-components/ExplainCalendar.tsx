@@ -1,6 +1,6 @@
 import ModalActionIcon from "../components/ModalActionIcon";
 import { Anchor, Table } from "@mantine/core";
-export default function Explain() {
+export default function ExplainCalendar() {
   return (
     <ModalActionIcon modalHeading="Some Explanation">
       <div>
@@ -149,7 +149,7 @@ export default function Explain() {
               <Table.Td>the month contains sidereal Aries cusp</Table.Td>
               <Table.Td>
                 the month contains ecliptic longitude 330° with simplified
-                calculation (平气)
+                calculation (平氣)
               </Table.Td>
             </Table.Tr>
             <Table.Tr>
@@ -157,12 +157,12 @@ export default function Explain() {
               <Table.Td>never</Table.Td>
               <Table.Td>last month of a year</Table.Td>
               <Table.Td>
-                the month does not contains (中气) ecliptic longitude (15 + 30m,
+                the month does not contains (中氣) ecliptic longitude (15 + 30m,
                 m is an integer)
               </Table.Td>
               <Table.Td>the month does not contains sign cusps</Table.Td>
               <Table.Td>
-                same as Chinese but with simplified calculation (平气)
+                same as Chinese but with simplified calculation (平氣)
               </Table.Td>
             </Table.Tr>
             <Table.Tr>
@@ -175,7 +175,7 @@ export default function Explain() {
                 Start of month might be influenced by festival's weekday.
               </Table.Td>
               <Table.Td>
-                A day contains the 中气, even if the time of 中气 occurred after
+                A day contains the 中氣, even if the time of 中氣 occurred after
                 new moon, which produce a lot of mess.
               </Table.Td>
               <Table.Td>

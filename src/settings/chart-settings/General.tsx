@@ -2,10 +2,11 @@ import { atomWithStorage } from "jotai/utils";
 import { useAtom } from "jotai";
 import TabsTwo from "../../components/TabsTwo";
 import SelectDropdown from "../../components/SelectDropdown";
+import TabsThree from "../../components/TabsThree";
 
 const defaultSettings = {
   nodeType: false,
-  lilithType: false,
+  lilithType: 0,
   helio: false,
   siderealOrTropical: false,
   sidMode: "0",
@@ -56,10 +57,14 @@ export default function ChartGeneralSettings() {
         setOption={setNodeType}
         optionLabel={["mean node", "true node"]}
       />
-      <TabsTwo
+      <TabsThree
         option={lilithType} //false: mean lilith, true: true lilith
         setOption={setLilithType}
-        optionLabel={["mean lilith", "true lilith"]}
+        optionLabel={[
+          { value: "0", label: "mean lilith" },
+          { value: "1", label: "true lilith" },
+          { value: "2", label: "interpolated" },
+        ]}
       />
       <TabsTwo
         option={helio} //false: geocentric, true: heliocentric

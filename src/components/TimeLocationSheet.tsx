@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { Suspense, useState } from "react";
 import { DateTime, FixedOffsetZone } from "luxon";
-import { ActionIcon, Button, Divider } from "@mantine/core";
+import { ActionIcon, Button, Divider, Loader } from "@mantine/core";
 import { Link } from "react-router-dom";
 import ModalButtonGeocode from "./ModalButtonGeocode";
 import BaseTextField from "./BaseTextField";
@@ -16,6 +16,8 @@ import {
   IconLetterN,
   IconLetterS,
 } from "@tabler/icons-react";
+import astrologer from "../astrologer";
+import { timestamp2jdut } from "../utils";
 // Define constants
 const SECONDS_IN_HOUR = 3600;
 const SECONDS_IN_DAY = 86400;
@@ -46,13 +48,30 @@ export default function TimeLocationSheet({
     latSec: "",
     // ew: location.longitude >= 0,
     // ns: location.latitude >= 0,
+    height: "",
   });
 
   const [locationDirection, setLocationDirection] = useState({
     eastWest: location.longitude >= 0,
     northSouth: location.latitude >= 0,
   });
+  // const [loaded, setLoaded] = useState(false);
 
+  // useEffect(() => {
+  //   astrologer(
+  //     timestamp2jdut(DateTime.now().toMillis()),
+  //     -1,
+  //     0,
+  //     0,
+  //     0,
+  //     "P",
+  //     258,
+  //     0
+  //   ).then(() => {
+  //     setLoaded(true);
+  //     // console.log("great");
+  //   });
+  // }, []);
   const regex = /^[-0-9.]*$/;
   function handleInputChange(identifier: string, value: string) {
     // const value = e.target.value;
@@ -136,7 +155,12 @@ export default function TimeLocationSheet({
           (parseFloat(inputValues.latSec) || 0) / 3600) *
         (locationDirection.northSouth ? 1 : -1);
     }
-    setLocation({ longitude, latitude });
+    const height =
+      inputValues.height !== ""
+        ? parseFloat(inputValues.height)
+        : location.height;
+
+    setLocation({ longitude, latitude, height });
     handleClear(longitude, latitude);
   }
   function handleClear(
@@ -157,6 +181,7 @@ export default function TimeLocationSheet({
       lonSec: "",
       latMin: "",
       latSec: "",
+      height: "",
     });
     setLocationDirection({
       eastWest: longitude >= 0,
@@ -220,7 +245,16 @@ export default function TimeLocationSheet({
           handleInputChange={handleInputChange}
           value={inputValues["timeZone"]}
         />
-        Use Gregorian Calendar
+        <small>
+          Gregorian Calendar
+          <br /> Height in meter
+        </small>
+        <BaseTextField
+          identifier="height"
+          placeHolder={location.height.toString()}
+          handleInputChange={handleInputChange}
+          value={inputValues["height"]}
+        />
       </div>
       {/* lon */}
       {/* lat */}
@@ -238,7 +272,7 @@ export default function TimeLocationSheet({
 
             <BaseTextField
               identifier="lonDeg"
-              maxWidth="12ch"
+              maxWidth="100px"
               value={inputValues["lonDeg"]}
               placeHolder={Math.abs(location.longitude).toString()}
               rightSection="°"
@@ -247,7 +281,7 @@ export default function TimeLocationSheet({
             />
             <BaseTextField
               identifier="lonMin"
-              maxWidth="8ch"
+              maxWidth="100px"
               value={inputValues["lonMin"]}
               placeHolder="0"
               rightSection="′"
@@ -256,7 +290,7 @@ export default function TimeLocationSheet({
             />
             <BaseTextField
               identifier="lonSec"
-              maxWidth="8ch"
+              maxWidth="100px"
               value={inputValues["lonSec"]}
               placeHolder="0"
               rightSection="″"
@@ -275,7 +309,7 @@ export default function TimeLocationSheet({
             </ActionIcon>
             <BaseTextField
               identifier="latDeg"
-              maxWidth="12ch"
+              maxWidth="100px"
               value={inputValues["latDeg"]}
               placeHolder={Math.abs(location.latitude).toString()}
               rightSection="°"
@@ -284,7 +318,7 @@ export default function TimeLocationSheet({
             />
             <BaseTextField
               identifier="latMin"
-              maxWidth="8ch"
+              maxWidth="100px"
               value={inputValues["latMin"]}
               placeHolder="0"
               rightSection="′"
@@ -293,7 +327,7 @@ export default function TimeLocationSheet({
             />
             <BaseTextField
               identifier="latSec"
-              maxWidth="8ch"
+              maxWidth="100px"
               value={inputValues["latSec"]}
               placeHolder="0"
               rightSection="″"
@@ -306,13 +340,58 @@ export default function TimeLocationSheet({
       </div>
 
       <div className={classes.stack}>
-        <Button onClick={handleSubmit}>Submit</Button>
+        <Button onClick={handleSubmit}>Set Time/Locations</Button>
         <Button onClick={() => handleClear()} className="mx-3">
           Clear
         </Button>
         <Button onClick={handleSetToNow}>Now</Button>
       </div>
       <Divider my="md" />
+      <Suspense fallback={<Loader type="dots" className={classes.loading} />}>
+        <AsyncMenu />
+      </Suspense>
+      {/* {loaded && (
+        <>
+          <div className={classes.stacklink}>
+            <strong>Astrology</strong>
+            <Button color="red" to="/chart" component={Link}>
+              CHART
+            </Button>
+            <Button color="red" to="/vedic" component={Link}>
+              VEDIC
+            </Button>
+            <Button color="red" to="/bazi" component={Link}>
+              BAZI
+            </Button>
+          </div>
+          <div className={classes.stacklink}>
+            <strong>Calendar</strong>
+            <Button color="red" to="/calendar" component={Link}>
+              CALENDAR
+            </Button>
+          </div>
+        </>
+      )}
+      {!loaded && <Loader type="dots" className={classes.loading} />} */}
+    </div>
+  );
+}
+function AsyncMenu() {
+  astrologer(
+    timestamp2jdut(DateTime.now().toMillis()),
+    -1,
+    0,
+    0,
+    0,
+    "P",
+    258,
+    0
+  ).then(() => {
+    console.log("great");
+  });
+  return (
+    <>
+      {" "}
       <div className={classes.stacklink}>
         <strong>Astrology</strong>
         <Button color="red" to="/chart" component={Link}>
@@ -331,6 +410,6 @@ export default function TimeLocationSheet({
           CALENDAR
         </Button>
       </div>
-    </div>
+    </>
   );
 }

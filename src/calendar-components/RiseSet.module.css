@@ -1,0 +1,13 @@
+.color-display {
+  width: 16px;
+  height: 16px;
+  border: 1px solid #000;
+  margin-right: 3px;
+  display: inline-block;
+}
+.icon {
+  width: 24px;
+  height: 24px;
+  margin-right: 4px;
+  /* margin-left: 4px; */
+}

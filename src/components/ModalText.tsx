@@ -1,22 +1,22 @@
 import { ReactNode } from "react";
 import { useDisclosure } from "@mantine/hooks";
-import { ActionIcon, Modal } from "@mantine/core";
-import { IconQuestionMark } from "@tabler/icons-react";
+import { Modal, Button } from "@mantine/core";
 type ModalButtonProps = {
   children: ReactNode;
+  text: string;
   modalHeading?: string;
 };
-//only used by question mark icon by now
-export default function ModalActionIcon({
+export default function ModalButton({
   children,
+  text,
   modalHeading,
 }: ModalButtonProps) {
   const [opened, { open, close }] = useDisclosure(false);
   return (
     <>
-      <ActionIcon onClick={open} size="xs" variant="subtle" radius="lg">
-        {<IconQuestionMark />}
-      </ActionIcon>
+      <Button onClick={open} variant="transparent">
+        {text}
+      </Button>
       <Modal
         opened={opened}
         onClose={close}

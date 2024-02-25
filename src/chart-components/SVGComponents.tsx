@@ -47,7 +47,6 @@ export function Text({
       stroke="white"
       paintOrder="stroke"
       strokeWidth="2"
-      className="astro-font"
     >
       {displayText}
     </text>

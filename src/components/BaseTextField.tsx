@@ -12,7 +12,8 @@ type InputValuesKey =
   | "lonMin"
   | "lonSec"
   | "latMin"
-  | "latSec";
+  | "latSec"
+  | "height";
 
 type InputValues = {
   [key in InputValuesKey]: string;
@@ -30,7 +31,7 @@ type BaseTextFieldProps = {
 
 export default function BaseTextField({
   identifier,
-  maxWidth = "10ch",
+  maxWidth = "120px",
   placeHolder,
   rightSection,
   value,

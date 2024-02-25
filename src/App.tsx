@@ -4,6 +4,7 @@ import {
   createBrowserRouter,
   createRoutesFromElements,
   RouterProvider,
+  // useParams,
 } from "react-router-dom";
 
 // import App from "./App.tsx";
@@ -52,6 +53,8 @@ const resolver: CSSVariablesResolver = (theme) => ({
 });
 export default function App() {
   const themeOverride = createTheme({
+    fontFamily:
+      "astro,-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji, sans-serif",
     activeClassName: "",
     components: {
       Button: Button.extend({

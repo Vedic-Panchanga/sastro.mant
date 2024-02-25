@@ -46,8 +46,8 @@ export function planetsSymbol(planetIndex: string | number, retText = false) {
     20: ["\u{26B6}", "Vesta"],
     15: ["\u{26B7}", "Chiron"],
     16: ["\u{2BDB}", "Pholus"],
-    12: ["\u{26B8}", "Lilith"],
-    13: ["\u{2BDE}", "Lilith"],
+    12: ["\u{26B8}", "Lilith"], //mean apogee
+    13: ["\u{2BDE}", "Lilith"], //true apogee
     10: ["\u{260A}", "Node"],
     11: ["\u{00C0}", "Node"],
     110: ["\u{260B}", "South Node"],
@@ -61,8 +61,10 @@ export function planetsSymbol(planetIndex: string | number, retText = false) {
     "-7": ["IC", "Nadir"],
     "-8": ["EP", "East Point"],
     "-9": ["Sp", "Spirit"],
+    21: ["\u{00c2}", "intp. APOGEE"],
+    22: ["\u{00c3}", "intp. PERIGEE"],
   };
-  return planetSymbols[planetIndex][+retText];
+  return planetSymbols[planetIndex]?.[+retText];
 }
 export function colorTheme(element: number) {
   const colors = ["#cc0000", "#f1c232", "#3d85c6", "#6aa84f"];
@@ -227,15 +229,15 @@ export function fixedStarName(fixedStarIndex: number) {
 
 //Bazi-related
 export function jdut2DateTime(jdut: number, zone: FixedOffsetZone) {
-  return DateTime.fromMillis(Math.floor((jdut - 2440587.5) * 86400000)).setZone(
-    zone
-  );
+  return DateTime.fromMillis(Math.floor((jdut - 2440587.5) * 86400000), {
+    zone: zone,
+  });
 }
-export function timestamp2jdlocal(unixInteger: number, offset = 0) {
-  return (unixInteger + offset * 60) / 86400 + 2440587.5;
+export function timestamp2jdlocal(millis: number, offset = 0) {
+  return (millis + offset * 60000) / 86400000 + 2440587.5;
 }
-export function timestamp2jdut(unixInteger: number) {
-  return timestamp2jdlocal(unixInteger, 0);
+export function timestamp2jdut(millis: number) {
+  return millis / 86400000 + 2440587.5;
 }
 export function day2GanzhiChar(jd: number) {
   const ganZhiNumber = day2Ganzhi(jd);

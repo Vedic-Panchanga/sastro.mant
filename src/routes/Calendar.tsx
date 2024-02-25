@@ -1,15 +1,16 @@
-import { ActionIcon, NativeSelect, TextInput } from "@mantine/core";
+import { ActionIcon, Button, NativeSelect, TextInput } from "@mantine/core";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import { useOutletContext } from "react-router-dom";
 import { type DateTimeT, Location } from "./Root";
-import CalendarTable from "../calendar-compenents/CalendarTable";
-import { FixedOffsetZone } from "luxon";
+import CalendarTable from "../calendar-components/CalendarTable";
+// import { FixedOffsetZone } from "luxon";
 import { IconMinus, IconPlus } from "@tabler/icons-react";
 import classes from "./Calendar.module.css";
 export default function Calendar() {
-  const [dateTime]: [DateTimeT, never, Location] = useOutletContext();
+  const [dateTime, , location]: [DateTimeT, never, Location] =
+    useOutletContext();
   const [year, setYear] = useState<string>(dateTime.year.toString());
 
   const [selectedDate, setSelectedDate] = useState(
@@ -31,13 +32,13 @@ export default function Calendar() {
       setSelectedDate((prev) => prev.set({ year: validYear }));
     }
   }
-  useEffect(() => {
-    setSelectedDate((prev) =>
-      prev.setZone(FixedOffsetZone.instance(dateTime.offset), {
-        keepLocalTime: true,
-      })
-    );
-  }, [dateTime]);
+  // useEffect(() => {
+  //   setSelectedDate((prev) =>
+  //     prev.setZone(FixedOffsetZone.instance(dateTime.offset), {
+  //       keepLocalTime: true,
+  //     })
+  //   );
+  // }, [dateTime]);
   function handlePlusMinus(key: string, direction: number) {
     const newSelectedDate = selectedDate.plus({ [key]: direction });
     setSelectedDate(newSelectedDate);
@@ -106,10 +107,20 @@ export default function Calendar() {
             <IconPlus />
           </ActionIcon>
         </div>
+        <Button
+          onClick={() =>
+            setSelectedDate(
+              dateTime.set({ hour: 0, minute: 0, second: 0, millisecond: 0 })
+            )
+          }
+        >
+          Reset
+        </Button>
       </div>
       <CalendarTable
         selectedDate={selectedDate}
         setSelectedDate={setSelectedDate}
+        location={location}
       />
     </div>
   );

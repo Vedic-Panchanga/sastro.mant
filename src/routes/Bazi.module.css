@@ -1,0 +1,27 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  margin: auto;
+}
+.tabsStack {
+  display: flex;
+}
+.stack {
+  display: flex;
+  /* flex-direction: column; */
+  /* align-items: center; */
+  /* justify-content: center; */
+  /* margin: auto; */
+  width: 100%;
+  justify-content: space-between;
+}
+
+.fourPillar {
+  /* width: inherit; */
+  display: flex;
+  justify-content: space-between;
+  min-width: 350px;
+  width: 100%;
+}

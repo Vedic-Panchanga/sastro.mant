@@ -12,6 +12,7 @@ import { type SetLocationObj } from "../routes/Root";
 import { IconSearch, IconChevronRight } from "@tabler/icons-react";
 import { useDisclosure } from "@mantine/hooks";
 import classes from "./ModalButtonGeocode.module.css";
+import React from "react";
 const API_BASE = "https://eu1.locationiq.com/v1";
 
 function buildUrl(method: string, params: { [key: string]: string }) {
@@ -89,33 +90,37 @@ function Geocode({ setGeocodeLocation }: GeocodeProps) {
             ) : (
               <List className={classes.list}>
                 {locationInfo.map((locationData, index: number) => (
-                  <>
+                  <React.Fragment key={index}>
                     {index !== 0 ? <Divider my="4" /> : ""}
-                    <List.Item key={index}>
-                      <div className={classes["list-item"]}>
+                    <List.Item
+                      className={classes.listItem}
+                      classNames={{
+                        itemLabel: classes.itemLabel,
+                        itemWrapper: classes.itemWrapper,
+                      }}
+                    >
+                      <div>
+                        {locationData.display_name}
                         <div>
-                          {locationData.display_name}
-                          <div>
-                            <span>Lon: </span>
-                            {`${parseFloat(locationData.lon).toFixed(3)}; `}
-                            <span>Lat: </span>
-                            {`${parseFloat(locationData.lat).toFixed(3)}`}
-                          </div>
+                          <span>Lon: </span>
+                          {`${parseFloat(locationData.lon).toFixed(3)}; `}
+                          <span>Lat: </span>
+                          {`${parseFloat(locationData.lat).toFixed(3)}`}
                         </div>
-                        <ActionIcon
-                          size="sm"
-                          onClick={() =>
-                            setGeocodeLocation(
-                              parseFloat(locationData.lon),
-                              parseFloat(locationData.lat)
-                            )
-                          }
-                        >
-                          <IconChevronRight />
-                        </ActionIcon>
                       </div>
+                      <ActionIcon
+                        size="sm"
+                        onClick={() =>
+                          setGeocodeLocation(
+                            parseFloat(locationData.lon),
+                            parseFloat(locationData.lat)
+                          )
+                        }
+                      >
+                        <IconChevronRight />
+                      </ActionIcon>
                     </List.Item>
-                  </>
+                  </React.Fragment>
                 ))}
               </List>
             ))}
@@ -128,7 +133,7 @@ function Geocode({ setGeocodeLocation }: GeocodeProps) {
 export default function ModalButtonGeocode({ setLocation }: SetLocationObj) {
   const [opened, { open, close }] = useDisclosure(false);
   function setGeocodeLocation(longitude: number, latitude: number) {
-    setLocation({ longitude, latitude });
+    setLocation((prev) => ({ height: prev.height, longitude, latitude }));
     close();
   }
   return (

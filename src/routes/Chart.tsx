@@ -54,6 +54,8 @@ export type WasmType = {
   planets: Record<string, Planet>;
   house: House;
   fixstar: Fixstars;
+  reflag: number;
+  retype: number;
 };
 // function MoonRelatedInfo({ wasm, weekday }) {
 //   const moonPhase = (wasm.planets[1].lon - wasm.planets[0].lon + 360) % 360;
@@ -63,9 +65,9 @@ export type WasmType = {
 //       <div>{`tithi: ${Math.ceil(moonPhase / 12)} (${(moonPhase / 12).toFixed(
 //         2
 //       )})`}</div>
-//       <div className="astro-font">
+//
 //         day lord {planetsSymbol([1, 4, 2, 5, 3, 6, 0][weekday - 1])}
-//       </div>
+//
 //     </div>
 //   );
 // }
@@ -82,7 +84,7 @@ export default function Chart() {
 
   useEffect(() => {
     astrologer(
-      timestamp2jdut(dateTime.toUnixInteger()),
+      timestamp2jdut(dateTime.toMillis()),
       siderealOrTropical === false ? -1 : Number(sidMode),
       location.longitude,
       location.latitude,

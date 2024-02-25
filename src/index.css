@@ -3,9 +3,13 @@
   src: url("./assets/astrobold.woff2") format("woff2");
 }
 
-.astro-font {
+/* .body {
   font-family: "astro", sans-serif;
+} */
+.text-center {
+  text-align: center;
 }
+
 .color-0 {
   color: var(--mantine-color-fire);
 }

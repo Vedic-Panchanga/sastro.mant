@@ -1,13 +1,27 @@
-.list-item {
+/* .listItem {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   justify-content: space-between;
-  width: auto;
+  width: 100%;
   align-items: flex-start;
-}
+  flex-wrap: nowrap;
+} */
 .list {
+  display: flex;
+  flex-direction: column;
   list-style-type: none;
   padding: 10px;
+}
+.itemLabel {
+  display: flex;
+  /* flex-direction: row; */
+  justify-content: space-between;
+  width: 100%;
+  /* align-items: flex-start; */
+  /* flex-wrap: nowrap; */
+}
+.itemWrapper {
+  width: 100%;
 }
 .search {
   --button-height-xs: 5rem !important;

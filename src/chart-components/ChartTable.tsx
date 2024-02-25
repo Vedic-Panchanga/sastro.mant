@@ -77,15 +77,10 @@ function TableChart({ planetState }: TableChartProps) {
             const lonParsed = parseDegree(planetInfo.lon);
             return (
               <Table.Tr key={planetIndex}>
-                <Table.Td className="astro-font">
-                  {planetsSymbol(planetIndex)}
-                </Table.Td>
+                <Table.Td>{planetsSymbol(planetIndex)}</Table.Td>
                 <Table.Td>
                   {lonParsed.degree}
-                  <span
-                    className="astro-font"
-                    style={{ color: colorTheme(lonParsed.zodiac % 4) }}
-                  >
+                  <span style={{ color: colorTheme(lonParsed.zodiac % 4) }}>
                     {zodiacSymbol(lonParsed.zodiac)}
                   </span>
                   {lonParsed.minute}
@@ -187,23 +182,20 @@ function TableFixstar({ planetState, fixstar }: TableFixstarProps) {
             const indexOfComma = fixstarInfo.name.indexOf(",");
             return (
               <Table.Tr key={fixstarInfo.key}>
-                <Table.Td className="astro-font">
+                <Table.Td>
                   {indexOfComma !== -1
                     ? fixstarInfo.name.substring(0, indexOfComma)
                     : fixstarInfo.name}
                 </Table.Td>
                 <Table.Td>
                   {lonParsed.degree}
-                  <span
-                    className="astro-font"
-                    style={{ color: colorTheme(lonParsed.zodiac % 4) }}
-                  >
+                  <span style={{ color: colorTheme(lonParsed.zodiac % 4) }}>
                     {zodiacSymbol(lonParsed.zodiac)}
                   </span>
                   {lonParsed.minute}
                 </Table.Td>
                 <Table.Td>{fixstarInfo.lat?.toFixed(3)}</Table.Td>
-                <Table.Td className="astro-font">
+                <Table.Td>
                   {fixstarInfo.planet.map((planetIndex) => (
                     <div key={planetIndex}>
                       {planetsSymbol(planetIndex)}{" "}
