@@ -4,16 +4,16 @@ import { useAtomValue } from "jotai";
 // import Accordion from "react-bootstrap/Accordion";
 // import { TabChart } from "../components/Chart-related.jsx";
 
-import ChartDrawingWrapper from "../chart-components/ChartDrawingWrapper";
+import ChartDrawingWrapper from "./ChartDrawingWrapper.tsx";
 // import ButtonGroupTwoOpt from "../component/ButtonGroupTwoOpt";
-import { type Location, type DateTimeT } from "./Root";
+import { type Location, type DateTimeT } from "../routes/Root.tsx";
 import {
   helioAtom,
   houseAtom,
   sidModeAtom,
   siderealOrTropicalAtom,
-} from "../settings/chart-settings/General";
-import { distance, planetsSymbol, timestamp2jdut } from "../utils";
+} from "../settings/chart-settings/General.tsx";
+import { distance, planetsSymbol, timestamp2jdut } from "../utils.ts";
 import astrologer from "../astrologer.ts";
 import { useEffect, useState } from "react";
 // import { ChartDrawingOptions } from "../chart-components/ChartDrawingOptions";
@@ -95,7 +95,7 @@ export default function Chart() {
     )
       .then((wasm) => {
         setWasm(wasm);
-        // console.log(wasm);
+        console.log("I am refetching, in chart");
 
         // calculate positions
         const planetState = wasm.planets;
@@ -145,10 +145,6 @@ export default function Chart() {
   }, [dateTime, location, helio, house, sidMode, siderealOrTropical]);
 
   return (
-    <div>
-      {wasm && (
-        <ChartDrawingWrapper wasm={wasm} helio={helio}></ChartDrawingWrapper>
-      )}
-    </div>
+    <div>{wasm && <ChartDrawingWrapper wasm={wasm}></ChartDrawingWrapper>}</div>
   );
 }

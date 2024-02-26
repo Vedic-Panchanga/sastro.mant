@@ -22,6 +22,7 @@ export default function SelectDropdown({
       value={option}
       onChange={(event) => setOption(event.currentTarget.value)}
       data={data}
+      // maw={150}
     />
   );
 }

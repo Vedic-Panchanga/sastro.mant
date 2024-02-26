@@ -218,7 +218,7 @@ export default function CalendarTable({
                     return (
                       <Table.Td key={day + "-" + index + "-" + i}>
                         <Tooltip
-                          events={{ hover: true, focus: false, touch: false }}
+                          // events={{ hover: true, focus: false, touch: false }}
                           label={
                             <>
                               <div>

@@ -7,10 +7,10 @@ import {
   timestamp2jdut,
   // timestamp2Jd,
 } from "../utils";
-import { Pillar, SmallPillar } from "../bazi-components/BaziPillar";
+import { Pillar, SmallPillar } from "./BaziPillar";
 import { useEffect, useState } from "react";
 import { useOutletContext } from "react-router-dom";
-import { type DateTimeT, Location } from "./Root";
+import { type DateTimeT, Location } from "../routes/Root";
 import astrologer from "../astrologer";
 import { DateTime, FixedOffsetZone } from "luxon";
 import TabsTwo from "../components/TabsTwo";
@@ -60,7 +60,7 @@ export default function Bazi() {
     )
       .then((wasm) => {
         setWasm(wasm);
-        console.log("baziwasm", wasm);
+        // console.log("baziwasm", wasm);
       })
       .catch((error) => {
         console.error("Error:", error);

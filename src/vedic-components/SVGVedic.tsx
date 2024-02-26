@@ -6,8 +6,8 @@ import {
 } from "./VedicRelated";
 import { groupPlanetsByWholeHouse } from "../utils";
 // import { Planet } from "../routes/Chart";
-import { type Planet } from "../routes/Vedic";
-import classes from "../chart-components/SVGChart.module.css";
+import { type Planet } from "./Vedic";
+import classes from "./SVGVedic.module.css";
 export default function SVGVedic({
   planetState,
 }: {

@@ -28,7 +28,7 @@ export default function Footer() {
           rel="noopener noreferrer"
           href="https://locationiq.com/"
         >
-          LocationIQ freeAPI
+          LocationIQ
         </Anchor>
         .
       </p>
@@ -41,6 +41,7 @@ export default function Footer() {
         The Swiss Ephemeris claims an accuracy to arc millisecond compared to
         JPL published by NASA.
       </p>
+      <strong>Set locations and use appropriate timezone!</strong>
     </ModalText>
   );
 }

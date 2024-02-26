@@ -45,10 +45,10 @@ export default function Root() {
       const newDateTime = DateTime.fromMillis(Number(ts) ?? 0, { zone: zone });
       if (newDateTime.isValid) setDateTime(newDateTime);
     }
-    console.log("outside", lon);
+    // console.log("outside", lon);
 
     if (!(lon === null) && !(lon === undefined)) {
-      console.log("Inside", location);
+      // console.log("Inside", location);
       setLocation((prev) => ({ ...prev, longitude: Number(lon) }));
     }
     if (!lat === null && !lat === undefined) {
@@ -58,7 +58,7 @@ export default function Root() {
       setLocation((prev) => ({ ...prev, height: Number(height) }));
     }
     setSearchParams(undefined);
-  }, [setSearchParams]);
+  }, [searchParams, setSearchParams, setLocation]);
 
   return (
     <div style={{ display: "flex", flexDirection: "column" }}>

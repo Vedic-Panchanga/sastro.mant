@@ -10,7 +10,7 @@ export default function EventsCalendar({
   eventList: EventType[][];
   zone: FixedOffsetZone;
 }) {
-  console.log(eventList);
+  // console.log(eventList);
   const rows = eventList.map((eventListOjb) =>
     eventListOjb.map((eventOjb, index) => (
       <Table.Tr key={`${eventOjb.jd} ${index}`}>

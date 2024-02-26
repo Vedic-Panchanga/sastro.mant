@@ -1,22 +1,15 @@
 import { ScrollArea, Table, Tabs, Tooltip } from "@mantine/core";
-import { type Planet as PlanetType, Fixstars } from "../routes/Chart.tsx";
-import {
-  parseDegree,
-  planetsSymbol,
-  colorTheme,
-  zodiacSymbol,
-  ifDegreeInOrb,
-  fixedStarName,
-} from "../utils.ts";
+import { type Planet as PlanetType, Fixstars } from "./Chart.tsx";
+import { planetsSymbol, ifDegreeInOrb, fixedStarName } from "../utils.ts";
 import Settings from "../settings/Settings.tsx";
 import classes from "./ChartTable.module.css";
+import LongitudeFormat from "../components/LongitudeFormat.tsx";
 
 type TableChartProps = {
   planetState: Record<string, PlanetType>;
 };
 
 function TableChart({ planetState }: TableChartProps) {
-  // const [scrolled, setScrolled] = useState(false);
   return (
     <ScrollArea
       h="80vh"
@@ -74,20 +67,16 @@ function TableChart({ planetState }: TableChartProps) {
             if (!planetInfo.shown) {
               return;
             }
-            const lonParsed = parseDegree(planetInfo.lon);
+
             return (
               <Table.Tr key={planetIndex}>
                 <Table.Td>{planetsSymbol(planetIndex)}</Table.Td>
                 <Table.Td>
-                  {lonParsed.degree}
-                  <span style={{ color: colorTheme(lonParsed.zodiac % 4) }}>
-                    {zodiacSymbol(lonParsed.zodiac)}
-                  </span>
-                  {lonParsed.minute}
+                  <LongitudeFormat longitude={planetInfo.lon} />
                 </Table.Td>
                 <Table.Td>{planetInfo.lat?.toFixed(3)}</Table.Td>
                 <Table.Td>{planetInfo.speed?.toFixed(3)}</Table.Td>
-                <Table.Td>{planetInfo.distance?.toFixed(3)}</Table.Td>
+                <Table.Td>{planetInfo.distance?.toExponential(4)}</Table.Td>
                 <Table.Td>
                   {planetInfo.speed_lat
                     ? (planetInfo.speed_lat * 1000).toFixed(3)
@@ -95,7 +84,7 @@ function TableChart({ planetState }: TableChartProps) {
                 </Table.Td>
                 <Table.Td>
                   {planetInfo.speed_distance
-                    ? (planetInfo.speed_distance * 1000).toFixed(3)
+                    ? (planetInfo.speed_distance * 1000).toExponential(4)
                     : ""}
                 </Table.Td>
               </Table.Tr>
@@ -142,14 +131,12 @@ function TableFixstar({ planetState, fixstar }: TableFixstarProps) {
         // only 9 planets and axies are considered
         const numberPlanetIndex = Number(planetIndex);
         if (
-          (numberPlanetIndex > 9 && numberPlanetIndex != 14) ||
-          numberPlanetIndex < -7 ||
-          numberPlanetIndex == -2 ||
-          numberPlanetIndex == -3
+          (numberPlanetIndex >= 0 && numberPlanetIndex <= 9) ||
+          numberPlanetIndex == -4 || //asc
+          numberPlanetIndex == -6 //mc
         ) {
-          return;
+          pushPlanet(Number(numberPlanetIndex), planetInfo.lon);
         }
-        pushPlanet(Number(numberPlanetIndex), planetInfo.lon);
       });
       return acc;
     },
@@ -177,7 +164,6 @@ function TableFixstar({ planetState, fixstar }: TableFixstarProps) {
         </Table.Thead>
         <Table.Tbody>
           {sortedFixstar.map((fixstarInfo) => {
-            const lonParsed = parseDegree(fixstarInfo.lon);
             // Find the index of the first comma
             const indexOfComma = fixstarInfo.name.indexOf(",");
             return (
@@ -188,11 +174,7 @@ function TableFixstar({ planetState, fixstar }: TableFixstarProps) {
                     : fixstarInfo.name}
                 </Table.Td>
                 <Table.Td>
-                  {lonParsed.degree}
-                  <span style={{ color: colorTheme(lonParsed.zodiac % 4) }}>
-                    {zodiacSymbol(lonParsed.zodiac)}
-                  </span>
-                  {lonParsed.minute}
+                  <LongitudeFormat longitude={fixstarInfo.lon} />
                 </Table.Td>
                 <Table.Td>{fixstarInfo.lat?.toFixed(3)}</Table.Td>
                 <Table.Td>
@@ -235,7 +217,7 @@ export default function ChartTable({ planetState, fixstar }: TabChartProps) {
         <TableFixstar planetState={planetState} fixstar={fixstar} />
       </Tabs.Panel>
       <Tabs.Panel value="settings">
-        <Settings defaultTab="chart" />
+        <Settings />
       </Tabs.Panel>
     </Tabs>
   );

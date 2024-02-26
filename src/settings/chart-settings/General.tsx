@@ -2,7 +2,7 @@ import { atomWithStorage } from "jotai/utils";
 import { useAtom } from "jotai";
 import TabsTwo from "../../components/TabsTwo";
 import SelectDropdown from "../../components/SelectDropdown";
-import TabsThree from "../../components/TabsThree";
+// import TabsThree from "../../components/TabsThree";
 
 const defaultSettings = {
   nodeType: false,
@@ -16,16 +16,16 @@ const defaultSettings = {
 const createAtom = <T extends keyof typeof defaultSettings>(key: T) =>
   atomWithStorage(key, defaultSettings[key]);
 
-export const nodeTypeAtom = createAtom("nodeType");
-export const lilithTypeAtom = createAtom("lilithType");
+// export const nodeTypeAtom = createAtom("nodeType");
+// export const lilithTypeAtom = createAtom("lilithType");
 export const helioAtom = createAtom("helio");
 export const siderealOrTropicalAtom = createAtom("siderealOrTropical");
 export const sidModeAtom = createAtom("sidMode");
 export const houseAtom = createAtom("house");
 
 export default function ChartGeneralSettings() {
-  const [nodeType, setNodeType] = useAtom(nodeTypeAtom);
-  const [lilithType, setLilithType] = useAtom(lilithTypeAtom);
+  // const [nodeType, setNodeType] = useAtom(nodeTypeAtom);
+  // const [lilithType, setLilithType] = useAtom(lilithTypeAtom);
   const [helio, setHelio] = useAtom(helioAtom);
   const [siderealOrTropical, setSiderealOrTropical] = useAtom(
     siderealOrTropicalAtom
@@ -52,7 +52,7 @@ export default function ChartGeneralSettings() {
   };
   return (
     <>
-      <TabsTwo
+      {/* <TabsTwo
         option={nodeType} //false: mean node, true: true node
         setOption={setNodeType}
         optionLabel={["mean node", "true node"]}
@@ -65,7 +65,7 @@ export default function ChartGeneralSettings() {
           { value: "1", label: "true lilith" },
           { value: "2", label: "interpolated" },
         ]}
-      />
+      /> */}
       <TabsTwo
         option={helio} //false: geocentric, true: heliocentric
         setOption={setHelio}
@@ -76,18 +76,20 @@ export default function ChartGeneralSettings() {
         setOption={setSiderealOrTropical}
         optionLabel={["tropical", "sidereal"]}
       />
-      <SelectDropdown
-        option={sidMode}
-        inputLabel="Sidereal Mode"
-        setOption={setSidMode}
-        options={sidOptions}
-      />
-      <SelectDropdown
-        option={house}
-        inputLabel="House"
-        setOption={setHouse}
-        options={houseOptions}
-      />
+      <div style={{ display: "flex", justifyContent: "center", gap: "10px" }}>
+        <SelectDropdown
+          option={sidMode}
+          inputLabel="Sidereal Mode"
+          setOption={setSidMode}
+          options={sidOptions}
+        />
+        <SelectDropdown
+          option={house}
+          inputLabel="House"
+          setOption={setHouse}
+          options={houseOptions}
+        />
+      </div>
     </>
   );
 }

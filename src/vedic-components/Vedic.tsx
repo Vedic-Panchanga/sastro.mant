@@ -1,14 +1,14 @@
 import { useOutletContext } from "react-router-dom";
 import { useEffect, useState } from "react";
 
-import SVGVedic from "../vedic-components/SVGVedic";
-import { TabVedic } from "../vedic-components/VedicRelated";
+import SVGVedic from "./SVGVedic.js";
+import { TabVedic } from "./VedicRelated.js";
 import astrologer from "../astrologer.js";
 import { timestamp2jdut } from "../utils.js";
-import { type DateTimeT, Location } from "./Root.js";
+import { type DateTimeT, Location } from "../routes/Root.js";
 // import { type Planet } from "../routes/Chart";
 import TabsTwo from "../components/TabsTwo.js";
-import SelectDropdown from "../components/SelectDropdown";
+import SelectDropdown from "../components/SelectDropdown.js";
 import classes from "../chart-components/ChartDrawingWrapper.module.css";
 export type Planet = {
   name: string;
@@ -51,6 +51,9 @@ export default function Vedic() {
       1 | 64
     )
       .then((wasm) => {
+        delete wasm.planets[7];
+        delete wasm.planets[8];
+        delete wasm.planets[9];
         setWasm(wasm);
       })
       .catch((error) => {

@@ -9,12 +9,12 @@ import {
 
 // import App from "./App.tsx";
 import ErrorPage from "./routes/ErrorPage";
-import Vedic from "./routes/Vedic";
-import Bazi from "./routes/Bazi";
-import Chart from "./routes/Chart";
+import Vedic from "./vedic-components/Vedic";
+import Bazi from "./bazi-components/Bazi";
+import Chart from "./chart-components/Chart";
 import Entry from "./routes/Entry";
 import Root from "./routes/Root";
-import Calendar from "./routes/Calendar";
+import Calendar from "./calendar-components/Calendar";
 import "@mantine/core/styles.css";
 import "./index.css";
 

@@ -1,0 +1,13 @@
+.chart {
+  max-width: calc(min(600px, 45vh));
+  min-width: 359px;
+  align-self: center;
+  /* 当屏幕方向为竖屏时 */
+  @media screen and (orientation: portrait) {
+    align-self: center;
+  }
+  /* 当屏幕方向为横屏时*/
+  @media screen and (orientation: landscape) {
+    align-self: flex-start;
+  }
+}

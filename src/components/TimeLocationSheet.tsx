@@ -1,4 +1,4 @@
-import { Suspense, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { DateTime, FixedOffsetZone } from "luxon";
 import { ActionIcon, Button, Divider, Loader } from "@mantine/core";
 import { Link } from "react-router-dom";
@@ -193,6 +193,23 @@ export default function TimeLocationSheet({
     setDateTime(DateTime.now());
     handleClear();
   }
+  const [loaded, setLoaded] = useState(false);
+
+  useEffect(() => {
+    astrologer(
+      timestamp2jdut(DateTime.now().toMillis()),
+      -1,
+      0,
+      0,
+      0,
+      "P",
+      258,
+      0
+    ).then(() => {
+      setLoaded(true);
+      console.log("Astrology data loaded");
+    });
+  }, []);
   return (
     <div className={classes.container}>
       {/* year month day */}
@@ -347,10 +364,11 @@ export default function TimeLocationSheet({
         <Button onClick={handleSetToNow}>Now</Button>
       </div>
       <Divider my="md" />
-      <Suspense fallback={<Loader type="dots" className={classes.loading} />}>
+      {/* <Suspense fallback={<Loader type="dots" className={classes.loading} />}>
         <AsyncMenu />
-      </Suspense>
-      {/* {loaded && (
+      </Suspense> */}
+
+      {loaded && (
         <>
           <div className={classes.stacklink}>
             <strong>Astrology</strong>
@@ -372,44 +390,48 @@ export default function TimeLocationSheet({
           </div>
         </>
       )}
-      {!loaded && <Loader type="dots" className={classes.loading} />} */}
+      {!loaded && <Loader type="dots" className={classes.loading} />}
     </div>
   );
 }
-function AsyncMenu() {
-  astrologer(
-    timestamp2jdut(DateTime.now().toMillis()),
-    -1,
-    0,
-    0,
-    0,
-    "P",
-    258,
-    0
-  ).then(() => {
-    console.log("great");
-  });
-  return (
-    <>
-      {" "}
-      <div className={classes.stacklink}>
-        <strong>Astrology</strong>
-        <Button color="red" to="/chart" component={Link}>
-          CHART
-        </Button>
-        <Button color="red" to="/vedic" component={Link}>
-          VEDIC
-        </Button>
-        <Button color="red" to="/bazi" component={Link}>
-          BAZI
-        </Button>
-      </div>
-      <div className={classes.stacklink}>
-        <strong>Calendar</strong>
-        <Button color="red" to="/calendar" component={Link}>
-          CALENDAR
-        </Button>
-      </div>
-    </>
-  );
-}
+// async function AsyncMenu() {
+//   const [astrologyLoaded, setAstrologyLoaded] = useState(false);
+
+//   useEffect(() => {
+//     astrologer(
+//       timestamp2jdut(DateTime.now().toMillis()),
+//       -1,
+//       0,
+//       0,
+//       0,
+//       "P",
+//       258,
+//       0
+//     ).then(() => {
+//       setAstrologyLoaded(true);
+//       console.log("Astrology data loaded");
+//     });
+//   }, []);
+//   return (
+//     <>
+//       <div className={classes.stacklink}>
+//         <strong>Astrology</strong>
+//         <Button color="red" to="/chart" component={Link}>
+//           CHART
+//         </Button>
+//         <Button color="red" to="/vedic" component={Link}>
+//           VEDIC
+//         </Button>
+//         <Button color="red" to="/bazi" component={Link}>
+//           BAZI
+//         </Button>
+//       </div>
+//       <div className={classes.stacklink}>
+//         <strong>Calendar</strong>
+//         <Button color="red" to="/calendar" component={Link}>
+//           CALENDAR
+//         </Button>
+//       </div>
+//     </>
+//   );
+// }

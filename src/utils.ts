@@ -1,5 +1,5 @@
 import { DateTime, FixedOffsetZone } from "luxon";
-import { Planet } from "./routes/Chart";
+import { Planet } from "./chart-components/Chart";
 /**
  *
  * @param deg [0,360)
@@ -46,10 +46,10 @@ export function planetsSymbol(planetIndex: string | number, retText = false) {
     20: ["\u{26B6}", "Vesta"],
     15: ["\u{26B7}", "Chiron"],
     16: ["\u{2BDB}", "Pholus"],
-    12: ["\u{26B8}", "Lilith"], //mean apogee
-    13: ["\u{2BDE}", "Lilith"], //true apogee
-    10: ["\u{260A}", "Node"],
-    11: ["\u{00C0}", "Node"],
+    12: ["\u{26B8}", "Lilith (mean)"], //mean apogee
+    13: ["\u{2BDE}", "Lilith (true)"], //true apogee
+    10: ["\u{260A}", "Node (mean)"],
+    11: ["\u{00C0}", "Node (true)"],
     110: ["\u{260B}", "South Node"],
     111: ["\u{00C1}", "South Node"],
     14: ["\u{1F728}", "Earth"],
@@ -249,7 +249,7 @@ export function year2Ganzhi(year_chinese: number) {
 }
 
 export function day2Ganzhi(jd: number) {
-  const day2JiaYin = Math.floor(-1 + 1 / 24 + jd);
+  const day2JiaYin = Math.floor(-1 + 1 / 24 + jd + 0.5);
   let gan = day2JiaYin % 10;
   let zhi = day2JiaYin % 12;
   if (gan < 0) gan += 10;

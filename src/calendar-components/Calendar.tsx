@@ -3,8 +3,8 @@ import { ActionIcon, Button, NativeSelect, TextInput } from "@mantine/core";
 import { useState } from "react";
 
 import { useOutletContext } from "react-router-dom";
-import { type DateTimeT, Location } from "./Root";
-import CalendarTable from "../calendar-components/CalendarTable";
+import { type DateTimeT, Location } from "../routes/Root";
+import CalendarTable from "./CalendarTable";
 // import { FixedOffsetZone } from "luxon";
 import { IconMinus, IconPlus } from "@tabler/icons-react";
 import classes from "./Calendar.module.css";

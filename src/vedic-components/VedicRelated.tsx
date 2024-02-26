@@ -10,7 +10,7 @@ import {
 } from "@mantine/core";
 // import { parseDegree, zodiacSymbol, colorTheme } from "../utils.js";
 import { useEffect, useState } from "react";
-import { Planet } from "../routes/Vedic.js";
+import { Planet } from "./Vedic.js";
 import { DateTimeT } from "../routes/Root.js";
 import { IconSelector, IconChevronDown } from "@tabler/icons-react";
 import classes from "./VedicRelated.module.css";
@@ -286,19 +286,21 @@ function sortData(data: VedicPlanetType[], sortBy: VedicPlanetSearchType) {
   data.sort((a, b) => {
     return a[sortBy] - b[sortBy];
   });
-  console.log("sortData", sortBy, data);
+  // console.log("sortData", sortBy, data);
   return data;
 }
 function TableSort({ planetState }: { planetState: VedicPlanetType[] }) {
-  const [sortedData, setSortedData] = useState(planetState);
+  let sortedData = planetState;
   const [sortBy, setSortBy] = useState<VedicPlanetSearchType>("lon");
   const [reverseSortDirection, setReverseSortDirection] = useState(false);
-
+  useEffect(() => {
+    setSortBy("karaIndex"); // reset sortBy when planetState changes
+  }, [planetState]);
   const setSorting = (field: VedicPlanetSearchType) => {
     const reversed = field === sortBy ? !reverseSortDirection : false;
     setReverseSortDirection(reversed);
     setSortBy(field);
-    setSortedData(sortData(planetState, field));
+    sortedData = sortData(planetState, field);
   };
   const rows = sortedData.map((row) => (
     <Table.Tr key={row.name}>
@@ -330,7 +332,7 @@ function TableSort({ planetState }: { planetState: VedicPlanetType[] }) {
               sorted={sortBy === "karaIndex"}
               onSort={() => setSorting("karaIndex")}
             >
-              Kara
+              Kara.
             </Th>
             <Th sorted={sortBy === "lon"} onSort={() => setSorting("lon")}>
               Lon
@@ -399,8 +401,9 @@ function TableVedic({ planetState }: { planetState: Record<string, Planet> }) {
     },
     []
   );
-  console.log("tablePlanetsInfo", tablePlanetsInfo);
+  // console.log("tablePlanetsInfo", tablePlanetsInfo);
   // tablePlanetsInfo[-4].name = "Lagna";
+  // no the kara just be set once, it does not resort with the table sorts
   tablePlanetsInfo.sort(
     (a, b) =>
       (b.index >= 0 && b.index < 7 ? b.lon % 30 : -1) -
@@ -469,39 +472,41 @@ function Dasas({
     }
   }
   return (
-    <Table highlightOnHover stickyHeader>
-      <Table.Thead>
-        <Table.Tr>
-          <Table.Th>Major</Table.Th>
-          <Table.Th>Minor</Table.Th>
-          <Table.Th>Date</Table.Th>
-          <Table.Th>Age</Table.Th>
-        </Table.Tr>
-      </Table.Thead>
-      <Table.Tbody>
-        {dataDasas.map((dasas) =>
-          dasas.map((dasa, index) => {
-            return (
-              <Table.Tr
-                key={dasa.cumulatedYear}
-                className={index === 0 ? classes.tablePrimary : ""}
-              >
-                <Table.Td>{dasa.major}</Table.Td>
-                <Table.Td>{dasa.minor}</Table.Td>
-                <Table.Td>
-                  {dateTime
-                    .plus({
-                      second: dasa.cumulatedYear * 365.24217 * 86400,
-                    })
-                    .toFormat("yyyy-MM-dd")}
-                </Table.Td>
-                <Table.Td>{dasa.cumulatedYear.toFixed(1)}</Table.Td>
-              </Table.Tr>
-            );
-          })
-        )}
-      </Table.Tbody>
-    </Table>
+    <ScrollArea h="80vh">
+      <Table highlightOnHover stickyHeader>
+        <Table.Thead>
+          <Table.Tr>
+            <Table.Th>Major</Table.Th>
+            <Table.Th>Minor</Table.Th>
+            <Table.Th>Date</Table.Th>
+            <Table.Th>Age</Table.Th>
+          </Table.Tr>
+        </Table.Thead>
+        <Table.Tbody>
+          {dataDasas.map((dasas) =>
+            dasas.map((dasa, index) => {
+              return (
+                <Table.Tr
+                  key={dasa.cumulatedYear}
+                  className={index === 0 ? classes.tablePrimary : ""}
+                >
+                  <Table.Td>{dasa.major}</Table.Td>
+                  <Table.Td>{dasa.minor}</Table.Td>
+                  <Table.Td>
+                    {dateTime
+                      .plus({
+                        second: dasa.cumulatedYear * 365.24217 * 86400,
+                      })
+                      .toFormat("yyyy-MM-dd")}
+                  </Table.Td>
+                  <Table.Td>{dasa.cumulatedYear.toFixed(1)}</Table.Td>
+                </Table.Tr>
+              );
+            })
+          )}
+        </Table.Tbody>
+      </Table>
+    </ScrollArea>
   );
 }
 export function TabVedic({

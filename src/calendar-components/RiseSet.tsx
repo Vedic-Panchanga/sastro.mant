@@ -66,14 +66,16 @@ export default function RiseSet({
   }
   return (
     <Table>
+      <Table.Thead>
+        {/* <Table.Tr> */}
+        <Table.Th className={classes.tableHead}>
+          {planetsSymbol(0)} Sun {planetsSymbol(0)}
+        </Table.Th>
+        <Table.Th>Rise</Table.Th>
+        <Table.Th>Set</Table.Th>
+        {/* </Table.Tr> */}
+      </Table.Thead>
       <Table.Tbody>
-        <Table.Tr>
-          <Table.Th>
-            {planetsSymbol(0)} Sun {planetsSymbol(0)}
-          </Table.Th>
-          <Table.Th>Rise</Table.Th>
-          <Table.Th>Set</Table.Th>
-        </Table.Tr>
         <EventRow
           event={{
             type: "Astronomy Twilight",
@@ -120,13 +122,15 @@ export default function RiseSet({
             {formatDayTime(sunRise[0])}
           </Table.Td>
         </Table.Tr>
-        <Table.Tr>
-          <Table.Th>
-            {planetsSymbol(1)} Moon {planetsSymbol(1)}
-          </Table.Th>
-          <Table.Th>Rise</Table.Th>
-          <Table.Th>Set</Table.Th>
-        </Table.Tr>
+      </Table.Tbody>
+      <Table.Thead>
+        <Table.Th className={classes.tableHead}>
+          {planetsSymbol(1)} Moon {planetsSymbol(1)}
+        </Table.Th>
+        <Table.Th>Rise</Table.Th>
+        <Table.Th>Set</Table.Th>
+      </Table.Thead>
+      <Table.Tbody>
         <EventRow
           event={{
             type: "Rise/Set",

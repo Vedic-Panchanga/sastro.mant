@@ -28,8 +28,12 @@ const defaultSettings: Record<string, boolean> = {
   "16": false,
   //Node
   "10": true,
+  "11": false,
   //Lilith
   "12": true,
+  "13": false,
+  "21": false,
+  "22": false,
   // // Asc
   // "-4": true,
   // // MC

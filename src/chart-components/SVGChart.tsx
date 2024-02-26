@@ -2,7 +2,7 @@ import React from "react";
 
 import { Line, Circle, Planet, Cusps } from "./SVGComponents.tsx";
 import { avoidCollision } from "../utils.ts";
-import { type Planet as PlanetType } from "../routes/Chart.tsx";
+import { type Planet as PlanetType } from "./Chart.tsx";
 import classes from "./SVGChart.module.css";
 const svgWidth = 404;
 const radius_out = 49;
