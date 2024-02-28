@@ -30,17 +30,17 @@ export default function ChartDrawingWrapper({
   const planetState = JSON.parse(JSON.stringify(wasm.planets));
   // console.log("planetState", planetState);
 
-  console.log(wasm.reflag);
+  // console.log(wasm.reflag);
 
   Object.keys(planetState).forEach((planetIndex) => {
     planetState[planetIndex].shown = display[planetIndex] ?? true;
-    console.log(
-      "planetIndex",
-      planetIndex,
-      display[planetIndex],
-      planetState[planetIndex].shown,
-      wasm.reflag
-    );
+    // console.log(
+    //   "planetIndex",
+    //   planetIndex,
+    //   display[planetIndex],
+    //   planetState[planetIndex].shown,
+    //   wasm.reflag
+    // );
 
     if (wasm.reflag & 8) {
       //heliocentric
@@ -58,7 +58,7 @@ export default function ChartDrawingWrapper({
       }
     }
   });
-  console.log("planetState", planetState);
+  // console.log("planetState", planetState);
   return (
     <div className={classes.container}>
       <SVGChart planetState={planetState} cusps={wasm.house} />

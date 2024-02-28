@@ -95,7 +95,7 @@ export default function Chart() {
     )
       .then((wasm) => {
         setWasm(wasm);
-        console.log("I am refetching, in chart");
+        // console.log("I am refetching, in chart");
 
         // calculate positions
         const planetState = wasm.planets;

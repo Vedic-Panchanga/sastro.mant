@@ -47,7 +47,7 @@ export default function ExplainRiseSet() {
         href="https://commons.wikimedia.org/wiki/File:Twilight-dawn_subcategories.svg"
       >
         <img
-          width="512"
+          // width="512"
           alt="Twilight-dawn subcategories"
           src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b4/Twilight-dawn_subcategories.svg/512px-Twilight-dawn_subcategories.svg.png"
         />

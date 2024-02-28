@@ -67,13 +67,13 @@ export default function RiseSet({
   return (
     <Table>
       <Table.Thead>
-        {/* <Table.Tr> */}
-        <Table.Th className={classes.tableHead}>
-          {planetsSymbol(0)} Sun {planetsSymbol(0)}
-        </Table.Th>
-        <Table.Th>Rise</Table.Th>
-        <Table.Th>Set</Table.Th>
-        {/* </Table.Tr> */}
+        <Table.Tr>
+          <Table.Th className={classes.tableHead}>
+            {planetsSymbol(0)} Sun {planetsSymbol(0)}
+          </Table.Th>
+          <Table.Th>Rise</Table.Th>
+          <Table.Th>Set</Table.Th>
+        </Table.Tr>
       </Table.Thead>
       <Table.Tbody>
         <EventRow
@@ -124,11 +124,13 @@ export default function RiseSet({
         </Table.Tr>
       </Table.Tbody>
       <Table.Thead>
-        <Table.Th className={classes.tableHead}>
-          {planetsSymbol(1)} Moon {planetsSymbol(1)}
-        </Table.Th>
-        <Table.Th>Rise</Table.Th>
-        <Table.Th>Set</Table.Th>
+        <Table.Tr>
+          <Table.Th className={classes.tableHead}>
+            {planetsSymbol(1)} Moon {planetsSymbol(1)}
+          </Table.Th>
+          <Table.Th>Rise</Table.Th>
+          <Table.Th>Set</Table.Th>
+        </Table.Tr>
       </Table.Thead>
       <Table.Tbody>
         <EventRow

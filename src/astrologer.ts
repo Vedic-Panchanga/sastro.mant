@@ -10,12 +10,17 @@ export default function astrologer(
   type: number
 ): Promise<any> {
   return new Promise((resolve, reject) => {
-    // if (astrologerWorker) {
-    //   astrologerWorker.terminate();
-    // }
-    if (!astrologerWorker) {
+    if (astrologerWorker) {
+      const temp: Worker = astrologerWorker;
+      astrologerWorker = new Worker("asweph.js");
+      temp.terminate();
+    } else {
       astrologerWorker = new Worker("asweph.js");
     }
+
+    // if (!astrologerWorker) {
+
+    // }
 
     astrologerWorker.postMessage([
       tjd_ut,
@@ -28,6 +33,8 @@ export default function astrologer(
       type,
     ]);
     astrologerWorker.onmessage = function (response) {
+      // console.log("in astrologerWorker", response.data);
+
       resolve(JSON.parse(response.data));
       // astrologerWorker.terminate(); // Clean up the worker after receiving the result
     };

@@ -40,12 +40,13 @@ export default function Root() {
     const lat = searchParams.get("lat");
     const height = searchParams.get("height");
     // const height = searchParams.get('height')
-    if (!ts === null && !ts === undefined) {
+    if (!(ts === null) && !(ts === undefined)) {
       const zone = FixedOffsetZone.instance(Number(offset));
       const newDateTime = DateTime.fromMillis(Number(ts) ?? 0, { zone: zone });
       if (newDateTime.isValid) setDateTime(newDateTime);
+      console.log("inside", ts, "newTime", newDateTime);
     }
-    // console.log("outside", lon);
+    console.log("outside", ts, !ts === null, !ts === undefined);
 
     if (!(lon === null) && !(lon === undefined)) {
       // console.log("Inside", location);

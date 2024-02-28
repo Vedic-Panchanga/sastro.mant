@@ -228,8 +228,11 @@ export function fixedStarName(fixedStarIndex: number) {
 }
 
 //Bazi-related
+export function jdut2timestamp(jdut: number) {
+  return Math.floor((jdut - 2440587.5) * 86400000);
+}
 export function jdut2DateTime(jdut: number, zone: FixedOffsetZone) {
-  return DateTime.fromMillis(Math.floor((jdut - 2440587.5) * 86400000), {
+  return DateTime.fromMillis(jdut2timestamp(jdut), {
     zone: zone,
   });
 }

@@ -5,8 +5,8 @@ export default function Footer() {
   return (
     <ModalText text={"About this page"} modalHeading={"About this page"}>
       <p>
-        This is a website provided some astrology tools, for fun:). Astrological
-        calculations are based on{" "}
+        This is a website provided some astrology tools, just for fun:).
+        Astrological calculations are based on the{" "}
         <Anchor
           target="_blank"
           rel="noopener noreferrer"
@@ -14,15 +14,15 @@ export default function Footer() {
         >
           Swiss Ephemeris
         </Anchor>
-        , and a bridge with wasm provided by{" "}
+        , with a bridge provided by{" "}
         <Anchor
           target="_blank"
           rel="noopener noreferrer"
           href="https://github.com/u-blusky/sweph-wasm"
         >
           u-blusky
-        </Anchor>
-        . City search is provided by{" "}
+        </Anchor>{" "}
+        using WebAssembly. City search functionality is provided by{" "}
         <Anchor
           target="_blank"
           rel="noopener noreferrer"
@@ -33,15 +33,22 @@ export default function Footer() {
         .
       </p>
       <p>
-        Time range from -4800 to 3000, Gregorian, and the time zone is fixed
-        time offset (which means you need to pay attention to daylight saving
-        and convert to gregorian if julian calendar is using).
+        The time range is from -4800 to 3000 in the Gregorian Calendar, and the
+        time zone uses fixed time offsets (so you need to pay attention to
+        daylight saving time and convert to Gregorian calendar if the Julian
+        calendar is used).
       </p>
       <p>
-        The Swiss Ephemeris claims an accuracy to arc millisecond compared to
-        JPL published by NASA.
+        The Swiss Ephemeris claims accuracy to the arc millisecond compared to
+        the data published by NASA's JPL.
       </p>
-      <strong>Set locations and use appropriate timezone!</strong>
+      <p>
+        Since this app treat alls times as UT1, it should have less than 1
+        second difference from UTC. All times and degrees are rounded down.
+      </p>
+      <strong>
+        Be sure to set locations and use the appropriate time zone offsets!
+      </strong>
     </ModalText>
   );
 }

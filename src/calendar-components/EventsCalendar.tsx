@@ -1,8 +1,10 @@
-import { Table } from "@mantine/core";
+import { Table, UnstyledButton } from "@mantine/core";
 import { type EventType } from "./CalendarTable";
 import { FixedOffsetZone } from "luxon";
-import { jdut2DateTime } from "../utils";
+import { jdut2DateTime, jdut2timestamp } from "../utils";
 import LongitudeFormat from "../components/LongitudeFormat";
+import classes from "./EventsCalendar.module.css";
+import { Link } from "react-router-dom";
 export default function EventsCalendar({
   eventList,
   zone,
@@ -18,8 +20,16 @@ export default function EventsCalendar({
           {jdut2DateTime(eventOjb.jd, zone).toFormat("yyyy LLL dd HH:mm:ss")}
         </Table.Td>
         <Table.Td>{eventOjb.type}</Table.Td>
-        <Table.Td>
-          <LongitudeFormat longitude={Number(eventOjb.value)} />
+        <Table.Td className={classes.buttonTd}>
+          <UnstyledButton
+            className={classes.buttonChart}
+            to={`/chart?ts=${jdut2timestamp(eventOjb.jd)}`}
+            component={Link}
+          >
+            {eventOjb.type !== "Sirius helical rising" && (
+              <LongitudeFormat longitude={Number(eventOjb.value)} />
+            )}
+          </UnstyledButton>
         </Table.Td>
       </Table.Tr>
     ))

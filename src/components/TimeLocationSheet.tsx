@@ -1,4 +1,4 @@
-import { Suspense, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { DateTime, FixedOffsetZone } from "luxon";
 import { ActionIcon, Button, Divider, Loader } from "@mantine/core";
 import { Link } from "react-router-dom";

@@ -17,6 +17,7 @@ import astrologer from "../astrologer";
 import EventsCalendar from "./EventsCalendar";
 import RiseSet from "./RiseSet";
 import ExplainRiseSet from "./ExplainRiseSet";
+import ExplainEvents from "./ExplainEvents";
 
 export type EventType = {
   jd: number; //when
@@ -131,13 +132,22 @@ export default function CalendarTable({
           return;
         } else {
           const moonDateTime = jdut2DateTime(moonArray[0], zone);
-          daysArraySubTitle[moonDateTime.day] = moonArray[1] == 0 ? "🌑" : "🌕";
+          let moonEmoji: undefined | string = undefined;
+          if (moonArray[1] == 0) {
+            moonEmoji = "🌑";
+          } else if (moonArray[1] == 90) {
+            moonEmoji = "🌓";
+          } else if (moonArray[1] == 180) {
+            moonEmoji = "🌕";
+          } else {
+            moonEmoji = "🌗";
+          }
+          daysArraySubTitle[moonDateTime.day] = moonEmoji;
           daysArrayEvents[moonDateTime.day].push({
             name: 1, //number of MOON
             jd: moonArray[0],
             value: moonArray[2],
-            // display: moonArray[1] == 0 ? "🌑" : "🌕",
-            type: moonArray[1] == 0 ? "🌑" : "🌕",
+            type: moonEmoji,
           });
         }
       }
@@ -161,12 +171,12 @@ export default function CalendarTable({
 
   //calendar skelton
   let day = 1;
-  for (let i = 0; i < 5; i++) {
-    if (i == 4 && days === 28 && firstDayOfMonth.weekday == 1) {
+  for (let i = 0; i < 6; i++) {
+    if (i == 4 && days === 28 && firstDayOfMonth.weekday === 1) {
       continue;
     }
     const week: (number | null)[] = [];
-    for (let j = 0; j < DAYS; j++) {
+    for (let j = 1; j <= DAYS; j++) {
       if ((i === 0 && j < firstDayOfMonth.weekday) || day > days!) {
         week.push(null);
       } else {
@@ -177,7 +187,7 @@ export default function CalendarTable({
     calendarArray.push(week);
     if (day > days!) break;
   }
-  // console.log("after wasm", wasm);
+  console.log("after wasm", wasm);
 
   return (
     <>
@@ -213,19 +223,18 @@ export default function CalendarTable({
                       .toLocaleParts({
                         dateStyle: "long",
                       });
-                    // console.log(daysArraySubTitle[day]);
+                    console.log(dayStringParts);
 
                     return (
                       <Table.Td key={day + "-" + index + "-" + i}>
                         <Tooltip
-                          // events={{ hover: true, focus: false, touch: false }}
+                          events={{ hover: true, focus: false, touch: false }}
                           label={
                             <>
                               <div>
-                                {dayStringParts[1].value}
+                                {/* {dayStringParts[1].value} */}
                                 {dayStringParts[3].value}
                                 {dayStringParts[4].value}
-
                                 {day2GanzhiChar(
                                   firstDayOfMonthJDLocal + day - 1
                                 )}
@@ -272,7 +281,9 @@ export default function CalendarTable({
               <Tabs.Tab value="calendar" rightSection={<ExplainCalendar />}>
                 Calendar
               </Tabs.Tab>
-              <Tabs.Tab value="events">Events</Tabs.Tab>
+              <Tabs.Tab value="events" rightSection={<ExplainEvents />}>
+                Events
+              </Tabs.Tab>
               <Tabs.Tab value="riseSet" rightSection={<ExplainRiseSet />}>
                 Rise Set
               </Tabs.Tab>
@@ -331,23 +342,27 @@ export default function CalendarTable({
 function eventLookup(planet: number, eventCode: number): string | undefined {
   let type = "";
   // let description = "";
-  if (planet < 4) {
+  if (planet === 1) {
+    return `${planetsSymbol(planet)} ☌ ${planetsSymbol(eventCode)}`;
+  } else if (planet < 4) {
     switch (eventCode) {
       case 0:
-        type = "superior conj.";
-        break;
-      case 200:
         type = "inferior conj.";
         break;
-      case 100:
-        type = "greatest east.";
+      case 200:
+        type = "superior conj.";
         break;
-      case 300:
+      case 100:
         type = "greatest west.";
         break;
+      case 300:
+        type = "greatest east.";
+        break;
+
       default:
         type = eventCode.toString();
     }
+    return `${planetsSymbol(planet)} ${type} ${planetsSymbol(0)}`;
   } else if (planet < 100) {
     switch (eventCode) {
       case 0:
@@ -357,18 +372,18 @@ function eventLookup(planet: number, eventCode: number): string | undefined {
         type = "☌";
         break;
       case 100:
-        type = "western quad.";
+        type = "eastern quad.";
         break;
       case 300:
-        type = "eastern quad.";
+        type = "western quad.";
         break;
       default:
         type = eventCode.toString();
     }
+    return `${planetsSymbol(planet)} ${type} ${planetsSymbol(0)}`;
   } else if (planet == 130) {
     return "Sirius helical rising";
-  }
-  if (eventCode < 100) {
+  } else if (eventCode < 100) {
     return `${planetsSymbol(planet)} ☌ ${planetsSymbol(type)}`;
   }
 
