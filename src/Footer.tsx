@@ -49,6 +49,9 @@ export default function Footer() {
       <strong>
         Be sure to set locations and use the appropriate time zone offsets!
       </strong>
+      <p>
+        If anything weird happened, email me: yingch_69@proton,me. Good luck:)
+      </p>
     </ModalText>
   );
 }

@@ -290,6 +290,10 @@ export default function CalendarTable({
             </Tabs.List>
             <Tabs.Panel value="calendar">
               <div>
+                <strong>Julian Day Number:</strong>
+                <br />
+                {(firstDayOfMonthJDLocal + selectedDate.day - 1).toString()}
+                <br />
                 <strong>Gregorian: </strong>
                 <br />
                 {selectedDate.toFormat("yyyy LLLL dd")}
@@ -301,6 +305,7 @@ export default function CalendarTable({
                   month: "long",
                   day: "numeric",
                 })}
+                {day2GanzhiChar(firstDayOfMonthJDLocal + selectedDate.day - 1)}
                 <br />
                 <strong>Hebrew:</strong>
                 <br />
@@ -316,7 +321,10 @@ export default function CalendarTable({
               </div>
             </Tabs.Panel>
             <Tabs.Panel value="events">
-              <small>{zone.name}, Geocentric</small>
+              <div className={classes.tableSmallExplain}>
+                <small>{zone.name}, Geocentric</small>
+                <small>click to chart 🔽</small>
+              </div>
               <EventsCalendar eventList={daysArrayEvents} zone={zone} />
             </Tabs.Panel>
             <Tabs.Panel value="riseSet">

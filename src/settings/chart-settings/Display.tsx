@@ -46,6 +46,10 @@ const defaultSettings: Record<string, boolean> = {
   "-3": true,
   //"Sp. P."
   "-9": false,
+  //Dsc
+  "-5": false,
+  //ID
+  "-7": false,
 };
 
 export const displayAtom = atomWithStorage("display", defaultSettings);

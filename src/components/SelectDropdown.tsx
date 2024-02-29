@@ -4,7 +4,7 @@ type SelectDropdownProps = {
   option: string;
   options: Record<string, string>;
   setOption: Dispatch<SetStateAction<string>>;
-  inputLabel: string;
+  inputLabel: React.ReactNode;
 };
 export default function SelectDropdown({
   option,

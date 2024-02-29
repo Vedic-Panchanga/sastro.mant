@@ -2,15 +2,17 @@ import { atomWithStorage } from "jotai/utils";
 import { useAtom } from "jotai";
 import TabsTwo from "../../components/TabsTwo";
 import SelectDropdown from "../../components/SelectDropdown";
+import ExplainNak from "./ExplainNak";
 // import TabsThree from "../../components/TabsThree";
 
 const defaultSettings = {
-  nodeType: false,
-  lilithType: 0,
+  // nodeType: false,
+  // lilithType: 0,
   helio: false,
   siderealOrTropical: false,
   sidMode: "0",
   house: "K",
+  subWheelType: "0", //0 none, 1 28, 2 27
 };
 
 const createAtom = <T extends keyof typeof defaultSettings>(key: T) =>
@@ -22,7 +24,7 @@ export const helioAtom = createAtom("helio");
 export const siderealOrTropicalAtom = createAtom("siderealOrTropical");
 export const sidModeAtom = createAtom("sidMode");
 export const houseAtom = createAtom("house");
-
+export const subWheelTypeAtom = createAtom("subWheelType");
 export default function ChartGeneralSettings() {
   // const [nodeType, setNodeType] = useAtom(nodeTypeAtom);
   // const [lilithType, setLilithType] = useAtom(lilithTypeAtom);
@@ -32,6 +34,7 @@ export default function ChartGeneralSettings() {
   );
   const [sidMode, setSidMode] = useAtom(sidModeAtom);
   const [house, setHouse] = useAtom(houseAtom);
+  const [nakshastra, setNakshastra] = useAtom(subWheelTypeAtom);
   const sidOptions = {
     0: "Fagan/Bradley",
     1: "Lahiri",
@@ -49,6 +52,11 @@ export default function ChartGeneralSettings() {
     W: "Whole sign",
     R: "Regiomontanus",
     C: "Campanus",
+  };
+  const nakshatraOptions = {
+    0: "None",
+    28: "28 Xiu",
+    27: "27 Nakshatra",
   };
   return (
     <>
@@ -88,6 +96,17 @@ export default function ChartGeneralSettings() {
           inputLabel="House"
           setOption={setHouse}
           options={houseOptions}
+        />{" "}
+        <SelectDropdown
+          option={nakshastra}
+          inputLabel={
+            <>
+              Sub Wheel
+              <ExplainNak />
+            </>
+          }
+          setOption={setNakshastra}
+          options={nakshatraOptions}
         />
       </div>
     </>

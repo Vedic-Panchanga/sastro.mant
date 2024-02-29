@@ -66,6 +66,107 @@ export function planetsSymbol(planetIndex: string | number, retText = false) {
   };
   return planetSymbols[planetIndex]?.[+retText];
 }
+export const subWheelNakNameList = [
+  ["Srav", "女", ",epAqr"], //280deg
+  ["Dhan", "虛", ",beAqr"],
+  ["Sata", "危", ",alAqr"],
+  ["PBha", "室", ",alPeg"], //320 deg
+  ["UBha", "壁", ",gaPeg"],
+  ["Reva", "奎", ",zeAnd"],
+  ["Aswi", "婁", ",beAri"], //1 0 deg
+  ["Bhar", "胃", ",35Ari"],
+  ["Krit", "昴", ",17Tau"],
+  ["Rohi", "畢", ",epTau"], //40 deg
+  ["Mrig", "觜", ",ph-1Ori"],
+  ["Ardra", "參", ",deOri"],
+  ["Puna", "井", ",muGem"], // 80deg
+  ["Push", "鬼", ",thCnc"],
+  ["Asre", "柳", ",deHya"],
+  ["Magh", "星", ",alHya"], //2 120 deg
+  ["PPha", "張", ",up-1Hya"],
+  ["UPha", "翼", ",alCrt"],
+  ["Hast", "軫", ",gaCrv"], //160deg
+  ["Chit", "角", ",alVir"],
+  ["Swati", "亢", ",kaVir"],
+  ["Visa", "氐", ",al-2Lib"], //200
+  ["Anu", "房", ",piSco"],
+  ["Jye", "心", ",siSco"],
+  ["Mula", "尾", ",mu-1Sco"], //3 240
+  ["PAsha", "箕", ",ga-2Sgr"],
+  ["UAsha", "斗", ",phSgr"],
+  ["Abhijit", "牛", ",beCap"], //280deg (not occupied)
+];
+//lang could be fixed star number or "en" or "zh"
+// export function subWheelName(type: string, index: number, lang = "en") {
+//   if (type === "27") {
+//     const langIndex = lang === "zh" ? 1 : 0;
+//     const list = [
+//       ["Aswi", "婁"], //1
+//       ["Bhar", "胃"],
+//       ["Krit", "昴"],
+//       ["Rohi", "畢"],
+//       ["Mrig", "觜"],
+//       ["Ardra", "參"],
+//       ["Puna", "井"],
+//       ["Push", "鬼"],
+//       ["Asre", "柳"],
+//       ["Magh", "星"], //2
+//       ["PPha", "張"],
+//       ["UPha", "翼"],
+//       ["Hast", "軫"],
+//       ["Chit", "角"],
+//       ["Swati", "亢"],
+//       ["Visa", "氐"],
+//       ["Anu", "房"],
+//       ["Jye", "心"],
+//       ["Mula", "尾"], //3
+//       ["PAsha", "箕"],
+//       ["UAsha", "斗"],
+//       ["Srav", "女"],
+//       ["Dhan", "虛"],
+//       ["Sata", "危"],
+//       ["PBha", "室"],
+//       ["UBha", "壁"],
+//       ["Reva", "奎"],
+//     ];
+//     return list[index][langIndex];
+//   } else if (type === "28") {
+//     const language = lang === "zh" ? 1 : 0;
+//     // const list = [
+//     //   ["Aswi", "婁", ",beAri"], //1
+//     //   ["Bhar", "胃", ",35Ari"],
+//     //   ["Krit", "昴", ",17Tau"],
+//     //   ["Rohi", "畢", ",epTau"],
+//     //   ["Mrig", "觜", ",ph-1Ori"],
+//     //   ["Ardra", "參", ",deOri"],
+//     //   ["Puna", "井", ",muGem"],
+//     //   ["Push", "鬼", ",thCnc"],
+//     //   ["Asre", "柳", ",deHya"],
+//     //   ["Magh", "星", ",alHya"], //2
+//     //   ["PPha", "張", ",up-1Hya"],
+//     //   ["UPha", "翼", ",alCrt"],
+//     //   ["Hast", "軫", ",gaCrv"],
+//     //   ["Chit", "角", ",alVir"],
+//     //   ["Swati", "亢", ",kaVir"],
+//     //   ["Visa", "氐", ",al-2Lib"],
+//     //   ["Anu", "房", ",piSco"],
+//     //   ["Jye", "心", ",siSco"],
+//     //   ["Mula", "尾", ",mu-1Sco"], //3
+//     //   ["PAsha", "箕", ",ga-2Sgr"],
+//     //   ["UAsha", "斗", ",phSgr"],
+//     //   ["Abhijit", "牛", ",beCap"],
+//     //   ["Srav", "女", ",epAqr"],
+//     //   ["Dhan", "虛", ",beAqr"],
+//     //   ["Sata", "危", ",alAqr"],
+//     //   ["PBha", "室", ",alPeg"],
+//     //   ["UBha", "壁", ",gaPeg"],
+//     //   ["Reva", "奎", ",zeAnd"],
+//     // ];
+//     return subWheelNakNameList[index][language];
+//   } else {
+//     return null;
+//   }
+// }
 export function colorTheme(element: number) {
   const colors = ["#cc0000", "#f1c232", "#3d85c6", "#6aa84f"];
   return colors[element];
@@ -100,8 +201,8 @@ export function avoidCollision(degreesList: Record<string, Planet>, diff = 5) {
         // merge the two group to the first
         groups[index][0] = groups[index][0].concat(groups[nextIndex][0]);
         groups[index][1] = middle(
-          degrees[groups[index][0][groups[index][0].length - 1]],
-          degrees[groups[index][0][0]]
+          degrees[groups[index][0][0]],
+          degrees[groups[index][0][groups[index][0].length - 1]]
         );
         groups[index][2] = ((groups[index][0].length - 1) * diff) / 2;
         // delete the second
@@ -131,13 +232,15 @@ export function avoidCollision(degreesList: Record<string, Planet>, diff = 5) {
   });
   return degrees;
 }
+/**
+ * degree1 should be less than or equal to degree2 if they do not cross 360 degrees. Find the midpoint when degree1 rotates counterclockwise to degree2.
+ */
 export function middle(degree1: number, degree2: number) {
-  //degree1 >= degree2 if not cross 360, find the middle point, when degree2 counter-clockwise to degree1
-  const middle = (degree1 + degree2) / 2;
-  if (degree1 >= degree2) {
-    return middle;
+  const middleDegree = (degree2 + degree1) / 2;
+  if (degree2 >= degree1) {
+    return middleDegree;
   } else {
-    return (middle + 180) % 360;
+    return (middleDegree + 180) % 360;
   }
 }
 // function trisection(degree1, degree2) {
@@ -188,41 +291,63 @@ export function ifDegreeInOrb(targetDegree: number, degree: number, orb = 1) {
     : degree >= startPoint && degree <= endPoint;
 }
 // Using index instead of name of planets and fixed stars
-export function fixedStarName(fixedStarIndex: number) {
-  const fixedStarList: Record<number, string> = {
-    90: "鬼宿星团",
-    120: "氐宿一",
-    128: "五車二",
-    129: "大角",
-    130: "天狼",
-    132: "南河三",
-    135: "老人",
-    137: "南門二",
-    146: "貫索四",
-    158: "北河二",
-    166: "軒轅十四",
-    171: "織女一",
-    178: "參宿四",
-    180: "室宿一",
-    184: "北落師門",
-    189: "心宿二",
-    192: "天市右垣七",
-    196: "畢宿五",
-    // 203: "勾陳一，北極星",
-    205: "角宿一",
-    216: "奎宿九",
-    251: "北河三",
-    260: "五帝座一",
-    262: "氐宿四",
-    270: "參宿七",
-    274: "大陵五",
-    328: "壘壁陣四",
-    333: "鬼宿四",
-    339: "軫宿三",
-    499: "昴宿六",
-    500: "搖光，北斗七",
-    505: "天大將軍一",
-    527: "鬼宿三",
+export function fixedStarName(fixedStarIndex: string) {
+  const fixedStarList: Record<string, string> = {
+    ",M44": "鬼宿星团",
+    ",al-2Lib": "氐宿一",
+    ",alAur": "五車二",
+    ",alBoo": "大角",
+    ",alCMa": "天狼",
+    ",alCMi": "南河三",
+    ",alCar": "老人",
+    ",alCen": "南門二",
+    ",alCrB": "貫索四",
+    ",alGem": "北河二",
+    ",alLeo": "軒轅十四",
+    ",alLyr": "織女一",
+    ",alOri": "參宿四",
+    ",alPeg": "室宿一",
+    ",alPsA": "北落師門",
+    ",alSco": "心宿二",
+    ",alSer": "天市右垣七",
+    ",alTau": "畢宿五",
+    ",alVir": "角宿一",
+    ",beAnd": "奎宿九",
+    ",beGem": "北河三",
+    ",beLeo": "五帝座一",
+    ",beLib": "氐宿四",
+    ",beOri": "參宿七",
+    ",bePer": "大陵五",
+    ",deCap": "壘壁陣四",
+    ",deCnc": "鬼宿四",
+    ",deCrv": "軫宿三",
+    ",etTau": "昴宿六",
+    ",etUMa": "搖光，北斗七",
+    ",ga-1And": "天大將軍一",
+    ",gaCnc": "鬼宿三",
+    ",kaVir": "亢宿一",
+    ",piSco": "房宿一",
+    ",siSco": "心宿一",
+    ",mu-1Sco": "尾宿一",
+    ",phSgr": "斗宿一",
+    ",ga-2Sgr": "箕宿一",
+    ",beCap": "牛宿一",
+    ",epAqr": "女宿一",
+    ",beAqr": "虛宿一",
+    ",alAqr": "危宿一",
+    ",gaPeg": "壁宿一",
+    ",zeAnd": "奎宿二",
+    ",beAri": "婁宿一",
+    ",17Tau": "昴宿一",
+    ",epTau": "畢宿一",
+    ",ph-1Ori": "觜宿二",
+    ",deOri": "參宿三",
+    ",muGem": "井宿一",
+    ",deHya": "柳宿一",
+    ",alHya": "星宿一",
+    ",up-1Hya": "張宿一",
+    ",alCrt": "翼宿一",
+    ",gaCrv": "軫宿一",
   };
   return fixedStarList[fixedStarIndex];
 }
@@ -240,7 +365,7 @@ export function timestamp2jdlocal(millis: number, offset = 0) {
   return (millis + offset * 60000) / 86400000 + 2440587.5;
 }
 export function timestamp2jdut(millis: number) {
-  return millis / 86400000 + 2440587.5;
+  return timestamp2jdlocal(millis, 0);
 }
 export function day2GanzhiChar(jd: number) {
   const ganZhiNumber = day2Ganzhi(jd);

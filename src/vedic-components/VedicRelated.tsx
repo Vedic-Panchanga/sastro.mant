@@ -348,33 +348,33 @@ function TableSort({ planetState }: { planetState: VedicPlanetType[] }) {
 }
 
 const nakshatras = [
-  "Aswi", //1
-  "Bhar",
-  "Krit",
-  "Rohi",
-  "Mrig",
-  "Ardra",
-  "Puna",
-  "Push",
-  "Asre",
-  "Magh", //2
-  "PPha",
-  "UPha",
-  "Hast",
-  "Chit",
-  "Swati",
-  "Visa",
-  "Anu",
-  "Jye",
-  "Mula", //3
-  "PAsha",
-  "UAsha",
-  "Srav",
-  "Dhan",
-  "Sata",
-  "PBha",
-  "UBha",
-  "Reva",
+  "Aswi婁", //1
+  "Bhar胃",
+  "Krit昴",
+  "Rohi畢",
+  "Mrig觜",
+  "Ardra參",
+  "Puna井",
+  "Push鬼",
+  "Asre柳",
+  "Magh星", //2
+  "PPha張",
+  "UPha翼",
+  "Hast軫",
+  "Chit角",
+  "Swati亢",
+  "Visa氐",
+  "Anu房",
+  "Jye心",
+  "Mula尾", //3
+  "PAsha箕",
+  "UAsha斗",
+  "Srav女",
+  "Dhan虛",
+  "Sata危",
+  "PBha室",
+  "UBha壁",
+  "Reva奎",
 ];
 const karaList = ["AK", "AmK", "BK", "MK", "PK", "GK", "DK"];
 // convert planetState: Record<string, Planet> => VedicPlanetType[]

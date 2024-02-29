@@ -4,8 +4,10 @@ import {
   middle,
   parseDegree,
   planetsSymbol,
+  subWheelNakNameList,
   zodiacSymbol,
 } from "../utils.ts";
+import { Fixstars } from "./Chart.tsx";
 // Constants for default values
 const DEFAULT_COLOR = "black";
 const DEFAULT_FONT_SIZE = "100%";
@@ -101,24 +103,24 @@ export function Circle({ radius, stroke }: CircleProps) {
 
 type CuspsProps = {
   cusps: number[];
-  radiusZodiac: number;
-  radiusInner: number;
   radiusCuspsDegree: number;
+  radiusInner: number;
+  radiusSub: number;
 };
 export function Cusps({
   cusps,
-  radiusZodiac,
+  radiusSub,
   radiusInner,
   radiusCuspsDegree,
 }: CuspsProps) {
   const strokeWidth_ASCMC = "4px";
   const strokeWidth_notASCMC = DEFAULT_STROKE_WIDTH;
   const houseRadius = radiusInner * 1.15;
-  const lengthCusps = radiusZodiac - radiusInner;
+  const lengthCusps = radiusSub - radiusInner;
   return cusps.map((cusp, i) => (
-    <React.Fragment key={`c usp_${i}`}>
+    <React.Fragment key={`cusp_${i}`}>
       <Line
-        startRadius={radiusZodiac}
+        startRadius={radiusSub}
         length={lengthCusps}
         theta={cusps[i]}
         leftDegree={cusps[0]}
@@ -127,7 +129,7 @@ export function Cusps({
       <Text
         displayText={(i + 1).toString()}
         distanceFromCenter={houseRadius}
-        angleInDegrees={middle(cusps[(i + 1) % 12], cusps[i])}
+        angleInDegrees={middle(cusps[i], cusps[(i + 1) % 12])}
         angleOffset={cusps[0]}
         textSize="50%"
         textWeight="normal"
@@ -157,6 +159,60 @@ export function Cusps({
       />
     </React.Fragment>
   ));
+}
+type SubWheelProps = {
+  radius_zodiac: number;
+  radius_sub: number;
+  fixstars: Fixstars;
+  leftDegree: number;
+  type: string;
+};
+export function SubWheel({
+  radius_zodiac,
+  radius_sub,
+  fixstars,
+  leftDegree,
+  type,
+}: SubWheelProps) {
+  if (type === "0") return null;
+  const distanceFromCenter = (radius_zodiac + radius_sub) / 2;
+  return subWheelNakNameList.map((nakNameListSlice, index) => {
+    if (type == "27" && index == 27) return null;
+    let cuspStart: number = 0;
+    let cuspEnd: number = 0;
+    if (type == "27") {
+      cuspStart = (13.33333333333333 * index + 280) % 360;
+      cuspEnd = (13.33333333333333 * index + 320) % 360;
+    } else if (type == "28") {
+      cuspStart = fixstars[nakNameListSlice[2]].lon;
+      cuspEnd = fixstars[subWheelNakNameList[(index + 1) % 28][2]].lon;
+    }
+    const cuspName = nakNameListSlice[1];
+    const cuspNamePosition =
+      Math.abs(cuspEnd - cuspStart) < 90
+        ? (cuspEnd + cuspStart) / 2
+        : middle(cuspStart, cuspEnd);
+    console.log(nakNameListSlice[2], fixstars[nakNameListSlice[2]]);
+
+    return (
+      <React.Fragment key={index}>
+        <Line
+          startRadius={radius_zodiac}
+          length={radius_zodiac - radius_sub}
+          theta={cuspStart}
+          leftDegree={leftDegree}
+          strokeWidth="0.5px"
+        />
+        <Text
+          displayText={cuspName}
+          distanceFromCenter={distanceFromCenter}
+          angleInDegrees={cuspNamePosition}
+          textSize="48%"
+          angleOffset={leftDegree}
+        />
+      </React.Fragment>
+    );
+  });
 }
 type PlanetProps = {
   planet: string;

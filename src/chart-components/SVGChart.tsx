@@ -1,27 +1,30 @@
 import React from "react";
 
-import { Line, Circle, Planet, Cusps } from "./SVGComponents.tsx";
+import { Line, Circle, Planet, Cusps, SubWheel } from "./SVGComponents.tsx";
 import { avoidCollision } from "../utils.ts";
-import { type Planet as PlanetType } from "./Chart.tsx";
+import { Fixstars, type Planet as PlanetType } from "./Chart.tsx";
 import classes from "./SVGChart.module.css";
+import { subWheelTypeAtom } from "../settings/chart-settings/General.tsx";
+import { useAtomValue } from "jotai";
 const svgWidth = 404;
 const radius_out = 49;
 const radius_zodiac = 42;
-const radius_house = 20;
-const radius_inner = 15;
-const stroke = [5, 1, 1, 1]; //stroke of circles from outside to inside
-const diff = 7; //avoid planets overlapped in chart
-const radius_planet = radius_zodiac * 0.8 + radius_house * 0.2;
-const radius_planet_degree = radius_zodiac * 0.57 + radius_house * 0.43;
-const radius_planet_zodiac = radius_zodiac * 0.36 + radius_house * 0.64;
-const radius_planet_minute = radius_zodiac * 0.205 + radius_house * 0.795;
-const radius_planet_retro = radius_house * 1.1;
+
+const radius_house = 13;
+const radius_inner = 10;
+const stroke = [5, 1, 1, 1, 1]; //stroke of circles from outside to inside
+const diff = 9; //avoid planets overlapped in chart
 
 type SVGChartProps = {
   planetState: Record<string, PlanetType>;
   cusps: number[];
+  fixstar: Fixstars;
 };
-export default function SVGChart({ planetState, cusps }: SVGChartProps) {
+export default function SVGChart({
+  planetState,
+  cusps,
+  fixstar,
+}: SVGChartProps) {
   // const short_length_pl = 0.1;
   // const short_length_xtick_minor = 0.15;
   // const short_length_xtick_major = 0.3;
@@ -31,7 +34,13 @@ export default function SVGChart({ planetState, cusps }: SVGChartProps) {
   // const linewidth_light = 0.3;
 
   const planetNonCollision = avoidCollision(planetState, diff);
-
+  const subWheelType = useAtomValue(subWheelTypeAtom);
+  const radius_sub = subWheelType === "0" ? radius_zodiac : 39;
+  const radius_planet = radius_sub * 0.8 + radius_house * 0.2;
+  const radius_planet_degree = radius_sub * 0.57 + radius_house * 0.43;
+  const radius_planet_zodiac = radius_sub * 0.36 + radius_house * 0.64;
+  const radius_planet_minute = radius_sub * 0.2 + radius_house * 0.8;
+  const radius_planet_retro = radius_house * 0.8 + radius_planet_minute * 0.2;
   return (
     <svg
       viewBox={
@@ -41,16 +50,24 @@ export default function SVGChart({ planetState, cusps }: SVGChartProps) {
       xmlns="http://www.w3.org/2000/svg"
       version="1.1"
     >
-      {[radius_out, radius_house, radius_zodiac, radius_inner].map(
+      {[radius_out, radius_house, radius_zodiac, radius_sub, radius_inner].map(
         (r, index) => (
           <Circle key={r} radius={r + "%"} stroke={stroke[index]} />
         )
       )}
       <Cusps
         cusps={cusps}
-        radiusZodiac={radius_zodiac}
+        radiusSub={radius_sub}
         radiusInner={radius_inner}
         radiusCuspsDegree={radius_zodiac * 0.5 + radius_out * 0.5}
+        // fixstar={fixstar}
+      />
+      <SubWheel
+        radius_zodiac={radius_zodiac}
+        radius_sub={radius_sub}
+        fixstars={fixstar}
+        leftDegree={cusps[0]}
+        type={subWheelType}
       />
       {Object.keys(planetState).map((planetIndex) => {
         if (planetState[planetIndex].shown == false) return;
@@ -69,7 +86,7 @@ export default function SVGChart({ planetState, cusps }: SVGChartProps) {
               leftDegree={cusps[0]}
             />
             <Line
-              startRadius={radius_zodiac}
+              startRadius={radius_sub}
               length={2}
               theta={planetState[planetIndex].lon}
               leftDegree={cusps[0]}

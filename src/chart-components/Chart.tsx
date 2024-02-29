@@ -42,7 +42,7 @@ type Fixstar = {
 
 // 定义 Fixstar 类型
 export type Fixstars = {
-  [key: number]: Fixstar;
+  [key: string]: Fixstar;
 };
 
 // 定义 House 类型

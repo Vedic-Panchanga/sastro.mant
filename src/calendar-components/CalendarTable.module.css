@@ -16,3 +16,8 @@
   text-align: center;
   max-width: 600px;
 }
+.tableSmallExplain {
+  display: flex;
+  justify-content: space-between;
+  padding-right: 20;
+}

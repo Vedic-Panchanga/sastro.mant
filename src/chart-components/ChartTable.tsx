@@ -102,7 +102,7 @@ type TableFixstarProps = {
 };
 type FixstarAcc = {
   [starIndex: string]: {
-    key: number;
+    key: string;
     lon: number;
     lat: number;
     name: string;
@@ -113,11 +113,12 @@ function TableFixstar({ planetState, fixstar }: TableFixstarProps) {
   const fixstarInOrb = Object.entries(fixstar).reduce<FixstarAcc>(
     (acc, [starIndex, starInfo]) => {
       function pushPlanet(planetIndex: number, planetLon: number) {
-        const numberStarIndex = Number(starIndex);
         if (ifDegreeInOrb(planetLon, starInfo.lon, 1.5)) {
           if (!acc[starIndex]) {
+            console.log("fix", starIndex, starInfo);
+
             acc[starIndex] = {
-              key: numberStarIndex,
+              key: starIndex,
               lon: starInfo.lon,
               lat: starInfo.lat,
               name: starInfo.name,
@@ -145,6 +146,7 @@ function TableFixstar({ planetState, fixstar }: TableFixstarProps) {
   const sortedFixstar = Object.values(fixstarInOrb).sort(
     (a, b) => a.lon - b.lon
   );
+  console.log("fixstar", fixstar);
 
   return (
     <Table.ScrollContainer minWidth={500}>
@@ -207,7 +209,11 @@ export default function ChartTable({ planetState, fixstar }: TabChartProps) {
     <Tabs defaultValue="planets" className={classes.container}>
       <Tabs.List>
         <Tabs.Tab value="planets">Planets</Tabs.Tab>
-        <Tabs.Tab value="fixed">Fixed Star</Tabs.Tab>
+        <Tabs.Tab value="fixed">
+          <Tooltip label="Only fixed stars near the planets would be displayed.">
+            <div>Fixed Star</div>
+          </Tooltip>
+        </Tabs.Tab>
         <Tabs.Tab value="settings">Settings</Tabs.Tab>
       </Tabs.List>
       <Tabs.Panel value="planets">

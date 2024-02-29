@@ -34,13 +34,6 @@ export default function ChartDrawingWrapper({
 
   Object.keys(planetState).forEach((planetIndex) => {
     planetState[planetIndex].shown = display[planetIndex] ?? true;
-    // console.log(
-    //   "planetIndex",
-    //   planetIndex,
-    //   display[planetIndex],
-    //   planetState[planetIndex].shown,
-    //   wasm.reflag
-    // );
 
     if (wasm.reflag & 8) {
       //heliocentric
@@ -58,10 +51,13 @@ export default function ChartDrawingWrapper({
       }
     }
   });
-  // console.log("planetState", planetState);
   return (
     <div className={classes.container}>
-      <SVGChart planetState={planetState} cusps={wasm.house} />
+      <SVGChart
+        planetState={planetState}
+        cusps={wasm.house}
+        fixstar={wasm.fixstar}
+      />
       {children}
       <ChartTable planetState={planetState} fixstar={wasm.fixstar} />
     </div>
@@ -69,5 +65,3 @@ export default function ChartDrawingWrapper({
 }
 const nodeList = [10, 11];
 const lilithList = [21, 22, 13, 12];
-// //lilith type conrrespond to lilith shown
-// const lilithTypeList = { 0: [12], 1: [13], 2: [21, 22] };

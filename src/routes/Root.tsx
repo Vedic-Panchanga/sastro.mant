@@ -41,7 +41,8 @@ export default function Root() {
     const height = searchParams.get("height");
     // const height = searchParams.get('height')
     if (!(ts === null) && !(ts === undefined)) {
-      const zone = FixedOffsetZone.instance(Number(offset));
+      const offsetToUse = offset ?? dateTime.offset;
+      const zone = FixedOffsetZone.instance(Number(offsetToUse));
       const newDateTime = DateTime.fromMillis(Number(ts) ?? 0, { zone: zone });
       if (newDateTime.isValid) setDateTime(newDateTime);
       console.log("inside", ts, "newTime", newDateTime);

@@ -1,4 +1,4 @@
-let astrologerWorker: Worker | null = null;
+let astrologerWorker: Worker | undefined = undefined;
 export default function astrologer(
   tjd_ut: number,
   sid: number,
@@ -10,13 +10,18 @@ export default function astrologer(
   type: number
 ): Promise<any> {
   return new Promise((resolve, reject) => {
-    if (astrologerWorker) {
-      const temp: Worker = astrologerWorker;
-      astrologerWorker = new Worker("asweph.js");
-      temp.terminate();
-    } else {
-      astrologerWorker = new Worker("asweph.js");
-    }
+    // if (astrologerWorker) {
+    // const temp: Worker = astrologerWorker;
+    // console.log("tempWorker", temp);
+
+    // astrologerWorker = new Worker("asweph.js");
+    // console.log("astroWorker", astrologerWorker);
+
+    // temp.terminate();
+    // console.log("astroWorkerAfter", astrologerWorker);
+    // } else {
+    astrologerWorker = new Worker("/asweph.js");
+    // }
 
     // if (!astrologerWorker) {
 

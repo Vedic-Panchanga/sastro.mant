@@ -39,6 +39,7 @@ const router = createBrowserRouter(
       <Route path="calendar" element={<Calendar />} />
     </Route>
   )
+  // { basename: "/sastros" }
 );
 
 const resolver: CSSVariablesResolver = (theme) => ({
