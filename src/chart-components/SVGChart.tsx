@@ -99,8 +99,9 @@ SVGChartProps) {
             cusps={innerCusps!}
             radiusSub={radius_sub}
             radiusInner={radius_inner}
-            radiusCuspsDegree={radius_zodiac * 0.5 + radius_out * 0.5}
+            radiusOut={radius_out}
           />
+
           <SubWheel
             radius_zodiac={radius_zodiac}
             radius_sub={radius_sub}

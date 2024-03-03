@@ -4,15 +4,19 @@ import { zodiacSymbol } from "../../utils";
 import RadioGroup from "../../components/RadioGroup";
 import classes from "./CustomGraphics.module.css";
 import { ReactNode } from "react";
+import TabsTwo from "../../components/TabsTwo";
 
 const defaultSettings = {
-  colorMode: "2",
+  colorMode: "1",
+  typeZodiac: true,
 };
 
 const createAtom = <T extends keyof typeof defaultSettings>(key: T) =>
   atomWithStorage(key, defaultSettings[key]);
 
 export const colorModeAtom = createAtom("colorMode");
+export const typeZodiacAtom = createAtom("typeZodiac");
+
 const colorType = ["colorFire", "colorEarth", "colorAir", "colorWater"];
 export const colorSettingOptions: Record<
   string,
@@ -43,6 +47,7 @@ export const colorSettingOptions: Record<
 };
 export default function CustomGraphicsSettings() {
   const [colorMode, setColorMode] = useAtom(colorModeAtom);
+  const [typeZodiac, setTypeZodiac] = useAtom(typeZodiacAtom);
 
   const colorModeOptions: Record<string, ReactNode> = {};
   Object.entries(colorSettingOptions).forEach(
@@ -73,6 +78,11 @@ export default function CustomGraphicsSettings() {
           options={colorModeOptions}
         />{" "}
       </div>
+      <TabsTwo
+        option={typeZodiac}
+        setOption={setTypeZodiac}
+        optionLabel={["Zodiac", "House"]}
+      />
     </>
   );
 }

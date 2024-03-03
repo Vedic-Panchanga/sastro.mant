@@ -7,6 +7,9 @@ import {
   zodiacSymbol,
 } from "../utils.ts";
 import { Fixstars } from "./Chart.tsx";
+import { useAtomValue } from "jotai";
+import { typeZodiacAtom } from "../settings/chart-settings/CustomGraphics.tsx";
+
 // Constants for default values
 const DEFAULT_FONT_SIZE = "100%";
 const DEFAULT_FONT_WEIGHT = "normal";
@@ -102,7 +105,7 @@ export function Circle({ radius, stroke }: CircleProps) {
 
 type CuspsProps = {
   cusps: number[];
-  radiusCuspsDegree: number;
+  radiusOut: number;
   radiusInner: number;
   radiusSub: number;
 };
@@ -110,54 +113,86 @@ export function Cusps({
   cusps,
   radiusSub,
   radiusInner,
-  radiusCuspsDegree,
+  radiusOut,
 }: CuspsProps) {
   const strokeWidth_ASCMC = "4px";
   const strokeWidth_notASCMC = DEFAULT_STROKE_WIDTH;
+  const radiusCuspsDegree = 0.5 * radiusOut + 0.5 * radiusSub;
   const houseRadius = radiusInner * 1.15;
   const lengthCusps = radiusSub - radiusInner;
-  return cusps.map((cusp, i) => (
-    <React.Fragment key={`cusp_${i}`}>
-      <Line
-        startRadius={radiusSub}
-        length={lengthCusps}
-        theta={cusps[i]}
-        leftDegree={cusps[0]}
-        strokeWidth={i % 3 === 0 ? strokeWidth_ASCMC : strokeWidth_notASCMC}
-      />
-      <Text
-        displayText={(i + 1).toString()}
-        distanceFromCenter={houseRadius}
-        angleInDegrees={middle(cusps[i], cusps[(i + 1) % 12])}
-        angleOffset={cusps[0]}
-        textSize="50%"
-        textWeight="normal"
-      />
-      <Text
-        displayText={parseDegree(cusp).degree.toString()}
-        distanceFromCenter={radiusCuspsDegree}
-        angleInDegrees={cusps[i] + 5}
-        angleOffset={cusps[0]}
-        textSize="75%"
-        textWeight="bold"
-      />
-      <Text
-        displayText={zodiacSymbol(parseDegree(cusp).zodiac)}
-        distanceFromCenter={radiusCuspsDegree}
-        angleInDegrees={cusps[i]}
-        angleOffset={cusps[0]}
-        textSize="90%"
-        textColor={parseDegree(cusp).zodiac % 4}
-      />
-      <Text
-        displayText={parseDegree(cusp).minute.toString()}
-        distanceFromCenter={radiusCuspsDegree}
-        angleInDegrees={cusps[i] - 5}
-        angleOffset={cusps[0]}
-        textSize="50%"
-      />
-    </React.Fragment>
-  ));
+  const typeZodiac = useAtomValue(typeZodiacAtom);
+  const cuspsWhole =
+    (cusps[0] + 30 === cusps[1] || cusps[0] + 330 === cusps[1]) &&
+    cusps[0] === Math.floor(cusps[0]);
+  return (
+    <>
+      {cusps.map((cusp, i) => (
+        <React.Fragment key={`cusp_${i}`}>
+          <Line
+            startRadius={radiusSub}
+            length={lengthCusps}
+            theta={cusps[i]}
+            leftDegree={cusps[0]}
+            strokeWidth={i % 3 === 0 ? strokeWidth_ASCMC : strokeWidth_notASCMC}
+          />
+          <Text
+            displayText={(i + 1).toString()}
+            distanceFromCenter={houseRadius}
+            angleInDegrees={middle(cusps[i], cusps[(i + 1) % 12])}
+            angleOffset={cusps[0]}
+            textSize="50%"
+            textWeight="normal"
+          />
+          {typeZodiac && !cuspsWhole && (
+            <>
+              <Text
+                displayText={parseDegree(cusp).degree.toString()}
+                distanceFromCenter={radiusCuspsDegree}
+                angleInDegrees={cusps[i] + 5}
+                angleOffset={cusps[0]}
+                textSize="75%"
+                textWeight="bold"
+              />
+              <Text
+                displayText={zodiacSymbol(parseDegree(cusp).zodiac)}
+                distanceFromCenter={radiusCuspsDegree}
+                angleInDegrees={cusps[i]}
+                angleOffset={cusps[0]}
+                textSize="90%"
+                textColor={parseDegree(cusp).zodiac % 4}
+              />
+              <Text
+                displayText={parseDegree(cusp).minute.toString()}
+                distanceFromCenter={radiusCuspsDegree}
+                angleInDegrees={cusps[i] - 5}
+                angleOffset={cusps[0]}
+                textSize="50%"
+              />
+            </>
+          )}
+        </React.Fragment>
+      ))}
+      {(!typeZodiac || cuspsWhole) &&
+        [...Array(12).keys()].map((index) => (
+          <>
+            <Text
+              displayText={zodiacSymbol(index)}
+              distanceFromCenter={radiusCuspsDegree}
+              angleInDegrees={(index * 30 + 15) % 360}
+              angleOffset={cusps[0]}
+              textSize="90%"
+              textColor={index % 4}
+            />
+            <Line
+              startRadius={radiusOut}
+              length={radiusOut - radiusSub}
+              theta={index * 30}
+              leftDegree={cusps[0]}
+            />
+          </>
+        ))}
+    </>
+  );
 }
 type SubWheelProps = {
   radius_zodiac: number;

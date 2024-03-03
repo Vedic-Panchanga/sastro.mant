@@ -32,7 +32,7 @@ export default function ExplainDisplay() {
           >
             Discussions on Lilith.
           </Anchor>{" "}
-          I also participated in the discussion and provided some pictures to
+          I participated in the discussion and provided some pictures to
           demonstrate how all three Liliths make a lot of sense there (at the
           very end of this discussion).
         </li>

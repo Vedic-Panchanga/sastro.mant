@@ -55,6 +55,7 @@ export const siderealOrTropicalAtom = createAtom("siderealOrTropical");
 export const sidModeAtom = createAtom("sidMode");
 export const houseAtom = createAtom("house");
 export const subWheelTypeAtom = createAtom("subWheelType");
+
 // 定义 Planet 类型
 export type Planet = {
   name: string;
@@ -243,7 +244,7 @@ export default function Chart() {
       });
   }, [dateTime, location, helio, house, sidMode, siderealOrTropical]);
   useEffect(() => {
-    if (chartType !== "natal" && wasm) {
+    if (chartType !== "Natal" && wasm) {
       const secondDateTime =
         chartType === "Transit"
           ? dateTimeTransit
@@ -254,8 +255,10 @@ export default function Chart() {
       astrologer(
         timestamp2jdut(secondDateTime.toMillis()),
         siderealOrTropical === false ? -1 : Number(sidMode),
-        locationTransit.longitude,
-        locationTransit.latitude,
+        locationSame === "same"
+          ? location.longitude
+          : locationTransit.longitude,
+        locationSame === "same" ? location.latitude : locationTransit.latitude,
         0,
         house,
         258 | (helio === true ? 8 : 0),
