@@ -7,6 +7,7 @@ Serverless astrology web page using [Swiss Ephemeris](https://www.astro.com/swis
 3. Vedic chart featuring Dasas and Karakamsa.
 4. Bazi and fundamental related information.
 5. Simple astrology calendar.
+6. Since it is browser based, old machine and slow Internet might have problem when using it.
 
 ## Structure
 
