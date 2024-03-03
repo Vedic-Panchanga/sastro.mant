@@ -1,6 +1,6 @@
 import { useOutletContext } from "react-router-dom";
 // import { planetsSymbol } from "../utils.ts";
-import { useAtomValue } from "jotai";
+import { atom, useAtomValue } from "jotai";
 // import Accordion from "react-bootstrap/Accordion";
 // import { TabChart } from "../components/Chart-related.jsx";
 
@@ -16,7 +16,6 @@ import ModalButton from "../components/ModalButton.tsx";
 import RadioGroup from "../components/RadioGroup.tsx";
 import { Checkbox } from "@mantine/core";
 import TimeLocationDisplay from "../components/TimeLocationDisplay.tsx";
-import { atomWithStorage } from "jotai/utils";
 
 const defaultSettings = {
   // nodeType: false,
@@ -28,8 +27,26 @@ const defaultSettings = {
   subWheelType: "0", //0 none, 1 28, 2 27
 };
 
-const createAtom = <T extends keyof typeof defaultSettings>(key: T) =>
-  atomWithStorage(key, defaultSettings[key]);
+const createAtom = <T extends keyof typeof defaultSettings>(key: T) => {
+  const getInitialValue = () => {
+    const item = localStorage.getItem(key);
+    if (item !== null) {
+      return JSON.parse(item);
+    }
+    return defaultSettings[key];
+  };
+  const baseAtom = atom(getInitialValue());
+  const derivedAtom = atom(
+    (get) => get(baseAtom),
+    (get, set, update) => {
+      const nextValue =
+        typeof update === "function" ? update(get(baseAtom)) : update;
+      set(baseAtom, nextValue);
+      localStorage.setItem(key, JSON.stringify(nextValue));
+    }
+  );
+  return derivedAtom;
+};
 
 // export const nodeTypeAtom = createAtom("nodeType");
 // export const lilithTypeAtom = createAtom("lilithType");
