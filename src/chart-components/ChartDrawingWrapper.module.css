@@ -9,7 +9,7 @@
   /* 当屏幕方向为横屏时，flex-direction为row */
   @media screen and (orientation: landscape) {
     flex-direction: row;
-    align-items: start;
+    align-items: flex-start;
   }
 }
 .svgWrapper {

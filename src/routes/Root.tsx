@@ -12,9 +12,11 @@ import { Loader } from "@mantine/core";
 import classes from "./Root.module.css";
 export type DateTimeT = DateTime;
 export type Location = { longitude: number; latitude: number; height: number };
-type SetLocation = Dispatch<SetStateAction<Location>>;
+export type SetLocation = Dispatch<SetStateAction<Location>>;
 type SetTime = Dispatch<SetStateAction<DateTime>>;
-
+export type SetLocationObj = {
+  setLocation: SetLocation;
+};
 export type SetDateTimeLocationObj = {
   setDateTime: SetTime;
   setLocation: SetLocation;

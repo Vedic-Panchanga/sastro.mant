@@ -1,20 +1,14 @@
-# Todo
+# About
 
-## chart setting: general
+Serverless astrology web page using [Swiss Ephemeris](https://www.astro.com/swisseph), with help of WebAssembly from [project of u-blusky](https://github.com/u-blusky/sweph-wasm).
 
-1. color scheme of elements
-2. bi-wheel
-3. animate the chart
+1. Chart spanning from -4800 to 3000 CE, displaying positions of planets and some fixed stars.
+2. Comparison of solar arc, secondary progression, and transit charts with the natal chart.
+3. Vedic chart featuring Dasas and Karakamsa.
+4. Bazi and fundamental related information.
+5. Simple astrology calendar.
 
-## chart setting: display
-
-1. add toggle of sun/moon, ect.
-2. fixed stars
-3. fixed star ring: 28 xiu
-
-check the error page
-
-# Struction
+## Structure
 
 1. root (which is Root.tsx)
    hold and parse general datetime and locations to routes

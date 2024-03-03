@@ -5,6 +5,7 @@ import {
   zhiList,
   jdut2DateTime,
   timestamp2jdut,
+  naYin,
   // timestamp2Jd,
 } from "../utils";
 import { Pillar, SmallPillar } from "./BaziPillar";
@@ -202,8 +203,6 @@ function BaziDisplay({
             gan={(zi5Num * 2 + hourChinese + 2) % 10}
             zhi={hourChinese}
           />
-          {/* <div className="col vertical-line"></div> */}
-
           <Pillar
             title={"大运"}
             ri={zi5Num}
@@ -222,6 +221,25 @@ function BaziDisplay({
             gan={(selectedLiuNianGan * 2 + selectedLiuYue + 2) % 10}
             zhi={selectedLiuYue}
           />
+        </div>
+        <div className={classes.naYin}>
+          <div>{naYin(zi1Num, zi2Num)}</div>
+          <div>{naYin(monthGan, monthChinese)}</div>
+          <div>{naYin(zi5Num, zi6Num)}</div>
+          <div>{naYin((zi5Num * 2 + hourChinese + 2) % 10, hourChinese)}</div>
+          <div>
+            {naYin(
+              (monthGan + shunNi * selectedDaYun + 10) % 10,
+              (monthChinese + shunNi * selectedDaYun + 12) % 12
+            )}
+          </div>
+          <div>{naYin(selectedLiuNianGanZhi[0], selectedLiuNianGanZhi[1])}</div>
+          <div>
+            {naYin(
+              (selectedLiuNianGan * 2 + selectedLiuYue + 2) % 10,
+              selectedLiuYue
+            )}
+          </div>
         </div>
         {/* <div className="col">
       起运：

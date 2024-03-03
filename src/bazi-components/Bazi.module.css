@@ -25,3 +25,11 @@
   min-width: 350px;
   width: 100%;
 }
+.naYin {
+  /* width: inherit; */
+  display: flex;
+  justify-content: space-around;
+  min-width: 350px;
+  width: 100%;
+  font-size: x-small;
+}

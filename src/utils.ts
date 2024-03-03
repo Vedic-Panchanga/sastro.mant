@@ -96,81 +96,6 @@ export const subWheelNakNameList = [
   ["UAsha", "斗", ",phSgr"],
   ["Abhijit", "牛", ",beCap"], //280deg (not occupied)
 ];
-//lang could be fixed star number or "en" or "zh"
-// export function subWheelName(type: string, index: number, lang = "en") {
-//   if (type === "27") {
-//     const langIndex = lang === "zh" ? 1 : 0;
-//     const list = [
-//       ["Aswi", "婁"], //1
-//       ["Bhar", "胃"],
-//       ["Krit", "昴"],
-//       ["Rohi", "畢"],
-//       ["Mrig", "觜"],
-//       ["Ardra", "參"],
-//       ["Puna", "井"],
-//       ["Push", "鬼"],
-//       ["Asre", "柳"],
-//       ["Magh", "星"], //2
-//       ["PPha", "張"],
-//       ["UPha", "翼"],
-//       ["Hast", "軫"],
-//       ["Chit", "角"],
-//       ["Swati", "亢"],
-//       ["Visa", "氐"],
-//       ["Anu", "房"],
-//       ["Jye", "心"],
-//       ["Mula", "尾"], //3
-//       ["PAsha", "箕"],
-//       ["UAsha", "斗"],
-//       ["Srav", "女"],
-//       ["Dhan", "虛"],
-//       ["Sata", "危"],
-//       ["PBha", "室"],
-//       ["UBha", "壁"],
-//       ["Reva", "奎"],
-//     ];
-//     return list[index][langIndex];
-//   } else if (type === "28") {
-//     const language = lang === "zh" ? 1 : 0;
-//     // const list = [
-//     //   ["Aswi", "婁", ",beAri"], //1
-//     //   ["Bhar", "胃", ",35Ari"],
-//     //   ["Krit", "昴", ",17Tau"],
-//     //   ["Rohi", "畢", ",epTau"],
-//     //   ["Mrig", "觜", ",ph-1Ori"],
-//     //   ["Ardra", "參", ",deOri"],
-//     //   ["Puna", "井", ",muGem"],
-//     //   ["Push", "鬼", ",thCnc"],
-//     //   ["Asre", "柳", ",deHya"],
-//     //   ["Magh", "星", ",alHya"], //2
-//     //   ["PPha", "張", ",up-1Hya"],
-//     //   ["UPha", "翼", ",alCrt"],
-//     //   ["Hast", "軫", ",gaCrv"],
-//     //   ["Chit", "角", ",alVir"],
-//     //   ["Swati", "亢", ",kaVir"],
-//     //   ["Visa", "氐", ",al-2Lib"],
-//     //   ["Anu", "房", ",piSco"],
-//     //   ["Jye", "心", ",siSco"],
-//     //   ["Mula", "尾", ",mu-1Sco"], //3
-//     //   ["PAsha", "箕", ",ga-2Sgr"],
-//     //   ["UAsha", "斗", ",phSgr"],
-//     //   ["Abhijit", "牛", ",beCap"],
-//     //   ["Srav", "女", ",epAqr"],
-//     //   ["Dhan", "虛", ",beAqr"],
-//     //   ["Sata", "危", ",alAqr"],
-//     //   ["PBha", "室", ",alPeg"],
-//     //   ["UBha", "壁", ",gaPeg"],
-//     //   ["Reva", "奎", ",zeAnd"],
-//     // ];
-//     return subWheelNakNameList[index][language];
-//   } else {
-//     return null;
-//   }
-// }
-// export function colorTheme(element: number) {
-//   const colors = ["#cc0000", "#f1c232", "#3d85c6", "#6aa84f"];
-//   return colors[element];
-// }
 
 export function avoidCollision(degreesList: Record<string, Planet>, diff = 5) {
   //flatten
@@ -443,4 +368,14 @@ export function jieqiList(jieqiNumber: number) {
 }
 export function deepCopy<T>(obj: T): T {
   return JSON.parse(JSON.stringify(obj));
+}
+export function naYin(gan: number, zhi: number) {
+  const naYinList = [
+    ["大溪水", "覆燈火", "沙中金", "井泉水", "山頭火", "海中金"],
+    ["爐中火", "沙中土", "天河水", "山下火", "屋上土", "澗下水"],
+    ["城頭土", "大林木", "天上火", "大駅土", "平地木", "霹靂火"],
+    ["松柏木", "白鑞金", "路傍土", "柘榴木", "釵釧金", "壁上土"],
+    ["金箔金", "長流水", "楊柳木", "釼鋒金", "大海水", "桑柘木"],
+  ];
+  return naYinList[Math.floor(gan / 2)][Math.floor(zhi / 2)];
 }
