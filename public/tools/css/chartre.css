@@ -1,0 +1,3 @@
+.form-group > :first-child {
+  width: 30px;
+}

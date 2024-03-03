@@ -4,17 +4,20 @@ import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { DateTime, FixedOffsetZone } from "luxon";
 import TimeLocationDisplay from "../components/TimeLocationDisplay";
 import { atomWithStorage } from "jotai/utils";
-import { useAtom } from "jotai";
+import { useAtom, useSetAtom } from "jotai";
+import { lmtOrLatAtom } from "../bazi-components/Bazi";
 import Footer from "../Footer";
+import astrologer from "../astrologer";
+import { Loader } from "@mantine/core";
+import classes from "./Root.module.css";
 export type DateTimeT = DateTime;
 export type Location = { longitude: number; latitude: number; height: number };
 type SetLocation = Dispatch<SetStateAction<Location>>;
 type SetTime = Dispatch<SetStateAction<DateTime>>;
-export type SetLocationObj = {
-  setLocation: SetLocation;
-};
-export type SetDateTimeObj = {
+
+export type SetDateTimeLocationObj = {
   setDateTime: SetTime;
+  setLocation: SetLocation;
 };
 export type DateTimeLocationObj = {
   dateTime: DateTime;
@@ -32,53 +35,73 @@ export default function Root() {
   //Natal
   const [dateTime, setDateTime] = useState(DateTime.now());
   const [location, setLocation] = useAtom(locationAtom);
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
+  const setLmtOrLatAtom = useSetAtom(lmtOrLatAtom);
+  //loading
+  const [loaded, setLoaded] = useState(false);
+  useEffect(() => {
+    astrologer(1, -1, 0, 0, 0, "P", 258, 0).then(() => {
+      setLoaded(true);
+      console.log("Astrology data loaded");
+    });
+  }, []);
   useEffect(() => {
     const ts = searchParams.get("ts");
     const offset = searchParams.get("offset");
     const lon = searchParams.get("lon");
     const lat = searchParams.get("lat");
     const height = searchParams.get("height");
+
     // const height = searchParams.get('height')
     if (!(ts === null) && !(ts === undefined)) {
       const offsetToUse = offset ?? dateTime.offset;
       const zone = FixedOffsetZone.instance(Number(offsetToUse));
       const newDateTime = DateTime.fromMillis(Number(ts) ?? 0, { zone: zone });
       if (newDateTime.isValid) setDateTime(newDateTime);
-      console.log("inside", ts, "newTime", newDateTime);
+      // console.log("inside", ts, "newTime", newDateTime);
     }
-    console.log("outside", ts, !ts === null, !ts === undefined);
-
+    // console.log("outside", ts, offset, lon, lat, height);
+    type LocationParam = {
+      longitude?: number;
+      latitude?: number;
+      height?: number;
+    };
+    const newLocation: Partial<LocationParam> = {};
     if (!(lon === null) && !(lon === undefined)) {
       // console.log("Inside", location);
-      setLocation((prev) => ({ ...prev, longitude: Number(lon) }));
+      newLocation.longitude = Number(lon);
+      // setLocation((prev) => ({ ...prev, longitude: Number(lon) }));
     }
-    if (!lat === null && !lat === undefined) {
-      setLocation((prev) => ({ ...prev, latitude: Number(lat) }));
+    if (!(lat === null) && !(lat === undefined)) {
+      newLocation.latitude = Number(lat);
+      // setLocation((prev) => ({ ...prev, latitude: Number(lat) }));
     }
-    if (!height === null && !height === undefined) {
-      setLocation((prev) => ({ ...prev, height: Number(height) }));
+    if (!(height === null) && !(height === undefined)) {
+      newLocation.height = Number(height);
+      // setLocation((prev) => ({ ...prev, height: Number(height) }));
     }
-    setSearchParams(undefined);
-  }, [searchParams, setSearchParams, setLocation]);
+    // console.log("insideLocation", newLocation, { ...location, ...newLocation });
+    setLmtOrLatAtom(false); //suppose we use LAT (since that is how the value passed)
+    setLocation((prev) => ({ ...prev, ...newLocation }));
+    // setSearchParams(undefined);
+  }, [searchParams]);
 
   return (
     <div style={{ display: "flex", flexDirection: "column" }}>
       {locationURL.pathname !== "/" && <Navigation location={locationURL} />}
-      {locationURL.pathname !== "/calendar" && (
+      {locationURL.pathname !== "/sscalendar" && (
         <TimeLocationDisplay
           dateTime={dateTime}
           location={location}
           setDateTime={setDateTime}
+          setLocation={setLocation}
         />
       )}
-
-      {/* wrap by settings*/}
-      {/* no, use jotai and settings only affect the leafs. leave the root clean */}
-      <Outlet context={[dateTime, setDateTime, location, setLocation]} />
-      <div>
-        <Footer />
-      </div>
+      {loaded && (
+        <Outlet context={[dateTime, setDateTime, location, setLocation]} />
+      )}
+      {!loaded && <Loader type="dots" className={classes.loading} />}
+      <Footer />
     </div>
   );
 }

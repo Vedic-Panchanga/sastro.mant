@@ -1,0 +1,11 @@
+.colorSelectionGroup {
+  display: flex;
+  gap: 3px;
+  font-size: medium;
+}
+.colorRadioGroupWrapper {
+  display: flex;
+  align-items: start;
+  margin-top: 10px;
+  flex-direction: column;
+}

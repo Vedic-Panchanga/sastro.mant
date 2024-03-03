@@ -1,30 +1,18 @@
-import { atomWithStorage } from "jotai/utils";
 import { useAtom } from "jotai";
 import TabsTwo from "../../components/TabsTwo";
 import SelectDropdown from "../../components/SelectDropdown";
 import ExplainNak from "./ExplainNak";
+
 // import TabsThree from "../../components/TabsThree";
+import classes from "./General.module.css";
+import {
+  helioAtom,
+  siderealOrTropicalAtom,
+  sidModeAtom,
+  houseAtom,
+  subWheelTypeAtom,
+} from "../../chart-components/Chart";
 
-const defaultSettings = {
-  // nodeType: false,
-  // lilithType: 0,
-  helio: false,
-  siderealOrTropical: false,
-  sidMode: "0",
-  house: "K",
-  subWheelType: "0", //0 none, 1 28, 2 27
-};
-
-const createAtom = <T extends keyof typeof defaultSettings>(key: T) =>
-  atomWithStorage(key, defaultSettings[key]);
-
-// export const nodeTypeAtom = createAtom("nodeType");
-// export const lilithTypeAtom = createAtom("lilithType");
-export const helioAtom = createAtom("helio");
-export const siderealOrTropicalAtom = createAtom("siderealOrTropical");
-export const sidModeAtom = createAtom("sidMode");
-export const houseAtom = createAtom("house");
-export const subWheelTypeAtom = createAtom("subWheelType");
 export default function ChartGeneralSettings() {
   // const [nodeType, setNodeType] = useAtom(nodeTypeAtom);
   // const [lilithType, setLilithType] = useAtom(lilithTypeAtom);
@@ -34,7 +22,8 @@ export default function ChartGeneralSettings() {
   );
   const [sidMode, setSidMode] = useAtom(sidModeAtom);
   const [house, setHouse] = useAtom(houseAtom);
-  const [nakshastra, setNakshastra] = useAtom(subWheelTypeAtom);
+  const [subWheelType, setSubWheelType] = useAtom(subWheelTypeAtom);
+
   const sidOptions = {
     0: "Fagan/Bradley",
     1: "Lahiri",
@@ -53,11 +42,12 @@ export default function ChartGeneralSettings() {
     R: "Regiomontanus",
     C: "Campanus",
   };
-  const nakshatraOptions = {
+  const subWheelOptions = {
     0: "None",
     28: "28 Xiu",
     27: "27 Nakshatra",
   };
+
   return (
     <>
       {/* <TabsTwo
@@ -84,13 +74,22 @@ export default function ChartGeneralSettings() {
         setOption={setSiderealOrTropical}
         optionLabel={["tropical", "sidereal"]}
       />
-      <div style={{ display: "flex", justifyContent: "center", gap: "10px" }}>
-        <SelectDropdown
-          option={sidMode}
-          inputLabel="Sidereal Mode"
-          setOption={setSidMode}
-          options={sidOptions}
-        />
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          gap: "10px",
+          flexWrap: "wrap",
+        }}
+      >
+        <div className={classes.sidMode}>
+          <SelectDropdown
+            option={sidMode}
+            inputLabel="Sidereal Mode"
+            setOption={setSidMode}
+            options={sidOptions}
+          />
+        </div>
         <SelectDropdown
           option={house}
           inputLabel="House"
@@ -98,15 +97,15 @@ export default function ChartGeneralSettings() {
           options={houseOptions}
         />{" "}
         <SelectDropdown
-          option={nakshastra}
+          option={subWheelType}
           inputLabel={
             <>
               Sub Wheel
               <ExplainNak />
             </>
           }
-          setOption={setNakshastra}
-          options={nakshatraOptions}
+          setOption={setSubWheelType}
+          options={subWheelOptions}
         />
       </div>
     </>

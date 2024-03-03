@@ -1,0 +1,13 @@
+.checkbox-group {
+  display: inline-block; /* 内部容器设置为 inline-block，使其水平排列 */
+  vertical-align: top; /* 使内部容器顶部对齐 */
+  margin-right: 20px; /* 添加右侧间距，可以根据需要调整 */
+  text-align: left;
+}
+table {
+  border-collapse: collapse; /* 合并表格边框 */
+  width: 90%; /* 使表格宽度充满父容器 */
+  @media (min-width: 600px) {
+    width: 570px;
+  }
+}

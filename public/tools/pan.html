@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>盘</title>
+
+</head>
+
+<body>
+  <div>
+    <label>
+      <input type="radio" name="yearGan" value=0 onchange="drawChart()" checked> 甲、己
+    </label>
+    <label>
+      <input type="radio" name="yearGan" value=1 onchange="drawChart()"> 乙、庚
+    </label>
+    <label>
+      <input type="radio" name="yearGan" value=2 onchange="drawChart()"> 丙、辛
+    </label>
+    <label>
+      <input type="radio" name="yearGan" value=3 onchange="drawChart()"> 丁、壬
+    </label>
+    <label>
+      <input type="radio" name="yearGan" value=4 onchange="drawChart()"> 戊、癸
+    </label>
+  </div>
+  <canvas id="PanCanvas" width="800" height="800" style="border:1px solid #000;"></canvas>
+  <script src="./javascript/pan.js"></script>
+</body>
+
+</html>

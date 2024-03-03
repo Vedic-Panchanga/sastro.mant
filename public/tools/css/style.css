@@ -1,0 +1,108 @@
+@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700&display=swap");
+* {
+  box-sizing: border-box;
+}
+
+/* PAGE SECTIONS */
+body {
+  background-color: #fbfcfe;
+  font-family: "Noto Sans TC", sans-serif;
+  display: flex;
+  margin: 0;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100hv;
+  overflow: auto;
+  text-align: center;
+  gap: 10px;
+}
+
+form {
+  background-color: white;
+  border: 3px black solid;
+  border-radius: 10px;
+  padding: 30px;
+  position: relative;
+}
+.form-group {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 30px 0;
+  gap: 5px;
+}
+
+.formInput {
+  /* display: flex; */
+  position: relative;
+  /* gap: 5px; */
+}
+.input-number {
+  border-radius: 3px;
+  font-size: 24px;
+  border: 1px solid #eee;
+  text-align: center;
+  appearance: textfield;
+}
+
+.input-number::-webkit-outer-spin-button,
+.input-number::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.input-number:valid {
+  border-color: #3498db;
+  box-shadow: 0 3px 3px -2px rgba(0, 0, 0, 0.25);
+}
+form label {
+  position: absolute;
+  font-size: 16px;
+  font-weight: 700;
+  top: -22px;
+  left: 5px;
+}
+
+button {
+  /* margin: 10px; */
+  display: block;
+  border: none;
+  background-color: #3498db;
+  color: white;
+  font-size: 16px;
+  padding: 8px 12px;
+  cursor: pointer;
+  border-radius: 8px;
+}
+button:active {
+  background-color: rgba(47, 130, 197, 0.98); /* 改变背景颜色 */
+}
+
+#clear {
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 6px;
+  font-size: 16px;
+}
+ul {
+  list-style-type: none;
+  padding: 0px;
+  margin: 0px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  /* align-items: stretch; */
+  /* justify-content: center; */
+  max-width: 600px;
+}
+ol li {
+  text-align: start;
+}
+@media (max-width: 767px) {
+  /* 手机样式 */
+  form {
+    padding: 20px;
+  }
+}

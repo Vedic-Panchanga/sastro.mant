@@ -23,7 +23,7 @@ export default function EventsCalendar({
         <Table.Td className={classes.buttonTd}>
           <UnstyledButton
             className={classes.buttonChart}
-            to={`/chart?ts=${jdut2timestamp(eventOjb.jd)}`}
+            to={`/sschart?ts=${jdut2timestamp(eventOjb.jd)}`}
             component={Link}
           >
             {eventOjb.type !== "Sirius helical rising" && (

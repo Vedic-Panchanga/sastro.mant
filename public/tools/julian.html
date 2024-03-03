@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>Time & Date</title>
+
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="./css/style.css">
+  <link rel="stylesheet" href="./css/julian.css">
+
+  <link rel="icon" href="favicon.png" type="image/png">
+</head>
+
+<body>
+  <header>
+    <h1>Time Converter</h1>
+    <!-- <p>Convert between calendar and julian day number</p> -->
+    <small>Year between -13000 to 16800, in gregorian calendar.</small>
+  </header>
+  <form id="dateForm">
+    <div class="form-group" id="ymd">
+      <div class="formInput"> <label for="yearInput">Year</label>
+        <input type="number" id="yearInput" class="input-number" placeholder="2023" min="-13200" max='17191'>
+      </div>
+
+      <div class="formInput"> <label for="monthInput">Month</label>
+        <input type="number" id="monthInput" class="input-number" placeholder="1" min="1" max="12">
+      </div>
+      <div class="formInput">
+        <label for="dayInput">Day</label>
+        <input type="number" id="dayInput" class="input-number" placeholder="1" min="1" max="31">
+      </div>
+
+    </div>
+
+    <div class="form-group" id="hms">
+      <div class="formInput"> <label for="hourInput">Hour</label>
+        <input type="number" id="hourInput" class="input-number" placeholder="0" min="0" max="23">
+      </div>
+      <div class="formInput"> <label for="minuteInput">Minute</label>
+        <input type="number" id="minuteInput" class="input-number" placeholder="0" min="0" max="59">
+      </div>
+
+      <div class="formInput"><label for="secondInput">Second</label>
+        <input type="number" id="secondInput" class="input-number" placeholder="0" min="0" max="59">
+      </div>
+    </div>
+    <div class="form-group" id="tz">
+      <div class="formInput"> <label for="time-zone">UTC</label>
+        <input type="number" id="time-zone" class="input-number" placeholder="8" min="-14" max="14" step=0.0000001>
+      </div>
+    </div>
+    <button type="button" id='clear'>Clear</button>
+  </form>
+  <button type="button" onclick="updateTime()">🔽Convert🔽</button>
+
+  <div class="tjd">
+    <div class="tjd-button-container">
+      <button type="button" onclick="updateTimeFromUT()">🔼Convert🔼</button>
+      <form class='tjdForm'>
+        <div class="formInput"> <label for="utInput">UT (Universal Time)</label>
+          <input type="number" id="utInput" class="input-number" value="0" step=0.000000001>
+        </div>
+      </form>
+
+    </div>
+
+
+    <div class="tjd-button-container">
+      <button type="button" onclick="updateTimeFromTT()">🔼Convert🔼</button>
+
+      <form class='tjdForm'>
+        <div>
+          <div class="formInput"><label for="ttInput">TT (Terrestrial Time)</label>
+            <input type="number" class="input-number" id="ttInput" value="0" step=0.000000001>
+          </div>
+        </div>
+      </form>
+    </div>
+
+  </div>
+  <div class="tjd">
+    <div class="tjd-button-container">
+      <button type="button" onclick="updateTimeFromTSSec()">🔼Convert🔼</button>
+
+      <form class='tjdForm'>
+        <div>
+          <div class="formInput"><label for="tssInput">Timestamp (sec)</label>
+            <input type="number" class="input-number" id="tssInput" value="0" step=0.000001>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="tjd-button-container">
+      <button type="button" onclick="updateTimeFromTS()">🔼Convert🔼</button>
+
+      <form class='tjdForm'>
+        <div>
+          <div class="formInput"><label for="tsInput">Timestamp (millisec)</label>
+            <input type="number" class="input-number" id="tsInput" value="0" step=0.000001>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="./javascript/astronomy.browser.min.js"></script>
+  <script src="./javascript/julian.js"></script>
+</body>
+
+</html>

@@ -115,7 +115,7 @@ function TableFixstar({ planetState, fixstar }: TableFixstarProps) {
       function pushPlanet(planetIndex: number, planetLon: number) {
         if (ifDegreeInOrb(planetLon, starInfo.lon, 1.5)) {
           if (!acc[starIndex]) {
-            console.log("fix", starIndex, starInfo);
+            // console.log("fix", starIndex, starInfo);
 
             acc[starIndex] = {
               key: starIndex,
@@ -146,7 +146,7 @@ function TableFixstar({ planetState, fixstar }: TableFixstarProps) {
   const sortedFixstar = Object.values(fixstarInOrb).sort(
     (a, b) => a.lon - b.lon
   );
-  console.log("fixstar", fixstar);
+  // console.log("fixstar", fixstar);
 
   return (
     <Table.ScrollContainer minWidth={500}>
@@ -171,9 +171,9 @@ function TableFixstar({ planetState, fixstar }: TableFixstarProps) {
             return (
               <Table.Tr key={fixstarInfo.key}>
                 <Table.Td>
-                  {indexOfComma !== -1
+                  {indexOfComma !== 0
                     ? fixstarInfo.name.substring(0, indexOfComma)
-                    : fixstarInfo.name}
+                    : fixstarInfo.name.substring(1)}
                 </Table.Td>
                 <Table.Td>
                   <LongitudeFormat longitude={fixstarInfo.lon} />

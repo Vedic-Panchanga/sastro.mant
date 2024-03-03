@@ -12,15 +12,15 @@ export default function ErrorPage() {
       <p>
         <i>{error.statusText || error.message}</i>
       </p>
-      {/* {error.message == "stackSave is not a function" && (
-        <p>
-          <div>A javascript did not finish loading. </div>
-          <div>Reload the home page and wait few seconds before charting.</div>
-        </p>
-      )} */}
-      <div>Try again, if the error persists, clear the browser cache.</div>
+      {error.message == "Not Found" && (
+        <div>Try again, if the error persists, clear the browser cache.</div>
+      )}
+
       <Button to="/" component={Link}>
         HOME
+      </Button>
+      <Button href="/tools/index.html" component="a">
+        TOOLS
       </Button>
     </div>
   );

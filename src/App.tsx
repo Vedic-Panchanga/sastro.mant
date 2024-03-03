@@ -17,7 +17,10 @@ import Root from "./routes/Root";
 import Calendar from "./calendar-components/Calendar";
 import "@mantine/core/styles.css";
 import "./index.css";
-
+import {
+  colorSettingOptions,
+  colorModeAtom,
+} from "./settings/chart-settings/CustomGraphics";
 import {
   Button,
   CSSVariablesResolver,
@@ -26,6 +29,7 @@ import {
   Tooltip,
   createTheme,
 } from "@mantine/core";
+import { useAtomValue } from "jotai";
 const router = createBrowserRouter(
   createRoutesFromElements(
     // hook: store time/location; transit time/location
@@ -33,10 +37,10 @@ const router = createBrowserRouter(
       {/* entry:set time/location */}
       <Route index element={<Entry />}></Route>
       {/* calc and display */}
-      <Route path="chart" element={<Chart />} />
-      <Route path="bazi" element={<Bazi />} />
-      <Route path="vedic" element={<Vedic />} />
-      <Route path="calendar" element={<Calendar />} />
+      <Route path="sschart" element={<Chart />} />
+      <Route path="ssbazi" element={<Bazi />} />
+      <Route path="ssvedic" element={<Vedic />} />
+      <Route path="sscalendar" element={<Calendar />} />
     </Route>
   )
   // { basename: "/sastros" }
@@ -53,6 +57,7 @@ const resolver: CSSVariablesResolver = (theme) => ({
   dark: {},
 });
 export default function App() {
+  const colorMode = useAtomValue(colorModeAtom);
   const themeOverride = createTheme({
     fontFamily:
       "astro,-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji, sans-serif",
@@ -81,12 +86,7 @@ export default function App() {
         },
       }),
     },
-    other: {
-      colorFire: " #cc0000",
-      colorEarth: "#f1c232",
-      colorAir: "#3d85c6",
-      colorWater: "#6aa84f",
-    },
+    other: colorSettingOptions[colorMode],
   });
   return (
     <React.StrictMode>

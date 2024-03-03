@@ -1,12 +1,11 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { DateTime, FixedOffsetZone } from "luxon";
-import { ActionIcon, Button, Divider, Loader } from "@mantine/core";
-import { Link } from "react-router-dom";
+import { ActionIcon, Button } from "@mantine/core";
+
 import ModalButtonGeocode from "./ModalButtonGeocode";
 import BaseTextField from "./BaseTextField";
 import {
-  type SetLocationObj,
-  type SetDateTimeObj,
+  type SetDateTimeLocationObj,
   type DateTimeLocationObj,
 } from "../routes/Root";
 import classes from "./TimeLocationSheet.module.css";
@@ -16,8 +15,7 @@ import {
   IconLetterN,
   IconLetterS,
 } from "@tabler/icons-react";
-import astrologer from "../astrologer";
-import { timestamp2jdut } from "../utils";
+
 // Define constants
 const SECONDS_IN_HOUR = 3600;
 const SECONDS_IN_DAY = 86400;
@@ -31,7 +29,8 @@ export default function TimeLocationSheet({
   setDateTime,
   location,
   setLocation,
-}: DateTimeLocationObj & SetLocationObj & SetDateTimeObj) {
+  transit, //undefined, "same", "different"
+}: DateTimeLocationObj & SetDateTimeLocationObj & { transit?: string }) {
   const [inputValues, setInputValues] = useState({
     year: "",
     month: "",
@@ -55,23 +54,7 @@ export default function TimeLocationSheet({
     eastWest: location.longitude >= 0,
     northSouth: location.latitude >= 0,
   });
-  // const [loaded, setLoaded] = useState(false);
 
-  // useEffect(() => {
-  //   astrologer(
-  //     timestamp2jdut(DateTime.now().toMillis()),
-  //     -1,
-  //     0,
-  //     0,
-  //     0,
-  //     "P",
-  //     258,
-  //     0
-  //   ).then(() => {
-  //     setLoaded(true);
-  //     // console.log("great");
-  //   });
-  // }, []);
   const regex = /^[-0-9.]*$/;
   function handleInputChange(identifier: string, value: string) {
     // const value = e.target.value;
@@ -140,6 +123,12 @@ export default function TimeLocationSheet({
           (parseFloat(inputValues.lonMin) || 0) / 60 +
           (parseFloat(inputValues.lonSec) || 0) / 3600) *
         (locationDirection.eastWest ? 1 : -1);
+      if (longitude > 180 || longitude < -180) {
+        alert(
+          "The longitude should be in the range [-180, 180], with east being positive.\nOtherwise, it would be set to zero."
+        );
+        longitude = 0;
+      }
     }
     let latitude = location.latitude;
     if (
@@ -154,6 +143,12 @@ export default function TimeLocationSheet({
           (parseFloat(inputValues.latMin) || 0) / 60 +
           (parseFloat(inputValues.latSec) || 0) / 3600) *
         (locationDirection.northSouth ? 1 : -1);
+      if (latitude > 90 || latitude < -90) {
+        alert(
+          "The latitude should be in the range [-90, 90], with north being positive.\nOtherwise, it would be set to zero."
+        );
+        latitude = 0;
+      }
     }
     const height =
       inputValues.height !== ""
@@ -193,25 +188,9 @@ export default function TimeLocationSheet({
     setDateTime(DateTime.now());
     handleClear();
   }
-  const [loaded, setLoaded] = useState(false);
 
-  useEffect(() => {
-    astrologer(
-      timestamp2jdut(DateTime.now().toMillis()),
-      -1,
-      0,
-      0,
-      0,
-      "P",
-      258,
-      0
-    ).then(() => {
-      setLoaded(true);
-      console.log("Astrology data loaded");
-    });
-  }, []);
   return (
-    <div className={classes.container}>
+    <div style={{ width: "fit-content", margin: "auto" }}>
       {/* year month day */}
       <div className={classes.stack}>
         <BaseTextField
@@ -264,174 +243,114 @@ export default function TimeLocationSheet({
         />
         <small>
           Gregorian Calendar
-          <br /> Height in meter
+          <br />
+          {transit !== "same" && "Height in meter"}
         </small>
-        <BaseTextField
-          identifier="height"
-          placeHolder={location.height.toString()}
-          handleInputChange={handleInputChange}
-          value={inputValues["height"]}
-        />
+        {transit !== "same" && (
+          <BaseTextField
+            identifier="height"
+            placeHolder={location.height.toString()}
+            handleInputChange={handleInputChange}
+            value={inputValues["height"]}
+          />
+        )}
       </div>
       {/* lon */}
       {/* lat */}
-      <div className={classes.stack}>
-        <div className={classes["line-no-lable"]}>
-          <div className={classes.stack}>
-            <div className={classes.mono}>Lon</div>
-            <ActionIcon
-              size="sm"
-              variant="light"
-              onClick={() => handleLocationDirectionChange("eastWest")}
-            >
-              {locationDirection.eastWest ? <IconLetterE /> : <IconLetterW />}
-            </ActionIcon>
+      {transit !== "same" && (
+        <div className={classes.stack}>
+          <div className={classes.lineNoLabel}>
+            <div className={classes.stack}>
+              <div className={classes.mono}>Lon</div>
+              <ActionIcon
+                size="sm"
+                variant="light"
+                onClick={() => handleLocationDirectionChange("eastWest")}
+              >
+                {locationDirection.eastWest ? <IconLetterE /> : <IconLetterW />}
+              </ActionIcon>
 
-            <BaseTextField
-              identifier="lonDeg"
-              maxWidth="100px"
-              value={inputValues["lonDeg"]}
-              placeHolder={Math.abs(location.longitude).toString()}
-              rightSection="°"
-              handleInputChange={handleInputChange}
-              lableShown={false}
-            />
-            <BaseTextField
-              identifier="lonMin"
-              maxWidth="100px"
-              value={inputValues["lonMin"]}
-              placeHolder="0"
-              rightSection="′"
-              handleInputChange={handleInputChange}
-              lableShown={false}
-            />
-            <BaseTextField
-              identifier="lonSec"
-              maxWidth="100px"
-              value={inputValues["lonSec"]}
-              placeHolder="0"
-              rightSection="″"
-              handleInputChange={handleInputChange}
-              lableShown={false}
-            />
+              <BaseTextField
+                identifier="lonDeg"
+                maxWidth="100px"
+                value={inputValues["lonDeg"]}
+                placeHolder={Math.abs(location.longitude).toString()}
+                rightSection="°"
+                handleInputChange={handleInputChange}
+                lableShown={false}
+              />
+              <BaseTextField
+                identifier="lonMin"
+                maxWidth="100px"
+                value={inputValues["lonMin"]}
+                placeHolder="0"
+                rightSection="′"
+                handleInputChange={handleInputChange}
+                lableShown={false}
+              />
+              <BaseTextField
+                identifier="lonSec"
+                maxWidth="100px"
+                value={inputValues["lonSec"]}
+                placeHolder="0"
+                rightSection="″"
+                handleInputChange={handleInputChange}
+                lableShown={false}
+              />
+            </div>
+            <div className={classes.stack}>
+              <div className={classes.mono}>Lat</div>
+              <ActionIcon
+                onClick={() => handleLocationDirectionChange("northSouth")}
+                size="sm"
+                variant="light"
+              >
+                {locationDirection.northSouth ? (
+                  <IconLetterN />
+                ) : (
+                  <IconLetterS />
+                )}
+              </ActionIcon>
+              <BaseTextField
+                identifier="latDeg"
+                maxWidth="100px"
+                value={inputValues["latDeg"]}
+                placeHolder={Math.abs(location.latitude).toString()}
+                rightSection="°"
+                handleInputChange={handleInputChange}
+                lableShown={false}
+              />
+              <BaseTextField
+                identifier="latMin"
+                maxWidth="100px"
+                value={inputValues["latMin"]}
+                placeHolder="0"
+                rightSection="′"
+                handleInputChange={handleInputChange}
+                lableShown={false}
+              />
+              <BaseTextField
+                identifier="latSec"
+                maxWidth="100px"
+                value={inputValues["latSec"]}
+                placeHolder="0"
+                rightSection="″"
+                handleInputChange={handleInputChange}
+                lableShown={false}
+              />
+            </div>
           </div>
-          <div className={classes.stack}>
-            <div className={classes.mono}>Lat</div>
-            <ActionIcon
-              onClick={() => handleLocationDirectionChange("northSouth")}
-              size="sm"
-              variant="light"
-            >
-              {locationDirection.northSouth ? <IconLetterN /> : <IconLetterS />}
-            </ActionIcon>
-            <BaseTextField
-              identifier="latDeg"
-              maxWidth="100px"
-              value={inputValues["latDeg"]}
-              placeHolder={Math.abs(location.latitude).toString()}
-              rightSection="°"
-              handleInputChange={handleInputChange}
-              lableShown={false}
-            />
-            <BaseTextField
-              identifier="latMin"
-              maxWidth="100px"
-              value={inputValues["latMin"]}
-              placeHolder="0"
-              rightSection="′"
-              handleInputChange={handleInputChange}
-              lableShown={false}
-            />
-            <BaseTextField
-              identifier="latSec"
-              maxWidth="100px"
-              value={inputValues["latSec"]}
-              placeHolder="0"
-              rightSection="″"
-              handleInputChange={handleInputChange}
-              lableShown={false}
-            />
-          </div>
+          <ModalButtonGeocode setLocation={setLocation} />
         </div>
-        <ModalButtonGeocode setLocation={setLocation} />
-      </div>
+      )}
 
-      <div className={classes.stack}>
+      <div className={`${classes.stack} ${classes.buttons}`}>
         <Button onClick={handleSubmit}>Set Time/Locations</Button>
         <Button onClick={() => handleClear()} className="mx-3">
           Clear
         </Button>
         <Button onClick={handleSetToNow}>Now</Button>
       </div>
-      <Divider my="md" />
-      {/* <Suspense fallback={<Loader type="dots" className={classes.loading} />}>
-        <AsyncMenu />
-      </Suspense> */}
-
-      {loaded && (
-        <>
-          <div className={classes.stacklink}>
-            <strong>Astrology</strong>
-            <Button color="red" to="/chart" component={Link}>
-              CHART
-            </Button>
-            <Button color="red" to="/vedic" component={Link}>
-              VEDIC
-            </Button>
-            <Button color="red" to="/bazi" component={Link}>
-              BAZI
-            </Button>
-          </div>
-          <div className={classes.stacklink}>
-            <strong>Calendar</strong>
-            <Button color="red" to="/calendar" component={Link}>
-              CALENDAR
-            </Button>
-          </div>
-        </>
-      )}
-      {!loaded && <Loader type="dots" className={classes.loading} />}
     </div>
   );
 }
-// async function AsyncMenu() {
-//   const [astrologyLoaded, setAstrologyLoaded] = useState(false);
-
-//   useEffect(() => {
-//     astrologer(
-//       timestamp2jdut(DateTime.now().toMillis()),
-//       -1,
-//       0,
-//       0,
-//       0,
-//       "P",
-//       258,
-//       0
-//     ).then(() => {
-//       setAstrologyLoaded(true);
-//       console.log("Astrology data loaded");
-//     });
-//   }, []);
-//   return (
-//     <>
-//       <div className={classes.stacklink}>
-//         <strong>Astrology</strong>
-//         <Button color="red" to="/chart" component={Link}>
-//           CHART
-//         </Button>
-//         <Button color="red" to="/vedic" component={Link}>
-//           VEDIC
-//         </Button>
-//         <Button color="red" to="/bazi" component={Link}>
-//           BAZI
-//         </Button>
-//       </div>
-//       <div className={classes.stacklink}>
-//         <strong>Calendar</strong>
-//         <Button color="red" to="/calendar" component={Link}>
-//           CALENDAR
-//         </Button>
-//       </div>
-//     </>
-//   );
-// }

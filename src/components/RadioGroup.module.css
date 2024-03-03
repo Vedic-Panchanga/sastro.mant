@@ -1,0 +1,10 @@
+.optionGroup {
+  display: flex;
+  gap: 20px;
+}
+.optionGroupVertical {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  /* margin-bottom: 10px; */
+}

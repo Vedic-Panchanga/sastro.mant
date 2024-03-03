@@ -1,5 +1,6 @@
 .chart {
   max-width: calc(min(800px, 100vh));
   min-width: 359px;
-  flex-shrink: 2;
+  /* flex-basis: 500px; */
+  /* position: relative; */
 }

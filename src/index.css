@@ -12,15 +12,19 @@
 
 .color-0 {
   color: var(--mantine-color-fire);
+  fill: var(--mantine-color-fire);
 }
 .color-1 {
   color: var(--mantine-color-earth);
+  fill: var(--mantine-color-earth);
 }
 .color-2 {
   color: var(--mantine-color-air);
+  fill: var(--mantine-color-air);
 }
 .color-3 {
   color: var(--mantine-color-water);
+  fill: var(--mantine-color-water);
 }
 .mono {
   font-family: var(--mantine-font-family-monospace);

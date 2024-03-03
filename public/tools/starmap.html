@@ -1,0 +1,81 @@
+<html>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Star Map</title>
+  <link rel="stylesheet" href="./css/style.css">
+  <link rel="stylesheet" href="./css/starmap.css">
+  <link rel="icon" href="favicon.png" type="image/png">
+</head>
+
+<body>
+  <!-- <div style="align:left;">
+    <b>Controls :</b> drag the sky with your mouse to move the center of projection<br>
+    Stars data have been extracted from the <a href="http://cdsarc.u-strasbg.fr/viz-bin/Cat?V/50">Bright Star
+      Catalogue</a>
+  </div> -->
+  <canvas id="canvas"></canvas>
+  <div>
+    <div class="checkbox-group">
+      <input type="checkbox" checked id="drawgrid" /><label for="drawgrid">Display coordinates grid</label><br />
+      <input type="checkbox" checked id="drawconst" /><label for="drawconst">Display constellations</label><br />
+      <input type="checkbox" checked id="drawconstname" /><label for="drawconstname">Display constellations
+        names</label><br />
+      <input type="checkbox" checked id="drawstars" /><label for="drawstars">Display stars</label><br />
+      <input type="checkbox" checked id="drawplanets" /><label for="drawplanets">Display planets</label><br />
+      <input type="checkbox" checked id="drawplanetname" /><label for="drawplanetname">Display planets
+        names</label><br />
+      <input type="checkbox" checked id="draweclipticofdate" /><label for="draweclipticofdate">Display Ecliptic (of
+        date)</label><br />
+      <input type="checkbox" checked id="drawequatorofdate" /><label for="drawequatorofdate">Display Equator (of
+        date)</label><br />
+      <input type="checkbox" checked id="drawhorizon" /><label for="drawhorizon">Display Horizon</label><br />
+    </div>
+    <div class="checkbox-group">
+      <input type="radio" id="gridHorizon" name="gridGroup" />
+      <label for="gridHorizon">Grid: Azimuthal</label><br />
+
+      <input type="radio" checked id="gridEquatorOfDate" name="gridGroup" />
+      <label for="gridEquatorOfDate">Grid: Equatorial (of date)</label><br />
+
+      <input type="radio" id="gridEclipticOfDate" name="gridGroup" />
+      <label for="gridEclipticOfDate">Grid: Ecliptic (of date)</label><br />
+    </div>
+  </div>
+  <table cellpadding="5" border="1">
+    <tr>
+      <!-- <td>
+        <div>Date and Time:</div>
+        <div>
+          <input type="checkbox" id="AutoTimeCheckBox" onchange="OnToggleAutoTime()">
+          <label for="AutoTimeCheckBox">Automatic</label>
+        </div>
+      </td> -->
+      <td>Date and Time: UTC</td>
+      <td>
+        <input type="date" id="dateinput" value='2023-10-09'>
+        <input type="time" id="timeinput" value="13:30:15">
+      </td>
+    </tr>
+    <tr>
+      <td>Latitude: -90 to 90</td>
+      <td><input type="text" id="latitude" pattern="[\-\+]?\d+(\.\d*)?" size="10" , value=39></td>
+    </tr>
+    <tr>
+      <td>Longitude: -180 to 180</td>
+      <td><input type="text" id="longitude" pattern="[\-\+]?\d+(\.\d*)?" size="10" , value=116></td>
+    </tr>
+    <tr>
+      <td>Elevation (m):</td>
+      <td><input type="text" id="elevation" pattern="[\-\+]?\d+(\.\d*)?" size="10" , value=50></td>
+    </tr>
+  </table>
+  <script src="./javascript/bright_stars.js" type="text/javascript"></script>
+  <script src="./javascript/constellations.js" type="text/javascript"></script>
+  <script src="./javascript/starmap.js" type="module"></script>
+</body>
+
+</html>

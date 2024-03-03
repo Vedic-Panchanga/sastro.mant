@@ -12,3 +12,12 @@
     align-items: start;
   }
 }
+.svgWrapper {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  /* 当屏幕方向为横屏时，flex-direction为row */
+  @media screen and (orientation: landscape) {
+    flex-basis: 800px;
+  }
+}

@@ -23,10 +23,10 @@ export default function Navigation({ location }: { location: Location }) {
           {/* <ActionIcon variant="default" aria-label="Back" className="self-end">
             <IconChevronLeft />
           </ActionIcon> */}
-          <Tabs.Tab value="/chart">Chart</Tabs.Tab>
-          <Tabs.Tab value="/vedic">Vedic</Tabs.Tab>
-          <Tabs.Tab value="/bazi">Bazi</Tabs.Tab>
-          <Tabs.Tab value="/calendar">
+          <Tabs.Tab value="/sschart">Chart</Tabs.Tab>
+          <Tabs.Tab value="/ssvedic">Vedic</Tabs.Tab>
+          <Tabs.Tab value="/ssbazi">Bazi</Tabs.Tab>
+          <Tabs.Tab value="/sscalendar">
             <IconCalendarMonth />
           </Tabs.Tab>
         </Tabs.List>

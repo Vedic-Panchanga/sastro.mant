@@ -1,10 +1,16 @@
 import { useState } from "react";
 import { NativeSelect } from "@mantine/core";
 import ModalButton from "./ModalButton";
-import { type DateTimeLocationObj, type SetDateTimeObj } from "../routes/Root";
+import {
+  type DateTimeLocationObj,
+  type SetDateTimeLocationObj,
+} from "../routes/Root";
 import { ActionIcon } from "@mantine/core";
 import { IconMinus, IconPlus } from "@tabler/icons-react";
 import classes from "./TimeLocationDisplay.module.css";
+import ModalText from "./ModalText";
+import TimeLocationSheet from "./TimeLocationSheet";
+
 function formatLocation(location: { longitude: number; latitude: number }) {
   const ew = location.longitude >= 0 ? "E" : "W";
   const ns = location.latitude >= 0 ? "N" : "S";
@@ -25,7 +31,9 @@ export default function TimeLocationDisplay({
   dateTime,
   setDateTime,
   location,
-}: DateTimeLocationObj & SetDateTimeObj) {
+  setLocation,
+  transit, //undefined, "same", "different"
+}: DateTimeLocationObj & SetDateTimeLocationObj & { transit?: string }) {
   const [number, setNumber] = useState<string>("1");
   const [unit, setUnit] = useState<string>("day");
   function addOrMinusTime(sign: number) {
@@ -33,10 +41,23 @@ export default function TimeLocationDisplay({
   }
   return (
     <div className={classes.container}>
-      <div className={classes.text}>
-        {dateTime.toFormat("yyyy-MM-dd HH:mm:ss Z EEE")}
-        {formatLocation(location)}
-      </div>
+      <ModalText
+        text={
+          <div className={classes.text}>
+            {dateTime.toFormat("yyyy-MM-dd HH:mm:ss Z EEE")}
+            {transit !== "same" && formatLocation(location)}
+          </div>
+        }
+        size="md"
+      >
+        <TimeLocationSheet
+          dateTime={dateTime}
+          location={location}
+          setLocation={setLocation}
+          setDateTime={setDateTime}
+          transit={transit}
+        />
+      </ModalText>
       <div className={classes.buttons}>
         <ActionIcon
           onClick={() => addOrMinusTime(-1)}

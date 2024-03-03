@@ -1,22 +1,24 @@
 import { ReactNode } from "react";
 import { useDisclosure } from "@mantine/hooks";
-import { Modal, Button } from "@mantine/core";
+import { Modal, Anchor } from "@mantine/core";
 type ModalButtonProps = {
   children: ReactNode;
-  text: string;
+  text: ReactNode;
   modalHeading?: string;
+  size?: "sm" | "md" | "lg" | "xl";
 };
-export default function ModalButton({
+export default function ModalText({
   children,
   text,
   modalHeading,
+  size = "xl",
 }: ModalButtonProps) {
   const [opened, { open, close }] = useDisclosure(false);
   return (
     <>
-      <Button onClick={open} variant="transparent">
+      <Anchor component="button" onClick={open} variant="transparent">
         {text}
-      </Button>
+      </Anchor>
       <Modal
         opened={opened}
         onClose={close}
@@ -25,7 +27,7 @@ export default function ModalButton({
           backgroundOpacity: 0.35,
           blur: 4,
         }}
-        size="xl"
+        size={size}
       >
         {children}
       </Modal>

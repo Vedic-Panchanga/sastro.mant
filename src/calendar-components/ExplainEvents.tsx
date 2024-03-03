@@ -3,7 +3,7 @@ import ModalActionIcon from "../components/ModalActionIcon";
 
 export default function ExplainEvents() {
   return (
-    <ModalActionIcon modalHeading="Explain on some events">
+    <ModalActionIcon modalHeading="Explain on some events, ephemeris">
       <h4>Conjunction</h4>
       <p>
         The definition of conjunction means the planet and Sun share the same
@@ -23,7 +23,7 @@ export default function ExplainEvents() {
         Quadratures of outer planets are calculated based on when the planet
         squares to Sun in ecliptic longitude.
       </p>
-      <h4>Others</h4>
+      <h4>Further</h4>
       <p>
         More to read:{" "}
         <Anchor
@@ -33,32 +33,41 @@ export default function ExplainEvents() {
         >
           wiki page
         </Anchor>
-      </p>
-      <p>
-        Lookup all planets motion at{" "}
+        <br />
+        Lookup printed all planets motion at{" "}
         <Anchor
           target="_blank"
           rel="noopener noreferrer"
           href="https://www.astro.com/swisseph/ae/"
         >
-          astro-seek
+          astro.com
         </Anchor>
-        , or{" "}
+        <br />
         <Anchor
           target="_blank"
           rel="noopener noreferrer"
           href="https://horoscopes.astro-seek.com/monthly-astro-calendar"
         >
-          astro-seek with delicates graphs
+          Astro-seek
+        </Anchor>{" "}
+        with{" "}
+        <Anchor
+          target="_blank"
+          rel="noopener noreferrer"
+          href="https://horoscopes.astro-seek.com/calculate-monthly-planetary-movement"
+        >
+          delicates graphs
         </Anchor>
-        , or{" "}
+        <br />
+        Or{" "}
         <Anchor
           target="_blank"
           rel="noopener noreferrer"
           href="https://www.timeanddate.com/astronomy/night/"
         >
-          sky tools with animation.
-        </Anchor>
+          sky tools with animation
+        </Anchor>{" "}
+        in timeandlocation.com
       </p>
       <p>
         <Anchor
@@ -68,7 +77,10 @@ export default function ExplainEvents() {
         >
           Stellarium
         </Anchor>{" "}
-        is a popular software available on web/mobile/desktop simulate the sky.{" "}
+        is a very popular free software available on web/mobile/desktop simulate
+        the sky. <br />
+        Astrolog, another light-weight free astrology software, is one of the
+        best. The ephemeris feature of it is very good.
       </p>
       <div>
         <a

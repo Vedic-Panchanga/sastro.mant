@@ -38,7 +38,7 @@ const jie = [
   "大雪",
   "小寒",
 ];
-const lmtOrLatAtom = atomWithStorage("isLMT", true);
+export const lmtOrLatAtom = atomWithStorage("isLMT", false);
 export default function Bazi() {
   // hooks
   const [dateTime, , location]: [DateTimeT, never, Location] =

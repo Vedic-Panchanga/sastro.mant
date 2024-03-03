@@ -187,7 +187,7 @@ export default function CalendarTable({
     calendarArray.push(week);
     if (day > days!) break;
   }
-  console.log("after wasm", wasm);
+  // console.log("after wasm", wasm);
 
   return (
     <>
@@ -223,7 +223,7 @@ export default function CalendarTable({
                       .toLocaleParts({
                         dateStyle: "long",
                       });
-                    console.log(dayStringParts);
+                    // console.log(dayStringParts);
 
                     return (
                       <Table.Td key={day + "-" + index + "-" + i}>

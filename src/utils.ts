@@ -167,10 +167,10 @@ export const subWheelNakNameList = [
 //     return null;
 //   }
 // }
-export function colorTheme(element: number) {
-  const colors = ["#cc0000", "#f1c232", "#3d85c6", "#6aa84f"];
-  return colors[element];
-}
+// export function colorTheme(element: number) {
+//   const colors = ["#cc0000", "#f1c232", "#3d85c6", "#6aa84f"];
+//   return colors[element];
+// }
 
 export function avoidCollision(degreesList: Record<string, Planet>, diff = 5) {
   //flatten
@@ -329,8 +329,8 @@ export function fixedStarName(fixedStarIndex: string) {
     ",piSco": "房宿一",
     ",siSco": "心宿一",
     ",mu-1Sco": "尾宿一",
-    ",phSgr": "斗宿一",
     ",ga-2Sgr": "箕宿一",
+    ",phSgr": "斗宿一",
     ",beCap": "牛宿一",
     ",epAqr": "女宿一",
     ",beAqr": "虛宿一",
@@ -348,6 +348,8 @@ export function fixedStarName(fixedStarIndex: string) {
     ",up-1Hya": "張宿一",
     ",alCrt": "翼宿一",
     ",gaCrv": "軫宿一",
+    ",35Ari": "胃宿一",
+    ",thCnc": "鬼宿一",
   };
   return fixedStarList[fixedStarIndex];
 }
@@ -438,4 +440,7 @@ export function jieqiList(jieqiNumber: number) {
     "大寒",
   ];
   return list[((jieqiNumber + 45) % 360) / 15];
+}
+export function deepCopy<T>(obj: T): T {
+  return JSON.parse(JSON.stringify(obj));
 }

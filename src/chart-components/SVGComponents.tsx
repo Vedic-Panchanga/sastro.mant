@@ -1,6 +1,5 @@
 import React from "react";
 import {
-  colorTheme,
   middle,
   parseDegree,
   planetsSymbol,
@@ -9,7 +8,6 @@ import {
 } from "../utils.ts";
 import { Fixstars } from "./Chart.tsx";
 // Constants for default values
-const DEFAULT_COLOR = "black";
 const DEFAULT_FONT_SIZE = "100%";
 const DEFAULT_FONT_WEIGHT = "normal";
 const DEFAULT_STROKE_WIDTH = "1px";
@@ -18,7 +16,7 @@ type TextProps = {
   displayText: string;
   distanceFromCenter: number;
   angleInDegrees: number;
-  textColor?: string;
+  textColor?: number;
   textSize?: string;
   angleOffset?: number;
   textWeight?: string;
@@ -27,7 +25,7 @@ export function Text({
   displayText,
   distanceFromCenter,
   angleInDegrees,
-  textColor = DEFAULT_COLOR,
+  textColor,
   textSize = DEFAULT_FONT_SIZE,
   //   fontWeight,
   //   isPlanet,
@@ -42,13 +40,14 @@ export function Text({
       y={+distanceFromCenter * sin_value + "%"}
       // fontFamily="Arial"
       fontSize={textSize}
-      fill={textColor}
+      // fill={textColor}
       textAnchor="middle"
       alignmentBaseline="middle"
       fontWeight={textWeight}
       stroke="white"
       paintOrder="stroke"
       strokeWidth="2"
+      className={`color-${textColor}`}
     >
       {displayText}
     </text>
@@ -148,7 +147,7 @@ export function Cusps({
         angleInDegrees={cusps[i]}
         angleOffset={cusps[0]}
         textSize="90%"
-        textColor={colorTheme(parseDegree(cusp).zodiac % 4)}
+        textColor={parseDegree(cusp).zodiac % 4}
       />
       <Text
         displayText={parseDegree(cusp).minute.toString()}
@@ -192,7 +191,7 @@ export function SubWheel({
       Math.abs(cuspEnd - cuspStart) < 90
         ? (cuspEnd + cuspStart) / 2
         : middle(cuspStart, cuspEnd);
-    console.log(nakNameListSlice[2], fixstars[nakNameListSlice[2]]);
+    // console.log(nakNameListSlice[2], fixstars[nakNameListSlice[2]]);
 
     return (
       <React.Fragment key={index}>
@@ -225,6 +224,7 @@ type PlanetProps = {
   radius_planet_retro: number;
   planetNonCollision: number;
   leftDegree: number;
+  biWheel?: boolean;
 };
 export function Planet({
   planet, //"1", "2", etc
@@ -237,16 +237,16 @@ export function Planet({
   radius_planet_retro,
   planetNonCollision,
   leftDegree,
+  biWheel,
 }: PlanetProps) {
   const resPosition = parseDegree(lon);
-  const fontsize_degree = "75%";
-  const fontsize_planets = "100%";
-  const fontsize_planets_text = "60%";
-  const fontsize_zodiac = "78%";
-  const fontsize_minute = "50%";
-  const fontsize_retro = "40%";
+  const fontsize_degree = biWheel ? "50%" : "75%";
+  const fontsize_planets = biWheel ? "75%" : "100%";
+  const fontsize_planets_text = biWheel ? "50%" : "60%";
+  const fontsize_zodiac = biWheel ? "50%" : "78%";
+  const fontsize_minute = biWheel ? "40%" : "50%";
+  const fontsize_retro = biWheel ? "35%" : "40%";
   const element = Math.floor(resPosition.zodiac % 4);
-  const color = colorTheme(element);
   // const textPlanet = ["Asc", "Vtx", "MC", "EP", "Sp. P."];
   return (
     <>
@@ -254,7 +254,7 @@ export function Planet({
         displayText={planetsSymbol(planet).toString()}
         distanceFromCenter={radius_planet}
         angleInDegrees={planetNonCollision}
-        textColor={color}
+        textColor={element}
         textSize={
           Number(planet) < -3 ? fontsize_planets_text : fontsize_planets
         }
@@ -274,15 +274,8 @@ export function Planet({
         displayText={zodiacSymbol(resPosition.zodiac)}
         distanceFromCenter={radius_planet_zodiac}
         angleInDegrees={planetNonCollision}
-        textColor={color}
+        textColor={element}
         textSize={fontsize_zodiac}
-        angleOffset={leftDegree}
-      />
-      <Text
-        displayText={resPosition.minute.toString()}
-        distanceFromCenter={radius_planet_minute}
-        angleInDegrees={planetNonCollision}
-        textSize={fontsize_minute}
         angleOffset={leftDegree}
       />
       {direction && (
@@ -290,11 +283,18 @@ export function Planet({
           displayText={"℞"}
           distanceFromCenter={radius_planet_retro}
           angleInDegrees={planetNonCollision}
-          textColor="red"
+          textColor={0}
           textSize={fontsize_retro}
           angleOffset={leftDegree}
         />
       )}
+      <Text
+        displayText={resPosition.minute.toString()}
+        distanceFromCenter={radius_planet_minute}
+        angleInDegrees={planetNonCollision}
+        textSize={fontsize_minute}
+        angleOffset={leftDegree}
+      />
     </>
   );
 }

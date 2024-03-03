@@ -1,0 +1,9 @@
+.sidMode {
+  flex-basis: 200px;
+}
+.selectDownContainer {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}

@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="reverse search engineering for Bazi">
+  <link rel="icon" href="favicon.png" type="image/png">
+  <link rel="stylesheet" href="./css/bazire.css">
+  <link rel="stylesheet" href="./css/style.css">
+
+  <title>Bazi Reversion</title>
+</head>
+
+<body>
+  <header>
+    <h1>Bazi Reversion (八字反推)</h1>
+  </header>
+  <div class="container-selection">
+    <div class="year gan">
+      <small>year-gan</small>
+      <div class="selection">
+        <input type="radio" id="year-gan1" name="year-gan">
+        <label for="year-gan1">甲</label>
+      </div>
+
+      <div class="selection">
+        <input type="radio" id="year-gan2" name="year-gan">
+        <label for="year-gan2">乙</label>
+      </div>
+
+      <div class="selection">
+        <input type="radio" id="year-gan3" name="year-gan">
+        <label for="year-gan3">丙</label>
+      </div>
+      <div class="selection">
+        <input type="radio" id="year-gan4" name="year-gan">
+        <label for="year-gan4">丁</label>
+      </div>
+      <div class="selection">
+        <input type="radio" id="year-gan5" name="year-gan">
+        <label for="year-gan5">戊</label>
+      </div>
+      <div class="selection">
+        <input type="radio" id="year-gan6" name="year-gan">
+        <label for="year-gan6">己</label>
+      </div>
+      <div class="selection">
+        <input type="radio" id="year-gan7" name="year-gan">
+        <label for="year-gan7">庚</label>
+      </div>
+      <div class="selection">
+        <input type="radio" id="year-gan8" name="year-gan">
+        <label for="year-gan8">辛</label>
+      </div>
+      <div class="selection">
+        <input type="radio" id="year-gan9" name="year-gan">
+        <label for="year-gan9">壬</label>
+      </div>
+      <div class="selection">
+        <input type="radio" id="year-gan10" name="year-gan">
+        <label for="year-gan10">癸</label>
+      </div>
+    </div>
+    <div class="year zhi">
+      <small>year-zhi</small>
+      <div class="selection">
+        <input type="radio" id="year-zhi1" name="year-zhi">
+        <label for="year-zhi1">子</label>
+      </div>
+
+      <div class="selection">
+        <input type="radio" id="year-zhi2" name="year-zhi">
+        <label for="year-zhi2">丑</label>
+      </div>
+
+      <div class="selection">
+        <input type="radio" id="year-zhi3" name="year-zhi">
+        <label for="year-zhi3">寅</label>
+      </div>
+      <div class="selection">
+        <input type="radio" id="year-zhi4" name="year-zhi">
+        <label for="year-zhi4">卯</label>
+      </div>
+      <div class="selection">
+        <input type="radio" id="year-zhi5" name="year-zhi">
+        <label for="year-zhi5">辰</label>
+      </div>
+      <div class="selection">
+        <input type="radio" id="year-zhi6" name="year-zhi">
+        <label for="year-zhi6">巳</label>
+      </div>
+      <div class="selection">
+        <input type="radio" id="year-zhi7" name="year-zhi">
+        <label for="year-zhi7">午</label>
+      </div>
+      <div class="selection">
+        <input type="radio" id="year-zhi8" name="year-zhi">
+        <label for="year-zhi8">未</label>
+      </div>
+      <div class="selection">
+        <input type="radio" id="year-zhi9" name="year-zhi">
+        <label for="year-zhi9">申</label>
+      </div>
+      <div class="selection">
+        <input type="radio" id="year-zhi10" name="year-zhi">
+        <label for="year-zhi10">酉</label>
+      </div>
+      <div class="selection">
+        <input type="radio" id="year-zhi11" name="year-zhi">
+        <label for="year-zhi11">戌</label>
+      </div>
+      <div class="selection">
+        <input type="radio" id="year-zhi12" name="year-zhi">
+        <label for="year-zhi12">亥</label>
+      </div>
+    </div>
+    <div class="month zhi">
+      <small>month-zhi</small>
+      <div class="selection">
+        <input type="radio" id="month-zhi1" name="month-zhi">
+        <label for="month-zhi1">子</label>
+      </div>
+
+      <div class="selection">
+        <input type="radio" id="month-zhi2" name="month-zhi">
+        <label for="month-zhi2">丑</label>
+      </div>
+
+      <div class="selection">
+        <input type="radio" id="month-zhi3" name="month-zhi">
+        <label for="month-zhi3">寅</label>
+      </div>
+      <div class="selection">
+        <input type="radio" id="month-zhi4" name="month-zhi">
+        <label for="month-zhi4">卯</label>
+      </div>
+      <div class="selection">
+        <input type="radio" id="month-zhi5" name="month-zhi">
+        <label for="month-zhi5">辰</label>
+      </div>
+      <div class="selection">
+        <input type="radio" id="month-zhi6" name="month-zhi">
+        <label for="month-zhi6">巳</label>
+      </div>
+      <div class="selection">
+        <input type="radio" id="month-zhi7" name="month-zhi">
+        <label for="month-zhi7">午</label>
+      </div>
+      <div class="selection">
+        <input type="radio" id="month-zhi8" name="month-zhi">
+        <label for="month-zhi8">未</label>
+      </div>
+      <div class="selection">
+        <input type="radio" id="month-zhi9" name="month-zhi">
+        <label for="month-zhi9">申</label>
+      </div>
+      <div class="selection">
+        <input type="radio" id="month-zhi10" name="month-zhi">
+        <label for="month-zhi10">酉</label>
+      </div>
+      <div class="selection">
+        <input type="radio" id="month-zhi11" name="month-zhi">
+        <label for="month-zhi11">戌</label>
+      </div>
+      <div class="selection">
+        <input type="radio" id="month-zhi12" name="month-zhi">
+        <label for="month-zhi12">亥</label>
+      </div>
+    </div>
+    <div class="day gan">
+      <small>day-gan</small>
+      <div class="selection">
+        <input type="radio" id="day-gan1" name="day-gan">
+        <label for="day-gan1">甲</label>
+      </div>
+
+      <div class="selection">
+        <input type="radio" id="day-gan2" name="day-gan">
+        <label for="day-gan2">乙</label>
+      </div>
+
+      <div class="selection">
+        <input type="radio" id="day-gan3" name="day-gan">
+        <label for="day-gan3">丙</label>
+      </div>
+      <div class="selection">
+        <input type="radio" id="day-gan4" name="day-gan">
+        <label for="day-gan4">丁</label>
+      </div>
+      <div class="selection">
+        <input type="radio" id="day-gan5" name="day-gan">
+        <label for="day-gan5">戊</label>
+      </div>
+      <div class="selection">
+        <input type="radio" id="day-gan6" name="day-gan">
+        <label for="day-gan6">己</label>
+      </div>
+      <div class="selection">
+        <input type="radio" id="day-gan7" name="day-gan">
+        <label for="day-gan7">庚</label>
+      </div>
+      <div class="selection">
+        <input type="radio" id="day-gan8" name="day-gan">
+        <label for="day-gan8">辛</label>
+      </div>
+      <div class="selection">
+        <input type="radio" id="day-gan9" name="day-gan">
+        <label for="day-gan9">壬</label>
+      </div>
+      <div class="selection">
+        <input type="radio" id="day-gan10" name="day-gan">
+        <label for="day-gan10">癸</label>
+      </div>
+    </div>
+    <div class="day zhi">
+      <small>day-zhi</small>
+      <div class="selection">
+        <input type="radio" id="day-zhi1" name="day-zhi">
+        <label for="day-zhi1">子</label>
+      </div>
+
+      <div class="selection">
+        <input type="radio" id="day-zhi2" name="day-zhi">
+        <label for="day-zhi2">丑</label>
+      </div>
+
+      <div class="selection">
+        <input type="radio" id="day-zhi3" name="day-zhi">
+        <label for="day-zhi3">寅</label>
+      </div>
+      <div class="selection">
+        <input type="radio" id="day-zhi4" name="day-zhi">
+        <label for="day-zhi4">卯</label>
+      </div>
+      <div class="selection">
+        <input type="radio" id="day-zhi5" name="day-zhi">
+        <label for="day-zhi5">辰</label>
+      </div>
+      <div class="selection">
+        <input type="radio" id="day-zhi6" name="day-zhi">
+        <label for="day-zhi6">巳</label>
+      </div>
+      <div class="selection">
+        <input type="radio" id="day-zhi7" name="day-zhi">
+        <label for="day-zhi7">午</label>
+      </div>
+      <div class="selection">
+        <input type="radio" id="day-zhi8" name="day-zhi">
+        <label for="day-zhi8">未</label>
+      </div>
+      <div class="selection">
+        <input type="radio" id="day-zhi9" name="day-zhi">
+        <label for="day-zhi9">申</label>
+      </div>
+      <div class="selection">
+        <input type="radio" id="day-zhi10" name="day-zhi">
+        <label for="day-zhi10">酉</label>
+      </div>
+      <div class="selection">
+        <input type="radio" id="day-zhi11" name="day-zhi">
+        <label for="day-zhi11">戌</label>
+      </div>
+      <div class="selection">
+        <input type="radio" id="day-zhi12" name="day-zhi">
+        <label for="day-zhi12">亥</label>
+      </div>
+    </div>
+    <div class="hour zhi">
+      <small>hour-zhi</small>
+      <div class="selection">
+        <input type="radio" id="hour-zhi1" name="hour-zhi">
+        <label for="hour-zhi1">子</label>
+      </div>
+
+      <div class="selection">
+        <input type="radio" id="hour-zhi2" name="hour-zhi">
+        <label for="hour-zhi2">丑</label>
+      </div>
+
+      <div class="selection">
+        <input type="radio" id="hour-zhi3" name="hour-zhi">
+        <label for="hour-zhi3">寅</label>
+      </div>
+      <div class="selection">
+        <input type="radio" id="hour-zhi4" name="hour-zhi">
+        <label for="hour-zhi4">卯</label>
+      </div>
+      <div class="selection">
+        <input type="radio" id="hour-zhi5" name="hour-zhi">
+        <label for="hour-zhi5">辰</label>
+      </div>
+      <div class="selection">
+        <input type="radio" id="hour-zhi6" name="hour-zhi">
+        <label for="hour-zhi6">巳</label>
+      </div>
+      <div class="selection">
+        <input type="radio" id="hour-zhi7" name="hour-zhi">
+        <label for="hour-zhi7">午</label>
+      </div>
+      <div class="selection">
+        <input type="radio" id="hour-zhi8" name="hour-zhi">
+        <label for="hour-zhi8">未</label>
+      </div>
+      <div class="selection">
+        <input type="radio" id="hour-zhi9" name="hour-zhi">
+        <label for="hour-zhi9">申</label>
+      </div>
+      <div class="selection">
+        <input type="radio" id="hour-zhi10" name="hour-zhi">
+        <label for="hour-zhi10">酉</label>
+      </div>
+      <div class="selection">
+        <input type="radio" id="hour-zhi11" name="hour-zhi">
+        <label for="hour-zhi11">戌</label>
+      </div>
+      <div class="selection">
+        <input type="radio" id="hour-zhi12" name="hour-zhi">
+        <label for="hour-zhi12">亥</label>
+      </div>
+    </div>
+  </div>
+  <form class="form-group">
+    <div class="formInput" id="observer">
+      <input type="number" class="input-number" id="longitude" max=180 min=-180 step=0.000001>
+      <label for="longitude">Longitude</label>
+    </div>
+    <div class="formInput" id="observer">
+      <input type="number" class="input-number" id="latitude" max=180 min=-180 step=0.000001>
+      <label for="latitude">Latitude</label>
+    </div>
+    <div class="formInput" id="observer">
+      <input type="number" class="input-number" id="height" max=8849 min=-6371 step=0.001>
+      <label for="height">Height (m)</label>
+    </div>
+  </form>
+  <button id="btn">Possible Dates</button>
+  <ul id="result-date"></ul>
+  <ol>
+    <li>Longitude: -180 to 180 (east positive). Latitude: -90 to 90 (north positive). </li>
+    <li>All resultes are in the <strong>prophetic Gregorian calendar</strong></li>
+    <li>Here the bazi is assumed to be in <strong>local apparent time</strong> (LAT, 真太陽時)</li>
+    <li>The finding date & time are displayed in <strong>local mean time</strong> (LMT, 平太陽時)</li>
+    <li>Longitude is essential to the calculation.</li>
+  </ol>
+  <!-- <script src="./javascript/astronomy.browser.min.js"></script> -->
+  <script src="./javascript/bazire.js" type="module"></script>
+</body>
+
+</html>

@@ -20,7 +20,10 @@ export default function astrologer(
     // temp.terminate();
     // console.log("astroWorkerAfter", astrologerWorker);
     // } else {
-    astrologerWorker = new Worker("/asweph.js");
+    if (!astrologerWorker) {
+      astrologerWorker = new Worker("/asweph.js");
+    }
+
     // }
 
     // if (!astrologerWorker) {

@@ -1,0 +1,31 @@
+.chartTopleft {
+  position: absolute;
+  top: 0%;
+  left: 0%;
+  text-align: start;
+  font-size: x-small;
+}
+.chartTopright {
+  position: absolute;
+  top: 0%;
+  right: 0%;
+  text-align: end;
+  font-size: x-small;
+}
+.chartBottomright {
+  position: absolute;
+  bottom: 0%;
+  right: 0%;
+  text-align: end;
+  font-size: x-small;
+}
+.chartBottomrightUp {
+  position: absolute;
+  bottom: 10%;
+  right: 0%;
+  text-align: end;
+  font-size: x-small;
+}
+.checkboxModelButton {
+  margin-top: 10px;
+}

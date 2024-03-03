@@ -1,0 +1,40 @@
+.selection {
+  margin-bottom: 0.1em;
+}
+.selection label {
+  display: inline-block;
+  width: 3em;
+  background-color: #42b4d6;
+  border-radius: 6px;
+  color: #ffffff;
+  padding: 0.3em;
+  cursor: pointer;
+}
+.selection label:hover {
+  background-color: #5fc0dc;
+}
+
+.selection input[type="radio"] {
+  display: none;
+}
+
+.selection input[type="radio"]:checked ~ label {
+  background-color: #f1592a;
+}
+.container-selection {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+}
+.hour .selection label,
+.month .selection label {
+  background-color: #4586ff;
+}
+
+/* #observer {
+  display: flex;
+  gap: 10px;
+} */
+#observer .input-number {
+  width: 150px;
+}

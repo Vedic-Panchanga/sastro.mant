@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="reverse search engineering for astrological chart">
+  <link rel="icon" href="favicon.png" type="image/png">
+  <link rel="stylesheet" href="./css/chartre.css">
+  <link rel="stylesheet" href="./css/style.css">
+
+  <title>Chart Reversion</title>
+</head>
+
+<body>
+  <header>
+    <h1>Charts Reversion</h1>
+  </header>
+  <form id="dateForm">
+    <div class="form-group">
+      <big>☉</big>
+      <div class="formInput"> <label for="sunDegreeInput">Degree</label>
+
+        <input type="number" id="sunDegreeInput" class="input-number" placeholder="20" min="0" max='29'>
+      </div>
+      <select class="select input-number">
+        <option>♈︎</option>
+        <option>♉︎</option>
+        <option>♊︎</option>
+        <option>♋︎</option>
+        <option>♌︎</option>
+        <option>♍︎</option>
+        <option>♎︎</option>
+        <option>♏︎</option>
+        <option>♐︎</option>
+        <option>♑︎</option>
+        <option>♒︎</option>
+        <option>♓︎</option>
+      </select>
+
+      <div class="formInput"> <label for="sunMinuteInput">Minute</label>
+        <input type="number" id="sunMinuteInput" class="input-number" placeholder="20" min="0" max='59'>
+      </div>
+      <div class="formInput"> <label for="sunSecondInput">Second</label>
+        <input type="number" id="sunSecondInput" class="input-number" placeholder="20" min="0" max='59'>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <big>☽</big>
+      <div class="formInput"> <label for="moonDegreeInput">Degree</label>
+        <input type="number" id="moonDegreeInput" class="input-number" placeholder="20" min="0" max='29'>
+      </div>
+      <select class="select input-number">
+        <option>♈︎</option>
+        <option>♉︎</option>
+        <option>♊︎</option>
+        <option>♋︎</option>
+        <option>♌︎</option>
+        <option>♍︎</option>
+        <option>♎︎</option>
+        <option>♏︎</option>
+        <option>♐︎</option>
+        <option>♑︎</option>
+        <option>♒︎</option>
+        <option>♓︎</option>
+      </select>
+      <div class="formInput"> <label for="moonMinuteInput">Minute</label>
+        <input type="number" id="moonMinuteInput" class="input-number" placeholder="20" min="0" max='59'>
+      </div>
+      <div class="formInput"> <label for="moonSecondInput">Second</label>
+        <input type="number" id="moonSecondInput" class="input-number" placeholder="20" min="0" max='59'>
+      </div>
+    </div>
+    <div class="form-group">
+      <big>♄</big>
+      <div class="formInput"> <label for="saturnDegreeInput">Degree</label>
+        <input type="number" id="saturnDegreeInput" class="input-number" placeholder="20" min="0" max='29'>
+      </div>
+      <select class="select input-number">
+        <option>♈︎</option>
+        <option>♉︎</option>
+        <option>♊︎</option>
+        <option>♋︎</option>
+        <option>♌︎</option>
+        <option>♍︎</option>
+        <option>♎︎</option>
+        <option>♏︎</option>
+        <option>♐︎</option>
+        <option>♑︎</option>
+        <option>♒︎</option>
+        <option>♓︎</option>
+      </select>
+      <div class="formInput"> <label for="saturnMinuteInput">Minute</label>
+        <input type="number" id="saturnMinuteInput" class="input-number" placeholder="20" min="0" max='59'>
+      </div>
+      <div class="formInput"> <label for="saturnSecondInput">Second</label>
+        <input type="number" id="saturnSecondInput" class="input-number" placeholder="20" min="0" max='59'>
+      </div>
+    </div>
+    <div class="form-group">
+      <small>ASC</small>
+      <div class="formInput"> <label for="ascDegreeInput">Degree</label>
+        <input type="number" id="ascDegreeInput" class="input-number" placeholder="20" min="0" max='29'>
+      </div>
+      <select class="select input-number">
+        <option>♈︎</option>
+        <option>♉︎</option>
+        <option>♊︎</option>
+        <option>♋︎</option>
+        <option>♌︎</option>
+        <option>♍︎</option>
+        <option>♎︎</option>
+        <option>♏︎</option>
+        <option>♐︎</option>
+        <option>♑︎</option>
+        <option>♒︎</option>
+        <option>♓︎</option>
+      </select>
+      <div class="formInput"> <label for="ascMinuteInput">Minute</label>
+        <input type="number" id="ascMinuteInput" class="input-number" placeholder="20" min="0" max='59'>
+      </div>
+      <div class="formInput"> <label for="ascSecondInput">Second</label>
+        <input type="number" id="ascSecondInput" class="input-number" placeholder="20" min="0" max='59'>
+      </div>
+    </div>
+    <div class="form-group">
+      <small>MC</small>
+      <div class="formInput"> <label for="mcDegreeInput">Degree</label>
+        <input type="number" id="mcDegreeInput" class="input-number" placeholder="20" min="0" max='29'>
+      </div>
+      <select class="select input-number">
+        <option>♈︎</option>
+        <option>♉︎</option>
+        <option>♊︎</option>
+        <option>♋︎</option>
+        <option>♌︎</option>
+        <option>♍︎</option>
+        <option>♎︎</option>
+        <option>♏︎</option>
+        <option>♐︎</option>
+        <option>♑︎</option>
+        <option>♒︎</option>
+        <option>♓︎</option>
+      </select>
+      <div class="formInput"> <label for="mcMinuteInput">Minute</label>
+        <input type="number" id="mcMinuteInput" class="input-number" placeholder="20" min="0" max='59'>
+      </div>
+      <div class="formInput"> <label for="mcSecondInput">Second</label>
+        <input type="number" id="mcSecondInput" class="input-number" placeholder="20" min="0" max='59'>
+      </div>
+    </div>
+    <button type="button" id='clear'>Clear</button>
+
+  </form>
+  <button type="button" id="chartre">Possible Dates</button>
+
+
+  <ul id="result-date"></ul>
+  <ol>
+
+    <li><big>☉ ☽ ♄</big> ➡ Date & Time</li>
+    <li><big>☉ ☽ ♄</big> MC ➡ Date & Time & GEO lon</li>
+    <li><big>☉ ☽ ♄</big> MC ASC ➡ Date & Time & GEO lon & GEO lat</li>
+    <li>Tolarence: Saturn 0.05 degree.</li>
+    <li>Only planets' degrees and minutes are given? <br><small>Set All arcsecond to zero. <br>Then adjust Sun's
+        arcsecond
+        to
+        find the minimum Diff of Moon.</small></li>
+
+  </ol>
+  <script src="./javascript/chartre.js" type="module"></script>
+</body>
+
+</html>
