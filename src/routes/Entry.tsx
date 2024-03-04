@@ -38,7 +38,7 @@ export default function Entry() {
 
       <div>
         {/* <strong>Tools</strong> */}
-        <Anchor href="/tools/index.html">Tools List</Anchor> (outer link)
+        <Anchor href="/tools/index.html">Tools List</Anchor> (external page)
         <br />
         Quick access to some useful ones:
         <li>
