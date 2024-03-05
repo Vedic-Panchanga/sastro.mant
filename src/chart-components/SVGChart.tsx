@@ -97,7 +97,7 @@ SVGChartProps) {
           ))}
           <Cusps
             cusps={innerCusps!}
-            radiusSub={radius_sub}
+            radiusZodiac={radius_zodiac}
             radiusInner={radius_inner}
             radiusOut={radius_out}
           />

@@ -107,19 +107,19 @@ type CuspsProps = {
   cusps: number[];
   radiusOut: number;
   radiusInner: number;
-  radiusSub: number;
+  radiusZodiac: number;
 };
 export function Cusps({
   cusps,
-  radiusSub,
+  radiusZodiac,
   radiusInner,
   radiusOut,
 }: CuspsProps) {
   const strokeWidth_ASCMC = "4px";
   const strokeWidth_notASCMC = DEFAULT_STROKE_WIDTH;
-  const radiusCuspsDegree = 0.5 * radiusOut + 0.5 * radiusSub;
+  const radiusCuspsDegree = 0.5 * radiusOut + 0.5 * radiusZodiac;
   const houseRadius = radiusInner * 1.15;
-  const lengthCusps = radiusSub - radiusInner;
+  const lengthCusps = radiusZodiac - radiusInner;
   const typeZodiac = useAtomValue(typeZodiacAtom);
   const cuspsWhole =
     (cusps[0] + 30 === cusps[1] || cusps[0] + 330 === cusps[1]) &&
@@ -129,7 +129,7 @@ export function Cusps({
       {cusps.map((cusp, i) => (
         <React.Fragment key={`cusp_${i}`}>
           <Line
-            startRadius={radiusSub}
+            startRadius={radiusZodiac}
             length={lengthCusps}
             theta={cusps[i]}
             leftDegree={cusps[0]}
@@ -185,7 +185,7 @@ export function Cusps({
             />
             <Line
               startRadius={radiusOut}
-              length={radiusOut - radiusSub}
+              length={radiusOut - radiusZodiac}
               theta={index * 30}
               leftDegree={cusps[0]}
             />
