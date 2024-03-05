@@ -8,6 +8,7 @@ Serverless astrology web page using [Swiss Ephemeris](https://www.astro.com/swis
 4. Bazi and fundamental related information.
 5. Simple astrology calendar.
 6. Since it is browser based, old machine and slow Internet might have problem when using it.
+7. Could be installed to desktop and mobile through browser like Chrome and Firefox, which enabled it to be used completed offline.
 
 ## Structure
 

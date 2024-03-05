@@ -38,7 +38,7 @@ export default function Entry() {
 
       <div>
         {/* <strong>Tools</strong> */}
-        <Anchor href="/tools/index.html">Tools List</Anchor> (external page)
+        <Anchor href="/tools/index.html">Tools List</Anchor>
         <br />
         Quick access to some useful ones:
         <li>
@@ -47,10 +47,10 @@ export default function Entry() {
           (converter with timestamp, Gregorian calendar)
         </li>{" "}
         <li>
-          <Anchor href="/tools/chartre.html">Chart Reverse</Anchor>{" "}
+          <Anchor href="/tools/chartreverse.html">Chart Reverse</Anchor>{" "}
         </li>
         <li>
-          <Anchor href="/tools/baizire.html">Bazi Reverse (八字反推)</Anchor>{" "}
+          <Anchor href="/tools/bazire.html">Bazi Reverse (八字反推)</Anchor>{" "}
         </li>
       </div>
     </div>

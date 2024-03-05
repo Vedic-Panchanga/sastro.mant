@@ -30,7 +30,11 @@ export default function Footer() {
         >
           LocationIQ
         </Anchor>
-        .
+        .{" "}
+      </p>
+      <p>
+        You can install this app on your desktop or mobile phone through the
+        browser. This enables the app to be used completely offline.
       </p>
       <p>
         The time range is from -4800 to 3000 in the Gregorian Calendar, and the
